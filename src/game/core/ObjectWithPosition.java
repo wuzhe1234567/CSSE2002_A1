@@ -3,19 +3,49 @@ package game.core;
 import game.ui.ObjectGraphic;
 
 /**
- * Abstract class representing a generic power-up.
+ * Abstract class representing an object with a position.
+ * This class can serve as a common base for game objects.
  */
-public abstract class PowerUp extends SpaceObject {
+public abstract class ObjectWithPosition {
+    protected int x;
+    protected int y;
+
     /**
-     * When the power-up is collected by the ship, apply its effect.
+     * Constructs an object with the specified coordinates.
      *
-     * @param ship the ship that collects the power-up.
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
      */
-    public abstract void apply(Ship ship);
-
-    @Override
-    public void tick(int tick) {
-        // By default, power-ups remain stationary.
+    public ObjectWithPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
-}
 
+    /**
+     * Returns the x-coordinate.
+     *
+     * @return the x-coordinate.
+     */
+    public abstract int getX();
+
+    /**
+     * Returns the y-coordinate.
+     *
+     * @return the y-coordinate.
+     */
+    public abstract int getY();
+
+    /**
+     * Returns the graphical representation of the object.
+     *
+     * @return an ObjectGraphic representing the object.
+     */
+    public abstract ObjectGraphic render();
+
+    /**
+     * Updates the object's state on each game tick.
+     *
+     * @param tick the current game tick.
+     */
+    public abstract void tick(int tick);
+}
