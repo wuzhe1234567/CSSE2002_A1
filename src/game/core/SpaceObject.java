@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 
 /**
- * Abstract interface representing a space object in the game.
+ * Public abstract interface representing a space object in the game.
  */
 public interface SpaceObject {
     /**
