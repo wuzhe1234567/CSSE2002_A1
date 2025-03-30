@@ -8,9 +8,7 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship implements Controllable {
-    private int x;
-    private int y;
+public class Ship extends Controllable {
     private int health;
     private int score;
 
@@ -22,8 +20,7 @@ public class Ship implements Controllable {
      * @param y the y-coordinate of the ship.
      */
     public Ship(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.health = 100;
         this.score = 0;
     }
@@ -39,8 +36,7 @@ public class Ship implements Controllable {
     }
 
     /**
-     * Returns the graphical representation of the ship,
-     * using the image from the relative path "src/assets/ship.png".
+     * Returns the graphical representation of the ship.
      *
      * @return an ObjectGraphic representing the ship.
      */
@@ -50,22 +46,21 @@ public class Ship implements Controllable {
     }
 
     /**
-     * Updates the ship's state on each tick.
-     * In this implementation, the ship does not move automatically.
+     * The ship does not move automatically on each tick.
      *
      * @param tick the current game tick.
      */
     @Override
     public void tick(int tick) {
-        // Movement is controlled by key input; no automatic update.
+        // Movement controlled by player input.
     }
 
     /**
      * Moves the ship in the specified direction by one unit.
-     * Throws a BoundaryExceededException if the move would exceed game boundaries.
+     * Throws a BoundaryExceededException if the move exceeds game boundaries.
      *
      * @param direction the direction to move the ship.
-     * @throws BoundaryExceededException if the move exceeds game boundaries.
+     * @throws BoundaryExceededException if movement exceeds boundaries.
      */
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
@@ -93,7 +88,7 @@ public class Ship implements Controllable {
         y = newY;
     }
 
-    // Additional methods for scoring and health management:
+    // Additional methods:
     public void addScore(int points) {
         score += points;
     }
