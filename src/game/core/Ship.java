@@ -5,33 +5,45 @@ import game.utility.Direction;
 import game.GameModel;
 
 /**
- * 表示玩家控制的飞船。
+ * Represents the player's ship.
  */
 public class Ship extends SpaceObject {
 
+    /**
+     * Constructs a Ship with the specified coordinates.
+     *
+     * @param x the x-coordinate of the ship.
+     * @param y the y-coordinate of the ship.
+     */
     public Ship(int x, int y) {
         super(x, y);
     }
 
     /**
-     * 返回飞船的图形表示，使用 "ship.png" 图片。
+     * Returns the graphical representation of the ship,
+     * using the image resource from the relative path "src/assets/ship.png".
+     *
+     * @return an ObjectGraphic representing the ship.
      */
     @Override
     public ObjectGraphic render() {
-        return new ObjectGraphic("Ship", "C:\\Users\\wuzhe\\Desktop\\Study\\Semester 2\\CSSE 2002\\Assignment1\\provided\\CSSE2002_A1\\assets\\ship.png");
+        return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
 
     /**
-     * 飞船在每个 tick 不会自动移动，只有接收到玩家输入时才改变位置。
+     * The ship does not move automatically on each tick.
+     *
+     * @param tick the current game tick.
      */
     @Override
-    public void update() {
-        // 玩家控制，不做自动更新
+    public void tick(int tick) {
+        // Movement is controlled by key input.
     }
 
     /**
-     * 根据传入的方向移动飞船，每次移动一步，并确保不超出游戏区域。
-     * @param direction 移动方向
+     * Moves the ship in the specified direction by one unit, ensuring it stays within bounds.
+     *
+     * @param direction the direction to move the ship.
      */
     public void move(Direction direction) {
         switch (direction) {
@@ -50,4 +62,3 @@ public class Ship extends SpaceObject {
         }
     }
 }
-
