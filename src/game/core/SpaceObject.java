@@ -14,25 +14,25 @@ public abstract class SpaceObject {
         this.y = y;
     }
 
-    public int getX() { 
-        return x; 
+    public int getX() {
+        return x;
     }
 
-    public int getY() { 
-        return y; 
+    public int getY() {
+        return y;
     }
 
     /**
-     * Returns the graphical representation of the object for rendering.
+     * Returns the graphical representation of the object.
      *
-     * @return an ObjectGraphic representing the object
+     * @return an ObjectGraphic representing the object.
      */
     public abstract ObjectGraphic render();
 
     /**
      * Updates the object's state on each game tick.
      *
-     * @param tick the current game tick
+     * @param tick the current game tick.
      */
     public abstract void tick(int tick);
 }
