@@ -9,11 +9,11 @@ public class ShieldPowerUp extends PowerUp {
     private int duration; // Duration in ticks
     
     /**
-     * Constructs a ShieldPowerUp at the given coordinates with a specified duration.
+     * Constructs a ShieldPowerUp.
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param duration the duration of the shield effect in ticks.
+     * @param duration the duration in ticks.
      */
     public ShieldPowerUp(int x, int y, int duration) {
         super(x, y);
@@ -27,8 +27,8 @@ public class ShieldPowerUp extends PowerUp {
     
     @Override
     public void apply(Ship ship) {
-        // 在此示例中，仅打印日志。实际可调用 ship.activateShield(duration) 之类方法。
-        System.out.println("Shield power-up applied for " + duration + " ticks.");
+        // 这里仅打印日志，实际应用中可调用 ship.activateShield(duration) 实现无敌效果
+        System.out.println("Shield activated for " + duration + " ticks.");
     }
     
     @Override
@@ -36,9 +36,10 @@ public class ShieldPowerUp extends PowerUp {
         return x;
     }
     
-    @Override
+    @Override 
     public int getY() {
         return y;
     }
 }
+
 
