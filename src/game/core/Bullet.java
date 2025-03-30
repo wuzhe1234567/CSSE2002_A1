@@ -5,7 +5,7 @@ import game.ui.ObjectGraphic;
 /**
  * Represents a bullet object.
  */
-public class Bullet implements SpaceObject {
+public class Bullet extends SpaceObject {
     private int x;
     private int y;
 
@@ -16,6 +16,7 @@ public class Bullet implements SpaceObject {
      * @param y the y-coordinate of the bullet.
      */
     public Bullet(int x, int y) {
+        super(x, y);
         this.x = x;
         this.y = y;
     }
@@ -41,7 +42,8 @@ public class Bullet implements SpaceObject {
     }
 
     /**
-     * Updates the bullet's state on each tick (moves upward).
+     * Updates the bullet's state on each tick.
+     * In this implementation, the bullet moves upward.
      *
      * @param tick the current game tick.
      */
@@ -50,3 +52,4 @@ public class Bullet implements SpaceObject {
         y--; // Move upward each tick
     }
 }
+
