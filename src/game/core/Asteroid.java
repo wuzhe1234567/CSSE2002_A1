@@ -31,9 +31,11 @@ public class Asteroid extends SpaceObject {
     /**
      * Updates the asteroid's state on each tick.
      * In this implementation, the asteroid moves downward by increasing its y-coordinate.
+     *
+     * @param tick the current game tick
      */
     @Override
-    public void update() {
+    public void tick(int tick) {
         y++; // Move downward each tick
     }
 }
