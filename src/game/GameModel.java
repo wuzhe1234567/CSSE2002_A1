@@ -10,13 +10,10 @@ import java.util.Random;
  * Represents the game information and state.
  * It stores and manages all game objects (ship, enemies, bullets, etc.)
  * and handles game updates such as collisions.
- *
- * Score and Health mechanisms have been removed.
  */
 public class GameModel {
     public static final int GAME_HEIGHT = 20;
     public static final int GAME_WIDTH = 10;
-    // Other constants can be defined here
 
     private final Random random = new Random();
     private List<SpaceObject> objects = new ArrayList<>();
@@ -49,11 +46,11 @@ public class GameModel {
 
     /**
      * Collision detection:
-     * 1. Ignore Health and Score objects (if any exist, but in this version they are removed).
+     * 1. Ignore Health and Score objects (if any).
      * 2. If a collision involves a Bullet and an Enemy, remove both.
      * 3. If a collision involves the Ship and an Enemy, remove the enemy.
      * 4. If a collision involves the Ship and an Asteroid, remove the asteroid.
-     * 5. Other collisions (with matching coordinates) remove both objects.
+     * 5. Other collisions (matching coordinates) remove both objects.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -61,19 +58,18 @@ public class GameModel {
             for (int j = i + 1; j < objects.size(); j++) {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
-                // If coordinates match, process collision
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // 1. Bullet and Enemy collision: remove both
+                    // Bullet and Enemy collision: remove both
                     if ((a instanceof Bullet && b instanceof Enemy) ||
-                            (a instanceof Enemy && b instanceof Bullet)) {
+                        (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
                         toRemove.add(b);
                         logger.log("Bullet destroyed enemy.");
                         continue;
                     }
-                    // 2. Ship and Enemy collision: remove enemy
+                    // Ship and Enemy collision: remove enemy
                     if ((a instanceof Ship && b instanceof Enemy) ||
-                            (b instanceof Ship && a instanceof Enemy)) {
+                        (b instanceof Ship && a instanceof Enemy)) {
                         if (a instanceof Ship) {
                             toRemove.add(b);
                         } else {
@@ -82,9 +78,9 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // 3. Ship and Asteroid collision: remove asteroid
+                    // Ship and Asteroid collision: remove asteroid
                     if ((a instanceof Ship && b instanceof Asteroid) ||
-                            (b instanceof Ship && a instanceof Asteroid)) {
+                        (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
                             toRemove.add(b);
                         } else {
@@ -93,24 +89,24 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // 4. Other collisions: if coordinates match, remove both
+                    // Other collisions: remove both
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
-                            " and " + b.render().toString());
+                               " and " + b.render().toString());
                 }
             }
         }
         objects.removeAll(toRemove);
 
-        // If the ship has been removed, log game over.
         if (ship == null || !objects.contains(ship)) {
             logger.log("Game Over: Ship destroyed.");
         }
     }
 
     public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
+        // Use the 3-parameter constructor; here initial health is set to 100
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
         addObject(ship);
     }
 
