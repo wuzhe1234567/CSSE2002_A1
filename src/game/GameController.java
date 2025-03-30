@@ -27,13 +27,20 @@ public class GameController {
     
     /**
      * Initial state: creates ship, enemies, asteroids, and power-ups,
-     * displays them (stationary), and waits for Enter key.
+     * displays them (stationary), and waits for the player to press Enter.
      */
     public void startGame() {
         model.createShip();
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        model.addObject(new DescendingEnemy(2, 0));
+        // 通过匿名内部类实例化 DescendingEnemy
+        model.addObject(new DescendingEnemy(2, 0) {
+            @Override
+            public ObjectGraphic render() {
+                // 如果有专用图像，可修改路径；否则使用同 Enemy 的图像
+                return new ObjectGraphic("DescendingEnemy", "src/assets/descending_enemy.png");
+            }
+        });
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
@@ -62,7 +69,7 @@ public class GameController {
     }
     
     /**
-     * Handles player input: W/A/S/D move the ship, F fires a bullet, P toggles pause.
+     * Handles player input: W/A/S/D to move, F to fire, P to toggle pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
