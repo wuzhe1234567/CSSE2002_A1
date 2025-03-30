@@ -5,10 +5,13 @@ import game.ui.ObjectGraphic;
 /**
  * Represents a bullet object.
  */
-public class Bullet extends SpaceObject {
-
+public class Bullet implements SpaceObject {
+    private int x;
+    private int y;
+    
     public Bullet(int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
     
     @Override
@@ -28,8 +31,6 @@ public class Bullet extends SpaceObject {
     
     @Override
     public void tick(int tick) {
-        y--; // Move upward each tick
+        y--; // Moves upward each tick
     }
 }
-
-
