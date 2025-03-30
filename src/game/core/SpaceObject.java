@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 
 /**
- * 抽象基类，表示游戏中的空间对象。
+ * Abstract base class representing a space object in the game.
  */
 public abstract class SpaceObject {
     protected int x;
@@ -14,22 +14,25 @@ public abstract class SpaceObject {
         this.y = y;
     }
 
-    public int getX() {
-        return x;
+    public int getX() { 
+        return x; 
     }
 
-    public int getY() {
-        return y;
+    public int getY() { 
+        return y; 
     }
 
     /**
-     * 返回该对象的图形表示，用于渲染。
+     * Returns the graphical representation of the object for rendering.
+     *
+     * @return an ObjectGraphic representing the object
      */
     public abstract ObjectGraphic render();
 
     /**
-     * 每个游戏 tick 更新对象状态（例如位置）。
+     * Updates the object's state on each game tick.
+     *
+     * @param tick the current game tick
      */
-    public abstract void update();
+    public abstract void tick(int tick);
 }
-
