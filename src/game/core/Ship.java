@@ -8,23 +8,19 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship implements Controllable {
-    // 自行维护位置字段
-    private int x;
-    private int y;
+public class Ship extends Controllable {
     private int health;
     private int score;
 
     /**
      * Constructs a Ship with the specified coordinates.
-     * Initial health is set to 100 and score to 0.
+     * The ship's initial health is set to 100 and score to 0.
      *
      * @param x the x-coordinate of the ship.
      * @param y the y-coordinate of the ship.
      */
     public Ship(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.health = 100;
         this.score = 0;
     }
@@ -50,17 +46,19 @@ public class Ship implements Controllable {
     }
 
     /**
-     * Ship does not update automatically.
+     * Updates the ship's state on each tick.
+     * In this implementation, the ship does not move automatically.
      *
      * @param tick the current game tick.
      */
     @Override
     public void tick(int tick) {
-        // Movement is controlled by key input.
+        // Movement is controlled by player input.
     }
 
     /**
      * Moves the ship in the specified direction by one unit.
+     * Throws a BoundaryExceededException if the move exceeds game boundaries.
      *
      * @param direction the direction to move the ship.
      * @throws BoundaryExceededException if the move exceeds game boundaries.
@@ -90,7 +88,7 @@ public class Ship implements Controllable {
         y = newY;
     }
 
-    // 以下方法用于管理分数和健康
+    // 以下方法用于管理分数与健康
     public void addScore(int points) {
         score += points;
     }
