@@ -46,11 +46,10 @@ public class GameModel {
 
     /**
      * Collision detection:
-     * 1. Ignore Health and Score objects (if any).
-     * 2. If a collision involves a Bullet and an Enemy, remove both.
-     * 3. If a collision involves the Ship and an Enemy, remove the enemy.
-     * 4. If a collision involves the Ship and an Asteroid, remove the asteroid.
-     * 5. Other collisions (matching coordinates) remove both objects.
+     * 1. If a collision involves a Bullet and an Enemy, remove both.
+     * 2. If a collision involves the Ship and an Enemy, remove the enemy.
+     * 3. If a collision involves the Ship and an Asteroid, remove the asteroid.
+     * 4. Other collisions with matching coordinates remove both objects.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -59,7 +58,7 @@ public class GameModel {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // Bullet and Enemy collision: remove both
+                    // 1. Bullet and Enemy collision: remove both
                     if ((a instanceof Bullet && b instanceof Enemy) ||
                         (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
@@ -67,7 +66,7 @@ public class GameModel {
                         logger.log("Bullet destroyed enemy.");
                         continue;
                     }
-                    // Ship and Enemy collision: remove enemy
+                    // 2. Ship and Enemy collision: remove enemy
                     if ((a instanceof Ship && b instanceof Enemy) ||
                         (b instanceof Ship && a instanceof Enemy)) {
                         if (a instanceof Ship) {
@@ -78,7 +77,7 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship and Asteroid collision: remove asteroid
+                    // 3. Ship and Asteroid collision: remove asteroid
                     if ((a instanceof Ship && b instanceof Asteroid) ||
                         (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
@@ -89,7 +88,7 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Other collisions: remove both
+                    // 4. Other collisions: remove both
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
@@ -98,15 +97,14 @@ public class GameModel {
             }
         }
         objects.removeAll(toRemove);
-
         if (ship == null || !objects.contains(ship)) {
             logger.log("Game Over: Ship destroyed.");
         }
     }
 
     public void createShip() {
-        // Use the 3-parameter constructor; here initial health is set to 100
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
+        // Use the two-parameter constructor for Ship.
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
         addObject(ship);
     }
 
