@@ -17,21 +17,11 @@ public class Bullet extends SpaceObject {
         super(x, y);
     }
 
-    /**
-     * Returns the x-coordinate of the bullet.
-     *
-     * @return the x-coordinate.
-     */
     @Override
     public int getX() {
         return x;
     }
 
-    /**
-     * Returns the y-coordinate of the bullet.
-     *
-     * @return the y-coordinate.
-     */
     @Override
     public int getY() {
         return y;
@@ -39,7 +29,7 @@ public class Bullet extends SpaceObject {
 
     /**
      * Returns the graphical representation of the bullet,
-     * using the image from the relative path "src/assets/bullet.png".
+     * using the image from "src/assets/bullet.png".
      *
      * @return an ObjectGraphic representing the bullet.
      */
@@ -50,13 +40,14 @@ public class Bullet extends SpaceObject {
 
     /**
      * Updates the bullet's state on each tick.
-     * In this implementation, the bullet moves upward (decreases its y-coordinate).
+     * In this implementation, the bullet moves upward.
      *
      * @param tick the current game tick.
      */
     @Override
     public void tick(int tick) {
-        y--; // Bullet moves upward each tick
+        y--; // Move upward each tick
     }
 }
+
 
