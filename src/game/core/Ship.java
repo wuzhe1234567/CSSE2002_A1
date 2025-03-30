@@ -53,7 +53,7 @@ public class Ship extends Controllable {
      */
     @Override
     public void tick(int tick) {
-        // Movement is controlled by player input.
+        // No automatic update; movement is controlled by player input.
     }
 
     /**
@@ -88,7 +88,7 @@ public class Ship extends Controllable {
         y = newY;
     }
 
-    // 以下方法用于管理分数与健康
+    // 以下方法用于管理分数和健康
     public void addScore(int points) {
         score += points;
     }
@@ -103,7 +103,7 @@ public class Ship extends Controllable {
 
     public void takeDamage(int amount) {
         health -= amount;
-        if(health < 0) {
+        if (health < 0) {
             health = 0;
         }
     }
@@ -112,3 +112,4 @@ public class Ship extends Controllable {
         return health;
     }
 }
+
