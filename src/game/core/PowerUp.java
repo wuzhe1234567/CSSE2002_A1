@@ -24,13 +24,9 @@ public abstract class PowerUp extends SpaceObject {
      */
     public abstract void apply(Ship ship);
     
-    /**
-     * By default, a power-up remains stationary.
-     *
-     * @param tick the current game tick.
-     */
     @Override
     public void tick(int tick) {
-        // No automatic movement by default.
+        // By default, power-ups remain stationary.
     }
 }
+
