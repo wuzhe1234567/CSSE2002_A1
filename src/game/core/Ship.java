@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel;
+import game.GameModel; // 用于引用 GAME_WIDTH 和 GAME_HEIGHT
 
 /**
  * Represents the player's ship.
@@ -16,8 +16,8 @@ public class Ship extends Controllable {
      * Constructs a Ship with the specified coordinates.
      * The ship's initial health is set to 100 and score to 0.
      *
-     * @param x the x-coordinate of the ship
-     * @param y the y-coordinate of the ship
+     * @param x the x-coordinate of the ship.
+     * @param y the y-coordinate of the ship.
      */
     public Ship(int x, int y) {
         super(x, y);
@@ -29,7 +29,7 @@ public class Ship extends Controllable {
      * Returns the graphical representation of the ship,
      * using the image from the relative path "src/assets/ship.png".
      *
-     * @return an ObjectGraphic representing the ship
+     * @return an ObjectGraphic representing the ship.
      */
     @Override
     public ObjectGraphic render() {
@@ -40,19 +40,19 @@ public class Ship extends Controllable {
      * Updates the ship's state on each tick.
      * In this implementation, the ship does not move automatically.
      *
-     * @param tick the current game tick
+     * @param tick the current game tick.
      */
     @Override
     public void tick(int tick) {
-        // Movement is controlled by key input; no automatic update.
+        // Ship movement is controlled by key input; no automatic update.
     }
 
     /**
      * Moves the ship in the specified direction by one unit.
      * Throws a BoundaryExceededException if the move exceeds game boundaries.
      *
-     * @param direction the direction to move the ship
-     * @throws BoundaryExceededException if the move exceeds game boundaries
+     * @param direction the direction to move the ship.
+     * @throws BoundaryExceededException if the move exceeds game boundaries.
      */
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
@@ -83,7 +83,7 @@ public class Ship extends Controllable {
     /**
      * Adds the specified number of points to the ship's score.
      *
-     * @param points the points to add
+     * @param points the points to add.
      */
     public void addScore(int points) {
         score += points;
@@ -92,7 +92,7 @@ public class Ship extends Controllable {
     /**
      * Returns the current score of the ship.
      *
-     * @return the current score
+     * @return the current score.
      */
     public int getScore() {
         return score;
@@ -101,7 +101,7 @@ public class Ship extends Controllable {
     /**
      * Heals the ship by the specified amount.
      *
-     * @param amount the amount of health to add
+     * @param amount the amount of health to add.
      */
     public void heal(int amount) {
         health += amount;
@@ -110,7 +110,7 @@ public class Ship extends Controllable {
     /**
      * Reduces the ship's health by the specified amount.
      *
-     * @param amount the damage amount to apply
+     * @param amount the damage amount to apply.
      */
     public void takeDamage(int amount) {
         health -= amount;
@@ -122,10 +122,9 @@ public class Ship extends Controllable {
     /**
      * Returns the current health of the ship.
      *
-     * @return the current health
+     * @return the current health.
      */
     public int getHealth() {
         return health;
     }
 }
-
