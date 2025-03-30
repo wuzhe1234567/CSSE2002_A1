@@ -42,7 +42,7 @@ public class Ship extends Controllable {
 
     @Override
     public void tick(int tick) {
-        // Ship's movement is controlled by player input; no automatic update.
+        // Ship does not update automatically.
     }
 
     @Override
@@ -94,3 +94,4 @@ public class Ship extends Controllable {
         return health;
     }
 }
+
