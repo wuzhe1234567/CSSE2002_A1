@@ -4,20 +4,9 @@ import game.exceptions.BoundaryExceededException;
 import game.utility.Direction;
 
 /**
- * Abstract class representing a controllable game object.
- * Inherits from SpaceObject.
+ * Public interface representing a controllable game object.
+ * Extends SpaceObject.
  */
-public abstract class Controllable extends SpaceObject {
-
-    public Controllable(int x, int y) {
-        super(x, y);
-    }
-    
-    /**
-     * Moves the object in the specified direction.
-     *
-     * @param direction the direction to move.
-     * @throws BoundaryExceededException if the move exceeds game boundaries.
-     */
-    public abstract void move(Direction direction) throws BoundaryExceededException;
+public interface Controllable extends SpaceObject {
+    void move(Direction direction) throws BoundaryExceededException;
 }
