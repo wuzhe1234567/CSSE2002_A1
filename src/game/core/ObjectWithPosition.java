@@ -4,12 +4,12 @@ import game.ui.ObjectGraphic;
 
 /**
  * Abstract class representing an object with a position.
- * This class can serve as a common base for game objects.
+ * Provides concrete implementations of getX() and getY().
  */
-public abstract class ObjectWithPosition {
+public abstract class ObjectWithPosition implements SpaceObject {
     protected int x;
     protected int y;
-
+    
     /**
      * Constructs an object with the specified coordinates.
      *
@@ -20,32 +20,21 @@ public abstract class ObjectWithPosition {
         this.x = x;
         this.y = y;
     }
-
-    /**
-     * Returns the x-coordinate.
-     *
-     * @return the x-coordinate.
-     */
-    public abstract int getX();
-
-    /**
-     * Returns the y-coordinate.
-     *
-     * @return the y-coordinate.
-     */
-    public abstract int getY();
-
-    /**
-     * Returns the graphical representation of the object.
-     *
-     * @return an ObjectGraphic representing the object.
-     */
+    
+    @Override
+    public int getX() {
+        return x;
+    }
+    
+    @Override
+    public int getY() {
+        return y;
+    }
+    
+    // render() 和 tick() 仍为抽象方法，要求子类提供具体实现
+    @Override
     public abstract ObjectGraphic render();
-
-    /**
-     * Updates the object's state on each game tick.
-     *
-     * @param tick the current game tick.
-     */
+    
+    @Override
     public abstract void tick(int tick);
 }
