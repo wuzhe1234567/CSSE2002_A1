@@ -8,20 +8,20 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship extends Controllable {
+public class Ship extends ObjectWithPosition implements Controllable {
     private int health;
     private int score;
     
     /**
-     * Constructs a Ship with the specified coordinates.
-     * The ship's initial health is set to 100 and score to 0.
+     * Constructs a Ship with the specified coordinates and initial health.
      *
-     * @param x the x-coordinate of the ship.
-     * @param y the y-coordinate of the ship.
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @param health the initial health of the ship.
      */
-    public Ship(int x, int y) {
+    public Ship(int x, int y, int health) {
         super(x, y);
-        this.health = 100;
+        this.health = health;
         this.score = 0;
     }
     
@@ -60,7 +60,7 @@ public class Ship extends Controllable {
         y = newY;
     }
     
-    // 以下方法用于管理分数和健康
+    // Methods for managing score and health
     public void addScore(int points) {
         score += points;
     }
