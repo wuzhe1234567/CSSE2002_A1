@@ -8,4 +8,3 @@ public class BoundaryExceededException extends Exception {
         super(message);
     }
 }
-
