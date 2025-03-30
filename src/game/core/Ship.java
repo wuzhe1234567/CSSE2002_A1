@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel;  // 用于引用 GAME_WIDTH 和 GAME_HEIGHT
+import game.GameModel;
 
 /**
  * Represents the player's ship.
@@ -13,15 +13,15 @@ public class Ship extends Controllable {
     private int score;
 
     /**
-     * Constructs a Ship with the specified coordinates and initial health.
+     * Constructs a Ship with the specified coordinates.
+     * The ship's initial health is set to 100 and score to 0.
      *
      * @param x the x-coordinate of the ship
      * @param y the y-coordinate of the ship
-     * @param health the initial health of the ship
      */
-    public Ship(int x, int y, int health) {
+    public Ship(int x, int y) {
         super(x, y);
-        this.health = health;
+        this.health = 100;
         this.score = 0;
     }
 
@@ -44,7 +44,7 @@ public class Ship extends Controllable {
      */
     @Override
     public void tick(int tick) {
-        // Movement is controlled by player input, so no automatic update.
+        // Ship movement is controlled by key input; no automatic updates.
     }
 
     /**
