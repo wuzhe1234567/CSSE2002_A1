@@ -18,7 +18,7 @@ public class GameModel {
     private Logger logger;
     private Ship ship;
     
-    public GameModel(Logger logger) {
+    public GameModel(game.utility.Logger logger) {
         this.logger = logger;
     }
     
@@ -42,10 +42,10 @@ public class GameModel {
     
     /**
      * Collision detection:
-     * 1. Bullet and Enemy collision: remove both and add 1 to ship's score.
-     * 2. Ship and Enemy collision: remove enemy and add 1 to ship's score.
-     * 3. Ship and Asteroid collision: remove asteroid.
-     * 4. Ship and HealthPowerUp/ShieldPowerUp collision: apply effect and remove the power-up.
+     * 1. Bullet and Enemy: remove both, add 1 score.
+     * 2. Ship and Enemy: remove enemy, add 1 score.
+     * 3. Ship and Asteroid: remove asteroid.
+     * 4. Ship and HealthPowerUp/ShieldPowerUp: apply effect and remove power-up.
      * 5. Other collisions: remove both.
      */
     public void checkCollisions() {
@@ -124,7 +124,7 @@ public class GameModel {
     }
     
     public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
         addObject(ship);
     }
     
