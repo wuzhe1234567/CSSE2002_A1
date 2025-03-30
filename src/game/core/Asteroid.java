@@ -24,15 +24,14 @@ public class Asteroid implements SpaceObject {
     public int getX() {
         return x;
     }
-    
+
     @Override 
     public int getY() {
         return y;
     }
 
     /**
-     * Returns the graphical representation of the asteroid,
-     * using the image from "src/assets/asteroid.png".
+     * Returns the graphical representation of the asteroid.
      *
      * @return an ObjectGraphic representing the asteroid.
      */
@@ -42,8 +41,7 @@ public class Asteroid implements SpaceObject {
     }
 
     /**
-     * Updates the asteroid's state on each tick.
-     * In this implementation, the asteroid moves downward.
+     * Updates the asteroid's state on each tick (moves downward).
      *
      * @param tick the current game tick.
      */
@@ -52,3 +50,4 @@ public class Asteroid implements SpaceObject {
         y++; // Move downward each tick
     }
 }
+
