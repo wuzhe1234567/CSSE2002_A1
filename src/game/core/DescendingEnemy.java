@@ -13,14 +13,15 @@ public class DescendingEnemy extends Enemy {
     
     @Override
     public void tick(int tick) {
-        // Move downward faster – 2 units per tick instead of 1.
+        // Descend 2 units per tick instead of 1.
+        // 由于 Enemy 已经提供了构造函数，我们重新实现 tick 以加快下降速度。
+        // 这里直接操作 y 字段：
         y += 2;
     }
     
     @Override
     public ObjectGraphic render() {
-        // 可选：使用与普通敌人不同的图像，例如 "src/assets/enemy.png" 改为 "src/assets/descending_enemy.png"
+        // 如果有专用图像，可修改路径；否则使用同 Enemy 的图像。
         return new ObjectGraphic("DescendingEnemy", "src/assets/enemy.png");
     }
 }
-
