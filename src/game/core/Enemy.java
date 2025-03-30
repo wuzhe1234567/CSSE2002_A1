@@ -5,7 +5,7 @@ import game.ui.ObjectGraphic;
 /**
  * Represents an enemy object.
  */
-public class Enemy implements SpaceObject {
+public class Enemy extends SpaceObject {
     private int x;
     private int y;
 
@@ -16,6 +16,7 @@ public class Enemy implements SpaceObject {
      * @param y the y-coordinate of the enemy.
      */
     public Enemy(int x, int y) {
+        super(x, y);
         this.x = x;
         this.y = y;
     }
@@ -41,7 +42,8 @@ public class Enemy implements SpaceObject {
     }
 
     /**
-     * Updates the enemy's state on each tick (moves downward).
+     * Updates the enemy's state on each tick.
+     * In this implementation, the enemy moves downward.
      *
      * @param tick the current game tick.
      */
@@ -50,4 +52,3 @@ public class Enemy implements SpaceObject {
         y++; // Move downward each tick
     }
 }
-
