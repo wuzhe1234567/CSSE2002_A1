@@ -27,7 +27,7 @@ public class ShieldPowerUp extends PowerUp {
     
     @Override
     public void apply(Ship ship) {
-        // 这里仅打印日志，实际应用中可调用 ship.activateShield(duration) 实现无敌效果
+        // 这里仅打印日志，实际可调用 ship.activateShield(duration) 实现无敌效果
         System.out.println("Shield activated for " + duration + " ticks.");
     }
     
@@ -41,5 +41,3 @@ public class ShieldPowerUp extends PowerUp {
         return y;
     }
 }
-
-
