@@ -3,27 +3,39 @@ package game.core;
 import game.ui.ObjectGraphic;
 
 /**
- * 表示敌人对象。
+ * Represents an enemy object.
  */
 public class Enemy extends SpaceObject {
 
+    /**
+     * Constructs an Enemy with the specified coordinates.
+     *
+     * @param x the x-coordinate of the enemy.
+     * @param y the y-coordinate of the enemy.
+     */
     public Enemy(int x, int y) {
         super(x, y);
     }
 
     /**
-     * 返回敌人的图形表示，使用 "enemy.png" 作为图片资源。
+     * Returns the graphical representation of the enemy,
+     * using the image resource from the relative path "src/assets/enemy.png".
+     *
+     * @return an ObjectGraphic representing the enemy.
      */
     @Override
     public ObjectGraphic render() {
-        return new ObjectGraphic("Enemy", "C:\\Users\\wuzhe\\Desktop\\Study\\Semester 2\\CSSE 2002\\Assignment1\\provided\\CSSE2002_A1\\assets\\enemy.png");
+        return new ObjectGraphic("Enemy", "src/assets/enemy.png");
     }
 
     /**
-     * 敌人每个 tick 向下移动（y 增加）。
+     * Updates the enemy's state on each tick.
+     * In this implementation, the enemy moves downward by increasing its y-coordinate.
+     *
+     * @param tick the current game tick.
      */
     @Override
-    public void update() {
-        y++; // 向下移动
+    public void tick(int tick) {
+        y++; // Move downward each tick
     }
 }
