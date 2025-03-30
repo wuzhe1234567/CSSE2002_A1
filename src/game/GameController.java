@@ -31,12 +31,12 @@ public class GameController {
      */
     public void startGame() {
         model.createShip();
-        // 添加普通敌人与陨石
+        // 添加普通敌人和陨石
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
         // 添加额外的对象：下降敌人、健康和护盾道具
         model.addObject(new DescendingEnemy(2, 0));
-        model.addObject(new HealthPowerUp(4, 0, 20));  // 增加20生命值
+        model.addObject(new HealthPowerUp(4, 0, 20));  // 收集后增加20生命值
         model.addObject(new ShieldPowerUp(6, 0, 50));    // 护盾持续50个tick
         renderGame();
         ui.onKey(this::handlePreGameInput);
@@ -65,7 +65,7 @@ public class GameController {
     
     /**
      * Handles player input:
-     * W/A/S/D to move, F to fire, P to toggle pause.
+     * W/A/S/D move the ship, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -101,3 +101,4 @@ public class GameController {
         }
     }
 }
+
