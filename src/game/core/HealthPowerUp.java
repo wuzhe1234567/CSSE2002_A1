@@ -9,11 +9,11 @@ public class HealthPowerUp extends PowerUp {
     private int healAmount;
     
     /**
-     * Constructs a HealthPowerUp at the given coordinates.
+     * Constructs a HealthPowerUp.
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param healAmount the amount of health to add when applied.
+     * @param healAmount the amount of health to add.
      */
     public HealthPowerUp(int x, int y, int healAmount) {
         super(x, y);
@@ -35,9 +35,8 @@ public class HealthPowerUp extends PowerUp {
         return x;
     }
     
-    @Override
+    @Override 
     public int getY() {
         return y;
     }
 }
-
