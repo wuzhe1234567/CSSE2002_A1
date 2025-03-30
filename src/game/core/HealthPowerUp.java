@@ -6,7 +6,7 @@ import game.ui.ObjectGraphic;
  * Represents a health power-up that increases the ship's health.
  */
 public class HealthPowerUp extends PowerUp {
-    private int healAmount = 20; // 固定增加的生命值
+    private int healAmount = 20; // 固定加成值
     
     /**
      * Constructs a HealthPowerUp at the given coordinates.
@@ -27,4 +27,15 @@ public class HealthPowerUp extends PowerUp {
     public void applyEffect(Ship ship) {
         ship.heal(healAmount);
     }
+    
+    @Override
+    public int getX() {
+        return x;
+    }
+    
+    @Override 
+    public int getY() {
+        return y;
+    }
 }
+
