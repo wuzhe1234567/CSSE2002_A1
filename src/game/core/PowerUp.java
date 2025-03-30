@@ -7,6 +7,12 @@ import game.ui.ObjectGraphic;
  */
 public abstract class PowerUp extends SpaceObject {
 
+    /**
+     * Constructs a PowerUp with the specified coordinates.
+     *
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     */
     public PowerUp(int x, int y) {
         super(x, y);
     }
@@ -18,9 +24,15 @@ public abstract class PowerUp extends SpaceObject {
      */
     public abstract void apply(Ship ship);
     
+    /**
+     * By default, a power-up remains stationary.
+     *
+     * @param tick the current game tick.
+     */
     @Override
     public void tick(int tick) {
-        // By default, power-ups remain stationary.
+        // Default: no movement.
     }
 }
+
 
