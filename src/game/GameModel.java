@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Represents the game information and state.
- * It stores and manages all game objects (ship, enemies, bullets, power-ups, etc.)
- * and handles game updates such as collisions.
+ * Represents the game state.
  */
 public class GameModel {
     public static final int GAME_HEIGHT = 20;
@@ -18,7 +16,6 @@ public class GameModel {
     private final Random random = new Random();
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
-    
     private Ship ship;
     
     public GameModel(Logger logger) {
@@ -38,7 +35,6 @@ public class GameModel {
     }
     
     public void updateGame(int tick) {
-        // Update all objects by calling tick(int tick)
         for (SpaceObject obj : objects) {
             obj.tick(tick);
         }
@@ -46,11 +42,11 @@ public class GameModel {
     
     /**
      * Collision detection:
-     * 1. If a collision involves a Bullet and an Enemy, remove both and add 1 to ship's score.
-     * 2. If a collision involves the Ship and an Enemy, remove the enemy and add 1 to ship's score.
-     * 3. If a collision involves the Ship and an Asteroid, remove the asteroid.
-     * 4. If the Ship collides with a HealthPowerUp or ShieldPowerUp, apply its effect and remove the power-up.
-     * 5. Other collisions with matching coordinates remove both objects.
+     * 1. Bullet and Enemy collision: remove both and add 1 to ship's score.
+     * 2. Ship and Enemy collision: remove enemy and add 1 to ship's score.
+     * 3. Ship and Asteroid collision: remove asteroid.
+     * 4. Ship and HealthPowerUp/ShieldPowerUp collision: apply effect and remove the power-up.
+     * 5. Other collisions: remove both.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -99,7 +95,7 @@ public class GameModel {
                     if ((a instanceof Ship && b instanceof HealthPowerUp) ||
                         (b instanceof Ship && a instanceof HealthPowerUp)) {
                         HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp)a : (HealthPowerUp)b;
-                        hp.apply(ship);
+                        hp.applyEffect(ship);
                         toRemove.add(hp);
                         logger.log("Ship collected Health Power-Up.");
                         continue;
@@ -108,12 +104,12 @@ public class GameModel {
                     if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
                         (b instanceof Ship && a instanceof ShieldPowerUp)) {
                         ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp)a : (ShieldPowerUp)b;
-                        sp.apply(ship);
+                        sp.applyEffect(ship);
                         toRemove.add(sp);
                         logger.log("Ship collected Shield Power-Up.");
                         continue;
                     }
-                    // Other collisions: remove both objects
+                    // Other collisions: remove both
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
@@ -128,7 +124,7 @@ public class GameModel {
     }
     
     public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
         addObject(ship);
     }
     
@@ -136,4 +132,3 @@ public class GameModel {
         return ship;
     }
 }
-
