@@ -8,43 +8,47 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship extends Controllable {
+public class Ship implements Controllable {
+    // 状态字段
+    private int x;
+    private int y;
     private int health;
     private int score;
-
+    
     /**
-     * Constructs a Ship with the specified coordinates and initial health.
+     * Constructs a Ship with the specified coordinates.
+     * The ship's initial health is set to 100.
      *
-     * @param x the x-coordinate of the ship.
-     * @param y the y-coordinate of the ship.
-     * @param health the initial health of the ship.
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
      */
-    public Ship(int x, int y, int health) {
-        super(x, y);
-        this.health = health;
+    public Ship(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.health = 100;
         this.score = 0;
     }
-
+    
     @Override
     public int getX() {
         return x;
     }
-
+    
     @Override 
     public int getY() {
         return y;
     }
-
+    
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
-
+    
     @Override
     public void tick(int tick) {
-        // Ship does not update automatically.
+        // Ship movement is controlled by player input; no automatic update.
     }
-
+    
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
@@ -69,29 +73,28 @@ public class Ship extends Controllable {
         x = newX;
         y = newY;
     }
-
-    // Methods for managing score and health
+    
+    // 其它方法
     public void addScore(int points) {
         score += points;
     }
-
+    
     public int getScore() {
         return score;
     }
-
+    
     public void heal(int amount) {
         health += amount;
     }
-
+    
     public void takeDamage(int amount) {
         health -= amount;
-        if (health < 0) {
+        if(health < 0) {
             health = 0;
         }
     }
-
+    
     public int getHealth() {
         return health;
     }
 }
-
