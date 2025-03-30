@@ -6,8 +6,6 @@ import game.ui.ObjectGraphic;
  * Represents an enemy object.
  */
 public class Enemy extends SpaceObject {
-    private int x;
-    private int y;
 
     /**
      * Constructs an Enemy with the specified coordinates.
@@ -17,11 +15,9 @@ public class Enemy extends SpaceObject {
      */
     public Enemy(int x, int y) {
         super(x, y);
-        this.x = x;
-        this.y = y;
     }
 
-    @Override 
+    @Override
     public int getX() {
         return x;
     }
@@ -52,3 +48,4 @@ public class Enemy extends SpaceObject {
         y++; // Move downward each tick
     }
 }
+
