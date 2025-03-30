@@ -27,26 +27,15 @@ public class Asteroid extends SpaceObject {
         return y;
     }
 
-    /**
-     * Returns the graphical representation of the asteroid,
-     * using the image from the relative path "src/assets/asteroid.png".
-     *
-     * @return an ObjectGraphic representing the asteroid.
-     */
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Asteroid", "src/assets/asteroid.png");
     }
 
-    /**
-     * Updates the asteroid's state on each tick.
-     * In this implementation, the asteroid moves downward.
-     *
-     * @param tick the current game tick.
-     */
     @Override
     public void tick(int tick) {
         y++; // Move downward each tick
     }
 }
+
 
