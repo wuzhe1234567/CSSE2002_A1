@@ -16,17 +16,17 @@ public class Enemy extends SpaceObject {
     public Enemy(int x, int y) {
         super(x, y);
     }
-    
+
     @Override
     public int getX() {
         return x;
     }
-    
+
     @Override 
     public int getY() {
         return y;
     }
-    
+
     /**
      * Returns the graphical representation of the enemy.
      *
@@ -36,7 +36,7 @@ public class Enemy extends SpaceObject {
     public ObjectGraphic render() {
         return new ObjectGraphic("Enemy", "src/assets/enemy.png");
     }
-    
+
     /**
      * Updates the enemy's state on each tick (moves downward).
      *
@@ -47,6 +47,3 @@ public class Enemy extends SpaceObject {
         y++; // Move downward each tick
     }
 }
-
-
-
