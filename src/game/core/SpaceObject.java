@@ -11,4 +11,3 @@ public interface SpaceObject {
     public abstract ObjectGraphic render();
     public abstract void tick(int tick);
 }
-
