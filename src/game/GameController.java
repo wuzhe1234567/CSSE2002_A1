@@ -5,7 +5,7 @@ import game.ui.UI;
 import game.utility.Direction;
 
 /**
- * Manages the game flow and interactions.
+ * Manages the game flow and interactions, connecting the UI with the GameModel.
  */
 public class GameController {
     private long startTime;
@@ -28,14 +28,14 @@ public class GameController {
     }
 
     /**
-     * Initial game state: create the ship, enemies, and asteroids,
-     * display them (stationary) and wait for the player to press Enter to start.
+     * Initial game state:
+     * Creates the ship, enemies, and asteroids, displays them (stationary),
+     * and waits for the player to press Enter to start the game.
      */
     public void startGame() {
         model.createShip();
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // Note: Health and Score mechanisms have been removed.
         renderGame();
         // Register pre-game key handler to listen for Enter
         ui.onKey(this::handlePreGameInput);
@@ -66,7 +66,7 @@ public class GameController {
 
     /**
      * Handles player input during the game:
-     * W/A/S/D control ship movement, F fires a bullet, P toggles pause.
+     * W/A/S/D to move the ship, F to fire a bullet, P to toggle pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -93,7 +93,7 @@ public class GameController {
                 ship.move(Direction.RIGHT);
                 break;
             case "F":
-                // Fire bullet from ship's position (one unit above)
+                // Fire bullet from one unit above the ship
                 model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
                 break;
             default:
