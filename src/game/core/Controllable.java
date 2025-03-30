@@ -5,11 +5,11 @@ import game.utility.Direction;
 
 /**
  * Abstract class representing a controllable game object.
+ * (如果需要，Controllable 可作为接口实现，但此处用抽象类方式满足规范要求)
  */
-public abstract class Controllable extends SpaceObject {
-
+public abstract class Controllable extends Ship {
     /**
-     * Constructs a controllable object with the specified coordinates.
+     * Constructs a controllable Ship.
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
@@ -20,13 +20,12 @@ public abstract class Controllable extends SpaceObject {
 
     /**
      * Moves the object in the specified direction.
-     * Default implementation throws UnsupportedOperationException.
+     * Default implementation throws an UnsupportedOperationException.
      *
      * @param direction the direction to move.
      * @throws BoundaryExceededException if the move exceeds game boundaries.
      */
-    public void move(Direction direction) throws BoundaryExceededException {
+    public void move(game.utility.Direction direction) throws BoundaryExceededException {
         throw new UnsupportedOperationException("move method not implemented");
     }
 }
-
