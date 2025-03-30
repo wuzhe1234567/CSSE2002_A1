@@ -17,21 +17,11 @@ public class Enemy extends SpaceObject {
         super(x, y);
     }
 
-    /**
-     * Returns the x-coordinate of the enemy.
-     *
-     * @return the x-coordinate.
-     */
     @Override
     public int getX() {
         return x;
     }
 
-    /**
-     * Returns the y-coordinate of the enemy.
-     *
-     * @return the y-coordinate.
-     */
     @Override
     public int getY() {
         return y;
@@ -39,7 +29,7 @@ public class Enemy extends SpaceObject {
 
     /**
      * Returns the graphical representation of the enemy,
-     * using the image from the relative path "src/assets/enemy.png".
+     * using the image from "src/assets/enemy.png".
      *
      * @return an ObjectGraphic representing the enemy.
      */
@@ -50,12 +40,12 @@ public class Enemy extends SpaceObject {
 
     /**
      * Updates the enemy's state on each tick.
-     * In this implementation, the enemy moves downward (increases its y-coordinate).
+     * In this implementation, the enemy moves downward.
      *
      * @param tick the current game tick.
      */
     @Override
     public void tick(int tick) {
-        y++; // Enemy moves downward each tick
+        y++; // Move downward each tick
     }
 }
