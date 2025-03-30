@@ -52,3 +52,4 @@ public abstract class SpaceObject {
      */
     public abstract void tick(int tick);
 }
+
