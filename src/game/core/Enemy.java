@@ -5,7 +5,9 @@ import game.ui.ObjectGraphic;
 /**
  * Represents an enemy object.
  */
-public class Enemy extends SpaceObject {
+public class Enemy implements SpaceObject {
+    private int x;
+    private int y;
 
     /**
      * Constructs an Enemy with the specified coordinates.
@@ -14,12 +16,21 @@ public class Enemy extends SpaceObject {
      * @param y the y-coordinate of the enemy.
      */
     public Enemy(int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
 
+    @Override
+    public int getX() {
+        return x;
+    }
+    @Override
+    public int getY() {
+        return y;
+    }
     /**
      * Returns the graphical representation of the enemy,
-     * using the image resource from the relative path "src/assets/enemy.png".
+     * using the image from the relative path "src/assets/enemy.png".
      *
      * @return an ObjectGraphic representing the enemy.
      */
@@ -27,10 +38,9 @@ public class Enemy extends SpaceObject {
     public ObjectGraphic render() {
         return new ObjectGraphic("Enemy", "src/assets/enemy.png");
     }
-
     /**
      * Updates the enemy's state on each tick.
-     * In this implementation, the enemy moves downward by increasing its y-coordinate.
+     * In this implementation, the enemy moves downward.
      *
      * @param tick the current game tick.
      */
@@ -39,3 +49,4 @@ public class Enemy extends SpaceObject {
         y++; // Move downward each tick
     }
 }
+
