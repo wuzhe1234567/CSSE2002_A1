@@ -8,7 +8,7 @@ import game.ui.ObjectGraphic;
 public class Bullet implements SpaceObject {
     private int x;
     private int y;
-    
+
     /**
      * Constructs a Bullet with the specified coordinates.
      *
@@ -19,20 +19,20 @@ public class Bullet implements SpaceObject {
         this.x = x;
         this.y = y;
     }
-    
+
     @Override
     public int getX() {
         return x;
     }
-    
+
     @Override 
     public int getY() {
         return y;
     }
-    
+
     /**
      * Returns the graphical representation of the bullet,
-     * using the image from "src/assets/bullet.png".
+     * using the image from the relative path "src/assets/bullet.png".
      *
      * @return an ObjectGraphic representing the bullet.
      */
@@ -40,7 +40,7 @@ public class Bullet implements SpaceObject {
     public ObjectGraphic render() {
         return new ObjectGraphic("Bullet", "src/assets/bullet.png");
     }
-    
+
     /**
      * Updates the bullet's state on each tick.
      * In this implementation, the bullet moves upward.
@@ -52,5 +52,6 @@ public class Bullet implements SpaceObject {
         y--; // Move upward each tick
     }
 }
+
 
 
