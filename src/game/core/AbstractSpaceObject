@@ -1,0 +1,33 @@
+package game.core;
+
+import game.ui.ObjectGraphic;
+
+/**
+ * Abstract base class implementing SpaceObject.
+ * Provides the x and y fields and implements getX() and getY() methods.
+ */
+public abstract class AbstractSpaceObject implements SpaceObject {
+    protected int x;
+    protected int y;
+
+    /**
+     * Constructs an object with the given coordinates.
+     *
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     */
+    public AbstractSpaceObject(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override 
+    public int getY() {
+        return y;
+    }
+}
