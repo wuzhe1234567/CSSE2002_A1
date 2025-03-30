@@ -16,17 +16,17 @@ public class Bullet extends SpaceObject {
     public Bullet(int x, int y) {
         super(x, y);
     }
-    
+
     @Override
     public int getX() {
         return x;
     }
-    
+
     @Override 
     public int getY() {
         return y;
     }
-    
+
     /**
      * Returns the graphical representation of the bullet.
      *
@@ -36,7 +36,7 @@ public class Bullet extends SpaceObject {
     public ObjectGraphic render() {
         return new ObjectGraphic("Bullet", "src/assets/bullet.png");
     }
-    
+
     /**
      * Updates the bullet's state on each tick (moves upward).
      *
