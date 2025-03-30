@@ -14,41 +14,43 @@ import java.util.Random;
 public class GameModel {
     public static final int GAME_HEIGHT = 20;
     public static final int GAME_WIDTH = 10;
-
+    
     private final Random random = new Random();
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
+    
     private Ship ship;
-
-    public GameModel(game.utility.Logger logger) {
+    
+    public GameModel(Logger logger) {
         this.logger = logger;
     }
-
+    
     public void setRandomSeed(int seed) {
         random.setSeed(seed);
     }
-
+    
     public void addObject(SpaceObject object) {
         objects.add(object);
     }
-
+    
     public List<SpaceObject> getSpaceObjects() {
         return objects;
     }
-
+    
     public void updateGame(int tick) {
+        // Update all objects by calling tick(int tick)
         for (SpaceObject obj : objects) {
             obj.tick(tick);
         }
     }
-
+    
     /**
      * Collision detection:
-     * 1. If a collision involves a Bullet and an Enemy, remove both and increase score.
-     * 2. If a collision involves the Ship and an Enemy, remove the enemy and increase score.
+     * 1. If a collision involves a Bullet and an Enemy, remove both and add 1 to ship's score.
+     * 2. If a collision involves the Ship and an Enemy, remove the enemy and add 1 to ship's score.
      * 3. If a collision involves the Ship and an Asteroid, remove the asteroid.
      * 4. If the Ship collides with a HealthPowerUp or ShieldPowerUp, apply its effect and remove the power-up.
-     * 5. Other collisions (with matching coordinates) remove both objects.
+     * 5. Other collisions with matching coordinates remove both objects.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -111,7 +113,7 @@ public class GameModel {
                         logger.log("Ship collected Shield Power-Up.");
                         continue;
                     }
-                    // Other collisions: remove both
+                    // Other collisions: remove both objects
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
@@ -124,13 +126,14 @@ public class GameModel {
             logger.log("Game Over: Ship destroyed.");
         }
     }
-
+    
     public void createShip() {
         ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
         addObject(ship);
     }
-
+    
     public Ship getShip() {
         return ship;
     }
 }
+
