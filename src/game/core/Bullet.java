@@ -20,19 +20,18 @@ public class Bullet implements SpaceObject {
         this.y = y;
     }
 
-    @Override
+    @Override 
     public int getX() {
         return x;
     }
-    
+
     @Override 
     public int getY() {
         return y;
     }
-    
+
     /**
-     * Returns the graphical representation of the bullet,
-     * using the image from "src/assets/bullet.png".
+     * Returns the graphical representation of the bullet.
      *
      * @return an ObjectGraphic representing the bullet.
      */
@@ -40,10 +39,9 @@ public class Bullet implements SpaceObject {
     public ObjectGraphic render() {
         return new ObjectGraphic("Bullet", "src/assets/bullet.png");
     }
-    
+
     /**
-     * Updates the bullet's state on each tick.
-     * In this implementation, the bullet moves upward.
+     * Updates the bullet's state on each tick (moves upward).
      *
      * @param tick the current game tick.
      */
@@ -52,4 +50,3 @@ public class Bullet implements SpaceObject {
         y--; // Move upward each tick
     }
 }
-
