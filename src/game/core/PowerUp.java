@@ -29,4 +29,3 @@ public abstract class PowerUp extends SpaceObject {
         // By default, power-ups remain stationary.
     }
 }
-
