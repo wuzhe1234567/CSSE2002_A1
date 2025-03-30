@@ -5,7 +5,7 @@ import game.utility.Direction;
 import game.ui.ObjectGraphic;
 
 /**
- * Abstract class representing a controllable game object.
+ * Abstract base class representing a controllable game object.
  */
 public abstract class Controllable extends SpaceObject {
 
@@ -21,9 +21,12 @@ public abstract class Controllable extends SpaceObject {
 
     /**
      * Moves the object in the specified direction.
+     * Default implementation throws an UnsupportedOperationException.
      *
      * @param direction the direction to move
      * @throws BoundaryExceededException if the move exceeds game boundaries
      */
-    public abstract void move(Direction direction) throws BoundaryExceededException;
+    public void move(Direction direction) throws BoundaryExceededException {
+        throw new UnsupportedOperationException("move method not implemented");
+    }
 }
