@@ -35,21 +35,37 @@ public class Ship extends Controllable {
         return y;
     }
 
+    /**
+     * Returns the graphical representation of the ship.
+     *
+     * @return an ObjectGraphic representing the ship.
+     */
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
 
+    /**
+     * Ship does not update automatically.
+     *
+     * @param tick the current game tick.
+     */
     @Override
     public void tick(int tick) {
-        // Ship does not update automatically.
+        // Movement is controlled by player input.
     }
 
+    /**
+     * Moves the ship in the specified direction by one unit.
+     *
+     * @param direction the direction to move.
+     * @throws BoundaryExceededException if the move exceeds game boundaries.
+     */
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
         int newY = y;
-        switch (direction) {
+        switch(direction) {
             case UP:
                 newY = y - 1;
                 break;
@@ -63,7 +79,7 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
