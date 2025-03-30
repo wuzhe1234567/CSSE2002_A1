@@ -19,7 +19,6 @@ public abstract class PowerUp extends SpaceObject {
     
     /**
      * When the power-up is collected by the ship, apply its effect.
-     * 注意：规范要求方法名称为 applyEffect 而非 apply。
      *
      * @param ship the ship that collects the power-up.
      */
