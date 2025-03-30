@@ -20,36 +20,10 @@ public abstract class SpaceObject {
         this.y = y;
     }
     
-    /**
-     * Returns the x-coordinate.
-     *
-     * @return the x-coordinate.
-     */
-    public int getX() {
-        return x;
-    }
-    
-    /**
-     * Returns the y-coordinate.
-     *
-     * @return the y-coordinate.
-     */
-    public int getY() {
-        return y;
-    }
-    
-    /**
-     * Returns the graphical representation of the object.
-     *
-     * @return an ObjectGraphic representing the object.
-     */
+    public abstract int getX();
+    public abstract int getY();
     public abstract ObjectGraphic render();
-    
-    /**
-     * Updates the object's state on each game tick.
-     *
-     * @param tick the current game tick.
-     */
     public abstract void tick(int tick);
 }
+
 
