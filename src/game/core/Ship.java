@@ -8,35 +8,21 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship implements Controllable {
-    // 状态字段
-    private int x;
-    private int y;
+public class Ship extends Controllable {
     private int health;
     private int score;
     
     /**
      * Constructs a Ship with the specified coordinates.
-     * The ship's initial health is set to 100.
+     * The ship's initial health is set to 100 and score to 0.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the x-coordinate of the ship.
+     * @param y the y-coordinate of the ship.
      */
     public Ship(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.health = 100;
         this.score = 0;
-    }
-    
-    @Override
-    public int getX() {
-        return x;
-    }
-    
-    @Override 
-    public int getY() {
-        return y;
     }
     
     @Override
@@ -46,14 +32,14 @@ public class Ship implements Controllable {
     
     @Override
     public void tick(int tick) {
-        // Ship movement is controlled by player input; no automatic update.
+        // Ship's movement is controlled by player input; no automatic update.
     }
     
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
         int newY = y;
-        switch (direction) {
+        switch(direction) {
             case UP:
                 newY = y - 1;
                 break;
@@ -74,7 +60,7 @@ public class Ship implements Controllable {
         y = newY;
     }
     
-    // 其它方法
+    // 以下方法用于管理分数和健康
     public void addScore(int points) {
         score += points;
     }
@@ -89,7 +75,7 @@ public class Ship implements Controllable {
     
     public void takeDamage(int amount) {
         health -= amount;
-        if(health < 0) {
+        if (health < 0) {
             health = 0;
         }
     }
