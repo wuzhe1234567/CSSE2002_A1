@@ -3,24 +3,22 @@ package game.core;
 import game.ui.ObjectGraphic;
 
 /**
- * Abstract base class representing a space object in the game.
+ * Abstract interface representing a space object in the game.
  */
-public abstract class SpaceObject {
-    protected int x;
-    protected int y;
+public interface SpaceObject {
+    /**
+     * Returns the x-coordinate of the object.
+     *
+     * @return the x-coordinate.
+     */
+    public abstract int getX();
 
-    public SpaceObject(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
+    /**
+     * Returns the y-coordinate of the object.
+     *
+     * @return the y-coordinate.
+     */
+    public abstract int getY();
 
     /**
      * Returns the graphical representation of the object.
