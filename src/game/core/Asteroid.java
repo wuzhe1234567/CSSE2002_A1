@@ -5,10 +5,13 @@ import game.ui.ObjectGraphic;
 /**
  * Represents an asteroid object.
  */
-public class Asteroid extends SpaceObject {
-
+public class Asteroid implements SpaceObject {
+    private int x;
+    private int y;
+    
     public Asteroid(int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
     
     @Override
@@ -28,7 +31,7 @@ public class Asteroid extends SpaceObject {
     
     @Override
     public void tick(int tick) {
-        y++; // Move downward each tick
+        y++; // Moves downward each tick
     }
 }
 
