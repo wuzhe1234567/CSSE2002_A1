@@ -1,5 +1,3 @@
-package game.core;
-
 import game.ui.ObjectGraphic;
 
 /**
