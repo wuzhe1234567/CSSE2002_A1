@@ -19,7 +19,7 @@ public class Bullet extends AbstractSpaceObject {
 
     /**
      * Returns the graphical representation of the bullet,
-     * using the image from "src/assets/bullet.png".
+     * using the image from the relative path "src/assets/bullet.png".
      *
      * @return an ObjectGraphic representing the bullet.
      */
