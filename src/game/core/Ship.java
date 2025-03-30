@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel; // 用于引用 GAME_WIDTH 和 GAME_HEIGHT
+import game.GameModel;
 
 /**
  * Represents the player's ship.
@@ -25,9 +25,18 @@ public class Ship extends Controllable {
         this.score = 0;
     }
 
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override 
+    public int getY() {
+        return y;
+    }
+
     /**
-     * Returns the graphical representation of the ship,
-     * using the image from the relative path "src/assets/ship.png".
+     * Returns the graphical representation of the ship.
      *
      * @return an ObjectGraphic representing the ship.
      */
@@ -38,13 +47,13 @@ public class Ship extends Controllable {
 
     /**
      * Updates the ship's state on each tick.
-     * In this implementation, the ship does not move automatically.
+     * In this implementation, the ship does not update automatically.
      *
      * @param tick the current game tick.
      */
     @Override
     public void tick(int tick) {
-        // Ship movement is controlled by key input; no automatic update.
+        // Ship's movement is controlled by player input.
     }
 
     /**
@@ -72,46 +81,26 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        // Check boundaries using GameModel constants
-        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
         y = newY;
     }
 
-    /**
-     * Adds the specified number of points to the ship's score.
-     *
-     * @param points the points to add.
-     */
+    // 以下方法用于管理分数和健康
     public void addScore(int points) {
         score += points;
     }
 
-    /**
-     * Returns the current score of the ship.
-     *
-     * @return the current score.
-     */
     public int getScore() {
         return score;
     }
 
-    /**
-     * Heals the ship by the specified amount.
-     *
-     * @param amount the amount of health to add.
-     */
     public void heal(int amount) {
         health += amount;
     }
 
-    /**
-     * Reduces the ship's health by the specified amount.
-     *
-     * @param amount the damage amount to apply.
-     */
     public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) {
@@ -119,11 +108,6 @@ public class Ship extends Controllable {
         }
     }
 
-    /**
-     * Returns the current health of the ship.
-     *
-     * @return the current health.
-     */
     public int getHealth() {
         return health;
     }
