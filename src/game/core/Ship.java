@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel;
+import game.GameModel; // 用于引用 GAME_WIDTH 和 GAME_HEIGHT
 
 /**
  * Represents the player's ship.
@@ -26,38 +26,18 @@ public class Ship extends Controllable {
     }
 
     @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    /**
-     * Returns the graphical representation of the ship.
-     *
-     * @return an ObjectGraphic representing the ship.
-     */
-    @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
 
-    /**
-     * The ship does not move automatically on each tick.
-     *
-     * @param tick the current game tick.
-     */
     @Override
     public void tick(int tick) {
-        // Movement controlled by player input.
+        // Ship does not update automatically.
     }
 
     /**
      * Moves the ship in the specified direction by one unit.
-     * Throws a BoundaryExceededException if the move exceeds game boundaries.
+     * Throws BoundaryExceededException if the move would exceed game boundaries.
      *
      * @param direction the direction to move the ship.
      * @throws BoundaryExceededException if movement exceeds boundaries.
@@ -80,7 +60,6 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        // Check boundaries using GameModel constants
         if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
@@ -88,7 +67,6 @@ public class Ship extends Controllable {
         y = newY;
     }
 
-    // Additional methods:
     public void addScore(int points) {
         score += points;
     }
@@ -103,9 +81,7 @@ public class Ship extends Controllable {
 
     public void takeDamage(int amount) {
         health -= amount;
-        if (health < 0) {
-            health = 0;
-        }
+        if(health < 0) health = 0;
     }
 
     public int getHealth() {
