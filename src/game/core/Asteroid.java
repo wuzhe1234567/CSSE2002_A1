@@ -3,28 +3,41 @@ package game.core;
 import game.ui.ObjectGraphic;
 
 /**
- * 表示陨石对象。
+ * Represents an asteroid object.
  */
 public class Asteroid extends SpaceObject {
 
+    /**
+     * Constructs an Asteroid with the specified coordinates.
+     *
+     * @param x the x-coordinate of the asteroid
+     * @param y the y-coordinate of the asteroid
+     */
     public Asteroid(int x, int y) {
         super(x, y);
     }
 
     /**
-     * 返回陨石的图形表示，使用 "asteroid.png" 作为图片资源。
+     * Returns the graphical representation of the asteroid,
+     * using "asteroid.png" as the image resource.
+     *
+     * @return an ObjectGraphic representing the asteroid
      */
     @Override
     public ObjectGraphic render() {
-        return new ObjectGraphic("Asteroid", "C:\\Users\\wuzhe\\Desktop\\Study\\Semester 2\\CSSE 2002\\Assignment1\\provided\\CSSE2002_A1\\assets\\asteroid.png");
+        // 使用相对路径引用图片（确保工作目录设置为项目根目录）
+        return new ObjectGraphic("Asteroid", "src/assets/asteroid.png");
     }
 
     /**
-     * 陨石每个 tick 向下移动（y 增加）。
+     * Updates the asteroid's state on each tick.
+     * In this implementation, the asteroid moves downward by increasing its y-coordinate.
+     *
+     * @param tick the current game tick
      */
     @Override
-    public void update() {
-        y++; // 向下移动
+    public void tick(int tick) {
+        y++; // Move downward each tick
     }
 }
 
