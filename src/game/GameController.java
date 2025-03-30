@@ -6,7 +6,7 @@ import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
 
 /**
- * Manages the game flow and interactions.
+ * Manages game flow and interactions.
  */
 public class GameController {
     private long startTime;
@@ -26,18 +26,16 @@ public class GameController {
     }
     
     /**
-     * Initial game state: creates ship, enemies, asteroids, and power-ups,
-     * displays them (stationary), and waits for the player to press Enter.
+     * Initial state: creates ship, enemies, asteroids, and power-ups,
+     * displays them (stationary), and waits for Enter key.
      */
     public void startGame() {
         model.createShip();
-        // 添加普通敌人和陨石
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 添加额外的对象：下降敌人、健康和护盾道具
         model.addObject(new DescendingEnemy(2, 0));
-        model.addObject(new HealthPowerUp(4, 0, 20));  // 收集后增加20生命值
-        model.addObject(new ShieldPowerUp(6, 0, 50));    // 护盾持续50个tick
+        model.addObject(new HealthPowerUp(4, 0));
+        model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
         ui.onKey(this::handlePreGameInput);
     }
@@ -64,8 +62,7 @@ public class GameController {
     }
     
     /**
-     * Handles player input:
-     * W/A/S/D move the ship, F fires a bullet, P toggles pause.
+     * Handles player input: W/A/S/D move the ship, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -101,4 +98,3 @@ public class GameController {
         }
     }
 }
-
