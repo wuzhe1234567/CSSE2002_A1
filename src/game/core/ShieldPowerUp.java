@@ -6,18 +6,16 @@ import game.ui.ObjectGraphic;
  * Represents a shield power-up that grants the ship temporary invincibility.
  */
 public class ShieldPowerUp extends PowerUp {
-    private int duration; // Duration in ticks
+    private int duration = 50; // 固定持续时间
     
     /**
-     * Constructs a ShieldPowerUp.
+     * Constructs a ShieldPowerUp at the given coordinates.
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param duration the duration in ticks.
      */
-    public ShieldPowerUp(int x, int y, int duration) {
+    public ShieldPowerUp(int x, int y) {
         super(x, y);
-        this.duration = duration;
     }
     
     @Override
@@ -26,8 +24,8 @@ public class ShieldPowerUp extends PowerUp {
     }
     
     @Override
-    public void apply(Ship ship) {
-        // 这里仅打印日志，实际可调用 ship.activateShield(duration) 实现无敌效果
+    public void applyEffect(Ship ship) {
+        // 这里只打印日志，实际中可调用 ship.activateShield(duration) 等方法
         System.out.println("Shield activated for " + duration + " ticks.");
     }
     
