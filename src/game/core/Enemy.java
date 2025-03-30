@@ -19,7 +19,7 @@ public class Enemy extends AbstractSpaceObject {
 
     /**
      * Returns the graphical representation of the enemy,
-     * using the image from "src/assets/enemy.png".
+     * using the image from the relative path "src/assets/enemy.png".
      *
      * @return an ObjectGraphic representing the enemy.
      */
@@ -39,3 +39,4 @@ public class Enemy extends AbstractSpaceObject {
         y++; // Move downward each tick
     }
 }
+
