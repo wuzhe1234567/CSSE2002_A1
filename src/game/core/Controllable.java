@@ -6,10 +6,10 @@ import game.utility.Direction;
 /**
  * Abstract class representing a controllable game object.
  */
-public abstract class Controllable extends ObjectWithPosition {
+public abstract class Controllable extends SpaceObject {
 
     /**
-     * Constructs a Controllable object with the specified coordinates.
+     * Constructs a controllable object with the specified coordinates.
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
@@ -20,12 +20,13 @@ public abstract class Controllable extends ObjectWithPosition {
 
     /**
      * Moves the object in the specified direction.
-     * Default implementation throws an UnsupportedOperationException.
+     * Default implementation throws UnsupportedOperationException.
      *
      * @param direction the direction to move.
      * @throws BoundaryExceededException if the move exceeds game boundaries.
      */
-    public void move(game.utility.Direction direction) throws BoundaryExceededException {
+    public void move(Direction direction) throws BoundaryExceededException {
         throw new UnsupportedOperationException("move method not implemented");
     }
 }
+
