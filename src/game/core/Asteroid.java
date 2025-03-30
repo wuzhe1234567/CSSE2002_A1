@@ -5,7 +5,7 @@ import game.ui.ObjectGraphic;
 /**
  * Represents an asteroid object.
  */
-public class Asteroid extends SpaceObject {
+public class Asteroid extends AbstractSpaceObject {
 
     /**
      * Constructs an Asteroid with the specified coordinates.
@@ -17,25 +17,25 @@ public class Asteroid extends SpaceObject {
         super(x, y);
     }
 
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
-    }
-
+    /**
+     * Returns the graphical representation of the asteroid,
+     * using the image from the relative path "src/assets/asteroid.png".
+     *
+     * @return an ObjectGraphic representing the asteroid.
+     */
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Asteroid", "src/assets/asteroid.png");
     }
 
+    /**
+     * Updates the asteroid's state on each tick.
+     * In this implementation, the asteroid moves downward.
+     *
+     * @param tick the current game tick.
+     */
     @Override
     public void tick(int tick) {
         y++; // Move downward each tick
     }
 }
-
-
