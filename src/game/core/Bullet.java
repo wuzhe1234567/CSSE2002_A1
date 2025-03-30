@@ -47,4 +47,3 @@ public class Bullet extends SpaceObject {
         y--; // Move upward each tick
     }
 }
-
