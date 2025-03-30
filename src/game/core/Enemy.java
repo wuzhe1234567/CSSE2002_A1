@@ -31,8 +31,7 @@ public class Enemy implements SpaceObject {
     }
 
     /**
-     * Returns the graphical representation of the enemy,
-     * using the image from "src/assets/enemy.png".
+     * Returns the graphical representation of the enemy.
      *
      * @return an ObjectGraphic representing the enemy.
      */
@@ -42,8 +41,7 @@ public class Enemy implements SpaceObject {
     }
 
     /**
-     * Updates the enemy's state on each tick.
-     * In this implementation, the enemy moves downward.
+     * Updates the enemy's state on each tick (moves downward).
      *
      * @param tick the current game tick.
      */
@@ -52,3 +50,4 @@ public class Enemy implements SpaceObject {
         y++; // Move downward each tick
     }
 }
+
