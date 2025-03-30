@@ -5,13 +5,17 @@ import game.ui.ObjectGraphic;
 /**
  * Represents a standard enemy object.
  */
-public class Enemy extends SpaceObject {
-
+public class Enemy implements SpaceObject {
+    // 为了让 DescendingEnemy 能修改坐标，这里声明为 protected
+    protected int x;
+    protected int y;
+    
     public Enemy(int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
     
-    @Override
+    @Override 
     public int getX() {
         return x;
     }
@@ -28,6 +32,6 @@ public class Enemy extends SpaceObject {
     
     @Override
     public void tick(int tick) {
-        y++; // Move downward each tick
+        y++; // Moves downward each tick
     }
 }
