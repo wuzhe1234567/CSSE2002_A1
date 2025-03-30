@@ -5,9 +5,7 @@ import game.ui.ObjectGraphic;
 /**
  * Represents a bullet object.
  */
-public class Bullet implements SpaceObject {
-    private int x;
-    private int y;
+public class Bullet extends AbstractSpaceObject {
 
     /**
      * Constructs a Bullet with the specified coordinates.
@@ -16,23 +14,12 @@ public class Bullet implements SpaceObject {
      * @param y the y-coordinate of the bullet.
      */
     public Bullet(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override 
-    public int getY() {
-        return y;
+        super(x, y);
     }
 
     /**
      * Returns the graphical representation of the bullet,
-     * using the image from the relative path "src/assets/bullet.png".
+     * using the image from "src/assets/bullet.png".
      *
      * @return an ObjectGraphic representing the bullet.
      */
@@ -52,6 +39,3 @@ public class Bullet implements SpaceObject {
         y--; // Move upward each tick
     }
 }
-
-
-
