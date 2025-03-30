@@ -13,15 +13,15 @@ public class Ship extends Controllable {
     private int score;
 
     /**
-     * Constructs a Ship with the specified coordinates.
-     * The ship's initial health is set to 100 and score to 0.
+     * Constructs a Ship with the specified coordinates and initial health.
      *
      * @param x the x-coordinate of the ship.
      * @param y the y-coordinate of the ship.
+     * @param health the initial health of the ship.
      */
-    public Ship(int x, int y) {
+    public Ship(int x, int y, int health) {
         super(x, y);
-        this.health = 100;
+        this.health = health;
         this.score = 0;
     }
 
@@ -35,34 +35,16 @@ public class Ship extends Controllable {
         return y;
     }
 
-    /**
-     * Returns the graphical representation of the ship.
-     *
-     * @return an ObjectGraphic representing the ship.
-     */
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
 
-    /**
-     * Updates the ship's state on each tick.
-     * In this implementation, the ship does not update automatically.
-     *
-     * @param tick the current game tick.
-     */
     @Override
     public void tick(int tick) {
-        // Ship's movement is controlled by player input.
+        // Ship does not update automatically.
     }
 
-    /**
-     * Moves the ship in the specified direction by one unit.
-     * Throws a BoundaryExceededException if the move exceeds game boundaries.
-     *
-     * @param direction the direction to move the ship.
-     * @throws BoundaryExceededException if the move exceeds game boundaries.
-     */
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
@@ -88,7 +70,7 @@ public class Ship extends Controllable {
         y = newY;
     }
 
-    // 以下方法用于管理分数和健康
+    // Methods for managing score and health
     public void addScore(int points) {
         score += points;
     }
@@ -107,6 +89,12 @@ public class Ship extends Controllable {
             health = 0;
         }
     }
+
+    public int getHealth() {
+        return health;
+    }
+}
+
 
     public int getHealth() {
         return health;
