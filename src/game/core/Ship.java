@@ -3,15 +3,14 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel;  // 加入此 import 以引用 GAME_WIDTH, GAME_HEIGHT
+import game.GameModel;  // 用于引用 GAME_WIDTH 和 GAME_HEIGHT
 
 /**
  * Represents the player's ship.
- * Implements the Controllable interface.
  */
-public class Ship extends SpaceObject implements Controllable {
+public class Ship extends Controllable {
     private int health;
-    private int score; // 如果需要管理分数，可以保留
+    private int score;
 
     /**
      * Constructs a Ship with the specified coordinates and initial health.
@@ -28,7 +27,7 @@ public class Ship extends SpaceObject implements Controllable {
 
     /**
      * Returns the graphical representation of the ship,
-     * using the image resource from the relative path "src/assets/ship.png".
+     * using the image from the relative path "src/assets/ship.png".
      *
      * @return an ObjectGraphic representing the ship
      */
@@ -38,18 +37,19 @@ public class Ship extends SpaceObject implements Controllable {
     }
 
     /**
-     * The ship does not move automatically on each tick.
+     * Updates the ship's state on each tick.
+     * In this implementation, the ship does not move automatically.
      *
      * @param tick the current game tick
      */
     @Override
     public void tick(int tick) {
-        // No automatic movement; movement is controlled by key input.
+        // Movement is controlled by player input, so no automatic update.
     }
 
     /**
      * Moves the ship in the specified direction by one unit.
-     * Throws BoundaryExceededException if the move would exceed game boundaries.
+     * Throws a BoundaryExceededException if the move would exceed game boundaries.
      *
      * @param direction the direction to move the ship
      * @throws BoundaryExceededException if the move exceeds game boundaries
@@ -80,6 +80,52 @@ public class Ship extends SpaceObject implements Controllable {
         y = newY;
     }
 
-    // 以下方法可根据需要添加，例如 addScore, heal, takeDamage, getScore, getHealth 等
-    // 这里省略，因本次重点不在此
+    /**
+     * Adds the specified number of points to the ship's score.
+     *
+     * @param points the points to add
+     */
+    public void addScore(int points) {
+        score += points;
+    }
+
+    /**
+     * Returns the current score of the ship.
+     *
+     * @return the current score
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * Heals the ship by the specified amount.
+     *
+     * @param amount the amount of health to add
+     */
+    public void heal(int amount) {
+        health += amount;
+    }
+
+    /**
+     * Reduces the ship's health by the specified amount.
+     *
+     * @param amount the damage amount to apply
+     */
+    public void takeDamage(int amount) {
+        health -= amount;
+        if (health < 0) {
+            health = 0;
+        }
+    }
+
+    /**
+     * Returns the current health of the ship.
+     *
+     * @return the current health
+     */
+    public int getHealth() {
+        return health;
+    }
 }
+
