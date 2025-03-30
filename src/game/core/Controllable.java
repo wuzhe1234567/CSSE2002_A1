@@ -9,12 +9,6 @@ import game.utility.Direction;
  */
 public abstract class Controllable extends SpaceObject {
 
-    /**
-     * Constructs a controllable object with the given coordinates.
-     *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
-     */
     public Controllable(int x, int y) {
         super(x, y);
     }
@@ -25,5 +19,5 @@ public abstract class Controllable extends SpaceObject {
      * @param direction the direction to move.
      * @throws BoundaryExceededException if the move exceeds game boundaries.
      */
-    public abstract void move(game.utility.Direction direction) throws BoundaryExceededException;
+    public abstract void move(Direction direction) throws BoundaryExceededException;
 }
