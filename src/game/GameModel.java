@@ -24,12 +24,6 @@ public class GameModel {
 
     private Ship ship;
 
-    // Score and Health mechanisms removed:
-    // private int playerLives = 3;
-    // private int score = 0;
-    // private boolean shipShieldActive = false;
-    // private ShieldPowerUp activeShieldPowerUp = null;
-
     public GameModel(Logger logger) {
         this.logger = logger;
     }
@@ -47,21 +41,19 @@ public class GameModel {
     }
 
     public void updateGame(int tick) {
-        // Update all objects
+        // Update all objects by calling tick(int tick)
         for (SpaceObject obj : objects) {
-            obj.update();
+            obj.tick(tick);
         }
-        // Remove all expired ShieldPowerUp objects
-        objects.removeIf(obj -> (obj instanceof ShieldPowerUp) && !((ShieldPowerUp)obj).isActive());
     }
 
     /**
      * Collision detection:
-     * 1. Ignore ShieldPowerUp objects.
+     * 1. Ignore Health and Score objects (if any exist, but in this version they are removed).
      * 2. If a collision involves a Bullet and an Enemy, remove both.
      * 3. If a collision involves the Ship and an Enemy, remove the enemy.
      * 4. If a collision involves the Ship and an Asteroid, remove the asteroid.
-     * 5. Other collisions with matching coordinates remove both objects.
+     * 5. Other collisions (with matching coordinates) remove both objects.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -69,20 +61,19 @@ public class GameModel {
             for (int j = i + 1; j < objects.size(); j++) {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
-                // If a ShieldPowerUp is involved, do nothing
-                if (a instanceof ShieldPowerUp || b instanceof ShieldPowerUp) {
-                    continue;
-                }
+                // If coordinates match, process collision
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // Bullet and Enemy collision: remove both
-                    if ((a instanceof Bullet && b instanceof Enemy) || (a instanceof Enemy && b instanceof Bullet)) {
+                    // 1. Bullet and Enemy collision: remove both
+                    if ((a instanceof Bullet && b instanceof Enemy) ||
+                            (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
                         toRemove.add(b);
                         logger.log("Bullet destroyed enemy.");
                         continue;
                     }
-                    // Ship and Enemy collision: remove the enemy
-                    if ((a instanceof Ship && b instanceof Enemy) || (b instanceof Ship && a instanceof Enemy)) {
+                    // 2. Ship and Enemy collision: remove enemy
+                    if ((a instanceof Ship && b instanceof Enemy) ||
+                            (b instanceof Ship && a instanceof Enemy)) {
                         if (a instanceof Ship) {
                             toRemove.add(b);
                         } else {
@@ -91,8 +82,9 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship and Asteroid collision: remove the asteroid
-                    if ((a instanceof Ship && b instanceof Asteroid) || (b instanceof Ship && a instanceof Asteroid)) {
+                    // 3. Ship and Asteroid collision: remove asteroid
+                    if ((a instanceof Ship && b instanceof Asteroid) ||
+                            (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
                             toRemove.add(b);
                         } else {
@@ -101,16 +93,20 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Other collisions: if coordinates match, remove both
-                    if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                        toRemove.add(a);
-                        toRemove.add(b);
-                        logger.log("Collision detected between " + a.render().toString() + " and " + b.render().toString());
-                    }
+                    // 4. Other collisions: if coordinates match, remove both
+                    toRemove.add(a);
+                    toRemove.add(b);
+                    logger.log("Collision detected between " + a.render().toString() +
+                            " and " + b.render().toString());
                 }
             }
         }
         objects.removeAll(toRemove);
+
+        // If the ship has been removed, log game over.
+        if (ship == null || !objects.contains(ship)) {
+            logger.log("Game Over: Ship destroyed.");
+        }
     }
 
     public void createShip() {
