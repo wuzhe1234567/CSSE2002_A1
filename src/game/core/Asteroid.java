@@ -5,7 +5,9 @@ import game.ui.ObjectGraphic;
 /**
  * Represents an asteroid object.
  */
-public class Asteroid extends SpaceObject {
+public class Asteroid implements SpaceObject {
+    private int x;
+    private int y;
 
     /**
      * Constructs an Asteroid with the specified coordinates.
@@ -14,7 +16,8 @@ public class Asteroid extends SpaceObject {
      * @param y the y-coordinate of the asteroid.
      */
     public Asteroid(int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class Asteroid extends SpaceObject {
         return x;
     }
 
-    @Override 
+    @Override
     public int getY() {
         return y;
     }
@@ -38,8 +41,7 @@ public class Asteroid extends SpaceObject {
     }
 
     /**
-     * Updates the asteroid's state on each tick.
-     * In this implementation, the asteroid moves downward.
+     * Updates the asteroid's state on each tick (moves downward).
      *
      * @param tick the current game tick.
      */
