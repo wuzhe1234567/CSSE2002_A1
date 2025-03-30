@@ -1,6 +1,7 @@
 package game;
 
 import game.core.*;
+import game.ui.ObjectGraphic;  // 添加这一行
 import game.ui.UI;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
@@ -33,11 +34,10 @@ public class GameController {
         model.createShip();
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 通过匿名内部类实例化 DescendingEnemy
+        // 使用匿名内部类实例化 DescendingEnemy
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
-                // 如果有专用图像，可修改路径；否则使用同 Enemy 的图像
                 return new ObjectGraphic("DescendingEnemy", "src/assets/descending_enemy.png");
             }
         });
@@ -69,7 +69,8 @@ public class GameController {
     }
     
     /**
-     * Handles player input: W/A/S/D to move, F to fire, P to toggle pause.
+     * Handles player input:
+     * W/A/S/D move the ship, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -105,3 +106,4 @@ public class GameController {
         }
     }
 }
+
