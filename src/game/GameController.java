@@ -1,5 +1,6 @@
 package game;
 
+import game.ui.ObjectGraphic;
 import game.core.*;
 import game.ui.UI;
 import game.utility.Direction;
