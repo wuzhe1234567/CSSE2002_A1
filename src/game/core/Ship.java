@@ -13,15 +13,15 @@ public class Ship extends Controllable {
     private int score;
 
     /**
-     * Constructs a Ship with the specified coordinates.
-     * The ship's initial health is set to 100 and score to 0.
+     * Constructs a Ship with the specified coordinates and initial health.
      *
      * @param x the x-coordinate of the ship
      * @param y the y-coordinate of the ship
+     * @param health the initial health of the ship
      */
-    public Ship(int x, int y) {
+    public Ship(int x, int y, int health) {
         super(x, y);
-        this.health = 100;
+        this.health = health;
         this.score = 0;
     }
 
@@ -44,12 +44,12 @@ public class Ship extends Controllable {
      */
     @Override
     public void tick(int tick) {
-        // Ship movement is controlled by key input; no automatic updates.
+        // Ship movement is controlled by key input; no automatic update.
     }
 
     /**
      * Moves the ship in the specified direction by one unit.
-     * Throws a BoundaryExceededException if the move would exceed game boundaries.
+     * Throws a BoundaryExceededException if the move exceeds game boundaries.
      *
      * @param direction the direction to move the ship
      * @throws BoundaryExceededException if the move exceeds game boundaries
