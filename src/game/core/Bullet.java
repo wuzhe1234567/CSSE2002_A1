@@ -6,8 +6,6 @@ import game.ui.ObjectGraphic;
  * Represents a bullet object.
  */
 public class Bullet extends SpaceObject {
-    private int x;
-    private int y;
 
     /**
      * Constructs a Bullet with the specified coordinates.
@@ -17,11 +15,9 @@ public class Bullet extends SpaceObject {
      */
     public Bullet(int x, int y) {
         super(x, y);
-        this.x = x;
-        this.y = y;
     }
 
-    @Override 
+    @Override
     public int getX() {
         return x;
     }
