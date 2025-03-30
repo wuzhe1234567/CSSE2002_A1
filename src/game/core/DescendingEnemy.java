@@ -13,11 +13,13 @@ public abstract class DescendingEnemy extends Enemy {
     
     @Override
     public void tick(int tick) {
-        // Descend faster: 2 units per tick instead of 1.
+        // Descend 2 units per tick instead of 1.
         y += 2;
     }
     
-    // 将 render 方法声明为 abstract，要求子类提供具体图像
+    /**
+     * render() remains abstract, so concrete subclasses (or anonymous classes) must provide an implementation.
+     */
     @Override
     public abstract ObjectGraphic render();
 }
