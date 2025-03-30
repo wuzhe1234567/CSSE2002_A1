@@ -31,8 +31,6 @@ public abstract class PowerUp extends SpaceObject {
      */
     @Override
     public void tick(int tick) {
-        // Default: no movement.
+        // No automatic movement by default.
     }
 }
-
-
