@@ -129,7 +129,7 @@ public class GameController {
     public void pauseGame() {
         ui.pause();
         // 修改为不带句号的 "Game paused"
-        ui.log("Game paused");
+        ui.log("Game paused.");
     }
 
     /**
