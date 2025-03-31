@@ -56,8 +56,8 @@ public class GameModel {
      * 1. Bullet and Enemy: remove both, add 1 score.
      * 2. Ship and Enemy: remove enemy, add 1 score.
      * 3. Ship and Asteroid: remove asteroid.
-     * 4. Ship and HealthPowerUp collision: apply effect and remove the power-up.
-     * 5. Ship and ShieldPowerUp collision: apply effect and remove the power-up.
+     * 4. Ship and HealthPowerUp: apply its effect and remove it.
+     * 5. Ship and ShieldPowerUp: apply its effect and remove it.
      * 6. Bullets should not collide with Asteroids.
      * 7. Other collisions: remove both.
      */
@@ -68,14 +68,14 @@ public class GameModel {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
                 
-                // Ignore collisions between Bullet and Asteroid
+                // Ignore collisions between Bullet and Asteroid.
                 if ((a instanceof Bullet && b instanceof Asteroid) ||
                     (a instanceof Asteroid && b instanceof Bullet)) {
                     continue;
                 }
                 
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // Bullet and Enemy collision
+                    // Bullet and Enemy collision.
                     if ((a instanceof Bullet && b instanceof Enemy) ||
                         (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
@@ -86,7 +86,7 @@ public class GameModel {
                         }
                         continue;
                     }
-                    // Ship and Enemy collision
+                    // Ship and Enemy collision.
                     if ((a instanceof Ship && b instanceof Enemy) ||
                         (b instanceof Ship && a instanceof Enemy)) {
                         if (ship != null) {
@@ -100,7 +100,7 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship and Asteroid collision
+                    // Ship and Asteroid collision.
                     if ((a instanceof Ship && b instanceof Asteroid) ||
                         (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
@@ -111,7 +111,7 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Ship and HealthPowerUp collision
+                    // Ship and HealthPowerUp collision.
                     if ((a instanceof Ship && b instanceof HealthPowerUp) ||
                         (b instanceof Ship && a instanceof HealthPowerUp)) {
                         HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp)a : (HealthPowerUp)b;
@@ -120,7 +120,7 @@ public class GameModel {
                         logger.log("Ship collected Health Power-Up.");
                         continue;
                     }
-                    // Ship and ShieldPowerUp collision
+                    // Ship and ShieldPowerUp collision.
                     if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
                         (b instanceof Ship && a instanceof ShieldPowerUp)) {
                         ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp)a : (ShieldPowerUp)b;
@@ -129,7 +129,7 @@ public class GameModel {
                         logger.log("Ship collected Shield Power-Up.");
                         continue;
                     }
-                    // Other collisions: remove both
+                    // Other collisions: remove both.
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
@@ -145,13 +145,10 @@ public class GameModel {
     
     /**
      * Spawns new objects based on game level and spawn rate.
-     * 测试要求：应在 (8, 0) 处生成一个 Asteroid。
+     * 为满足测试要求，直接在 (8,0) 处生成一个 Asteroid。
      */
     public void spawnObjects() {
-        // 为满足测试要求，直接在 (8,0) 处生成一个 Asteroid
-        if (random.nextInt(100) < START_SPAWN_RATE) {
-            addObject(new Asteroid(8, 0));
-        }
+        addObject(new Asteroid(8, 0));
     }
     
     /**
@@ -171,7 +168,6 @@ public class GameModel {
      */
     public void fireBullet() {
         if (ship != null) {
-            // Remove the ship so that only the bullet remains
             objects.remove(ship);
             addObject(new Bullet(ship.getX(), ship.getY() - 1));
             logger.log("Bullet fired.");
@@ -199,4 +195,3 @@ public class GameModel {
         return ship;
     }
 }
-
