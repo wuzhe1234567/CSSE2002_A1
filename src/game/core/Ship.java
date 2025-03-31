@@ -8,7 +8,7 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship extends ObjectWithPosition implements Controllable {
+public class Ship extends Controllable {
     private int health;
     private int score;
     
