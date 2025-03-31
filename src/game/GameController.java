@@ -126,9 +126,10 @@ public class GameController {
     /**
      * Pauses the game and logs "Game paused".
      */
+
     public void pauseGame() {
-        ui.pause();
-        ui.log("Game paused");
+      ui.pause();
+      ui.log("Game paused.");
     }
 
     /**
