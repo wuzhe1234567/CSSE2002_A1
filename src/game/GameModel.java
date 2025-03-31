@@ -47,7 +47,6 @@ public class GameModel {
         for (SpaceObject obj : objects) {
             obj.tick(tick);
         }
-        // 可添加刷新、生成新对象逻辑
         spawnObjects();
         levelUp();
     }
@@ -137,23 +136,22 @@ public class GameModel {
     
     /**
      * Spawns new objects based on game level and spawn rate.
-     * 这里简单示例，每 tick 有一定几率生成敌人。
+     * 简单示例：每 tick 有一定几率生成一个敌人。
      */
     public void spawnObjects() {
-        // 例如：以 START_SPAWN_RATE% 概率生成一个敌人
         if (random.nextInt(100) < START_SPAWN_RATE) {
             addObject(new Enemy(random.nextInt(GAME_WIDTH), 0));
         }
     }
     
     /**
-     * Levels up the game when score threshold is met.
+     * Levels up the game when the ship's score reaches the threshold.
      */
     public void levelUp() {
         if (ship != null && ship.getScore() >= SCORE_THRESHOLD * level) {
             level++;
             logger.log("Level up! Now level " + level);
-            // 可增加生成更多敌人或调整游戏参数的逻辑
+            // 可增加更多逻辑：如提高 spawn rate 等
         }
     }
     
@@ -177,7 +175,7 @@ public class GameModel {
     }
     
     public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
         addObject(ship);
     }
     
@@ -185,4 +183,3 @@ public class GameModel {
         return ship;
     }
 }
-
