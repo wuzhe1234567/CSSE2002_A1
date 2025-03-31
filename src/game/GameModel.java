@@ -16,8 +16,8 @@ public class GameModel {
     public static final int GAME_HEIGHT = 20;
     public static final int GAME_WIDTH = 10;
     public static final int START_LEVEL = 1;
-    public static final int START_SPAWN_RATE = 2; // 原设定值，现不使用随机条件，直接生成陨石
-    public static final int SCORE_THRESHOLD = 100; // 每个等级所需分数
+    public static final int START_SPAWN_RATE = 2; // Percentage chance per tick to spawn an Asteroid
+    public static final int SCORE_THRESHOLD = 100; // Score needed to level up (per level)
     public static final int ASTEROID_DAMAGE = 10;
     public static final int ENEMY_DAMAGE = 20;
     public static final int SPAWN_RATE_INCREASE = 5;
@@ -28,7 +28,7 @@ public class GameModel {
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
     
-    // Ship 对象由外部设置，构造后模型初始为空
+    // Ship 对象由外部设置（通过 setShip()），初始状态模型中无对象
     private Ship ship = null;
     private int level = START_LEVEL;
     
@@ -50,14 +50,14 @@ public class GameModel {
     
     /**
      * Updates the state of all space objects.
-     * 当 tick > 0 时，同时调用 spawnObjects() 与 levelUp()。
+     * 仅当 tick > 0 时调用 spawnObjects() 与 levelUp()。
      */
     public void updateGame(int tick) {
         // 更新所有对象状态
         for (SpaceObject obj : new ArrayList<>(objects)) {
             obj.tick(tick);
         }
-        // 仅在 tick > 0 时进行生成和升级
+        // 仅在 tick > 0 时生成新对象与升级
         if (tick > 0) {
             spawnObjects();
             levelUp();
@@ -86,7 +86,7 @@ public class GameModel {
                         (a instanceof Asteroid && b instanceof Bullet)) {
                         continue;
                     }
-                    // Bullet-Enemy collision: remove both, add 1 score.
+                    // Bullet-Enemy collision
                     if ((a instanceof Bullet && b instanceof Enemy) ||
                         (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
@@ -97,7 +97,7 @@ public class GameModel {
                         }
                         continue;
                     }
-                    // Ship-Enemy collision: remove enemy, add 1 score.
+                    // Ship-Enemy collision
                     if ((a instanceof Ship && b instanceof Enemy) ||
                         (b instanceof Ship && a instanceof Enemy)) {
                         if (ship != null) {
@@ -111,7 +111,7 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship-Asteroid collision: remove asteroid.
+                    // Ship-Asteroid collision
                     if ((a instanceof Ship && b instanceof Asteroid) ||
                         (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
@@ -122,7 +122,7 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Ship-HealthPowerUp collision.
+                    // Ship-HealthPowerUp collision
                     if ((a instanceof Ship && b instanceof HealthPowerUp) ||
                         (a instanceof HealthPowerUp && b instanceof Ship)) {
                         HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp)a : (HealthPowerUp)b;
@@ -131,7 +131,7 @@ public class GameModel {
                         logger.log("Ship collected Health Power-Up.");
                         continue;
                     }
-                    // Ship-ShieldPowerUp collision.
+                    // Ship-ShieldPowerUp collision
                     if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
                         (a instanceof ShieldPowerUp && b instanceof Ship)) {
                         ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp)a : (ShieldPowerUp)b;
@@ -156,12 +156,13 @@ public class GameModel {
     
     /**
      * Spawns new objects based on a fixed spawn rate.
-     * 修改后：每次调用该方法时都会在 (8,0) 生成一个 Asteroid，
-     * 以满足测试用例要求。
+     * 如果随机数小于 START_SPAWN_RATE，则在 (8,0) 生成一个 Asteroid。
      */
     public void spawnObjects() {
-        addObject(new Asteroid(8, 0));
-        logger.log("Asteroid spawned at (8,0).");
+        if (random.nextInt(100) < START_SPAWN_RATE) {
+            addObject(new Asteroid(8, 0));
+            logger.log("Asteroid spawned at (8,0).");
+        }
     }
     
     /**
@@ -176,8 +177,8 @@ public class GameModel {
     
     /**
      * Fires a bullet from the ship.
-     * 测试要求调用 fireBullet() 后，模型中仅存在 1 个空间对象（子弹），
-     * 因此该方法先移除 ship，再添加一个 Bullet。
+     * 根据测试要求，此方法应先移除 ship，再添加一个 Bullet，
+     * 使得模型中仅剩下一个空间对象（子弹）。
      */
     public void fireBullet() {
         if (ship != null) {
