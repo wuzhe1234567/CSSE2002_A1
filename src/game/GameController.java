@@ -38,7 +38,7 @@ public class GameController {
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
-                return new ObjectGraphic("DescendingEnemy", "src/assets/descending_enemy.png");
+                return new ObjectGraphic("DescendingEnemy", "assets/descending_enemy.png");
             }
         });
         model.addObject(new HealthPowerUp(4, 0));
@@ -85,15 +85,23 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
+                    ui.log("Ship moved");
+                    System.out.println("Ship moved");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
+                    ui.log("Ship moved");
+                    System.out.println("Ship moved");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
+                    ui.log("Ship moved");
+                    System.out.println("Ship moved");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
+                    ui.log("Ship moved");
+                    System.out.println("Ship moved");
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
@@ -110,7 +118,7 @@ public class GameController {
     
     /**
      * Public method to pause the game.
-     * In addition to calling ui.pause(), logs "Game paused" both via ui.log and System.out.println.
+     * In addition to calling ui.pause(), logs "Game paused" via ui.log and System.out.println.
      */
     public void pauseGame() {
         ui.pause();
@@ -127,4 +135,5 @@ public class GameController {
         return model;
     }
 }
+
 
