@@ -85,7 +85,3 @@ public class Ship extends ObjectWithPosition implements Controllable {
     }
 }
 
-    public int getHealth() {
-        return health;
-    }
-}
