@@ -28,15 +28,12 @@ public class GameModel {
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
     
-    // Ship 对象自动在构造函数中创建，确保 getShip() 返回非 null
-    private Ship ship;
+    // Ship 对象由外部设置，初始状态为空
+    private Ship ship = null;
     private int level = START_LEVEL;
     
     public GameModel(Logger logger) {
         this.logger = logger;
-        // 自动创建 Ship：位置居中下方，初始健康值为 100
-        this.ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
-        addObject(ship);
     }
     
     public void setRandomSeed(int seed) {
@@ -53,10 +50,11 @@ public class GameModel {
     
     /**
      * Updates the state of all space objects.
-     * 同时调用 spawnObjects() 与 levelUp()。
+     * Also calls spawnObjects() and levelUp().
      */
     public void updateGame(int tick) {
-        for (SpaceObject obj : objects) {
+        // 使用副本遍历，防止并发修改
+        for (SpaceObject obj : new ArrayList<>(objects)) {
             obj.tick(tick);
         }
         spawnObjects();
@@ -64,14 +62,14 @@ public class GameModel {
     }
     
     /**
-     * Performs collision detection among all space objects.
+     * Collision detection:
      * 1. Bullet-Enemy: remove both, ship gains 1 score.
      * 2. Ship-Enemy: remove enemy, ship gains 1 score.
      * 3. Ship-Asteroid: remove asteroid.
      * 4. Ship-HealthPowerUp: apply effect and remove power-up.
      * 5. Ship-ShieldPowerUp: apply effect and remove power-up.
-     * 6. Bullets 不与 Asteroids 发生碰撞（忽略）。
-     * 7. 其它坐标完全匹配的碰撞：移除双方。
+     * 6. Bullets do not collide with Asteroids (ignored).
+     * 7. Other collisions: remove both.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -80,12 +78,12 @@ public class GameModel {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // 忽略 Bullet 与 Asteroid 之间的碰撞
+                    // Ignore collisions between Bullet and Asteroid.
                     if ((a instanceof Bullet && b instanceof Asteroid) ||
                         (a instanceof Asteroid && b instanceof Bullet)) {
                         continue;
                     }
-                    // Bullet 与 Enemy 碰撞：移除双方，并给 ship 加分
+                    // Bullet-Enemy collision.
                     if ((a instanceof Bullet && b instanceof Enemy) ||
                         (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
@@ -96,7 +94,7 @@ public class GameModel {
                         }
                         continue;
                     }
-                    // Ship 与 Enemy 碰撞：移除敌人，并给 ship 加分
+                    // Ship-Enemy collision.
                     if ((a instanceof Ship && b instanceof Enemy) ||
                         (b instanceof Ship && a instanceof Enemy)) {
                         if (ship != null) {
@@ -110,7 +108,7 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship 与 Asteroid 碰撞：移除陨石
+                    // Ship-Asteroid collision.
                     if ((a instanceof Ship && b instanceof Asteroid) ||
                         (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
@@ -121,25 +119,25 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Ship 与 HealthPowerUp 碰撞：应用效果后移除 power-up
+                    // Ship-HealthPowerUp collision.
                     if ((a instanceof Ship && b instanceof HealthPowerUp) ||
-                        (a instanceof HealthPowerUp && b instanceof Ship)) {
+                        (b instanceof HealthPowerUp && a instanceof Ship)) {
                         HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp)a : (HealthPowerUp)b;
                         hp.applyEffect(ship);
                         toRemove.add(hp);
                         logger.log("Ship collected Health Power-Up.");
                         continue;
                     }
-                    // Ship 与 ShieldPowerUp 碰撞：应用效果后移除 power-up
+                    // Ship-ShieldPowerUp collision.
                     if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
-                        (a instanceof ShieldPowerUp && b instanceof Ship)) {
+                        (b instanceof ShieldPowerUp && a instanceof Ship)) {
                         ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp)a : (ShieldPowerUp)b;
                         sp.applyEffect(ship);
                         toRemove.add(sp);
                         logger.log("Ship collected Shield Power-Up.");
                         continue;
                     }
-                    // 其他碰撞：移除双方
+                    // Other collisions: remove both.
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
@@ -155,7 +153,7 @@ public class GameModel {
     
     /**
      * Spawns new objects based on a fixed spawn rate.
-     * 当随机数小于 START_SPAWN_RATE 时，在 (8, 0) 生成一个 Asteroid。
+     * When random number is less than START_SPAWN_RATE, spawn an Asteroid at (8, 0).
      */
     public void spawnObjects() {
         if (random.nextInt(100) < START_SPAWN_RATE) {
@@ -175,8 +173,8 @@ public class GameModel {
     
     /**
      * Fires a bullet from the ship.
-     * 测试要求调用 fireBullet() 后模型中仅存在 1 个空间对象（子弹），
-     * 因此此方法先移除飞船再添加子弹。
+     * For testing, fireBullet() should leave only 1 space object (the bullet) in the model.
+     * This method removes the ship and adds a Bullet.
      */
     public void fireBullet() {
         if (ship != null) {
@@ -192,5 +190,14 @@ public class GameModel {
     
     public Ship getShip() {
         return ship;
+    }
+    
+    /**
+     * Sets the Ship object.
+     * External code (e.g. test cases) must set the Ship.
+     */
+    public void setShip(Ship ship) {
+        this.ship = ship;
+        addObject(ship);
     }
 }
