@@ -124,8 +124,8 @@ public class GameModel {
     }
     
     public void createShip() {
-        // 修改为使用三个参数的构造函数
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
+        // 调用 Ship 构造函数时只使用两个参数
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
         addObject(ship);
     }
     
@@ -133,3 +133,4 @@ public class GameModel {
         return ship;
     }
 }
+
