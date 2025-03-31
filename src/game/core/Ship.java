@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel; // 用于引用 GAME_WIDTH 与 GAME_HEIGHT
+import game.GameModel; // 用于引用 GAME_WIDTH 和 GAME_HEIGHT
 
 /**
  * Represents the player's ship.
@@ -13,15 +13,15 @@ public class Ship extends Controllable {
     private int score;
 
     /**
-     * Constructs a Ship with the specified coordinates and initial health.
+     * Constructs a Ship with the specified coordinates.
+     * The ship's initial health is set to 100 and score to 0.
      *
      * @param x the x-coordinate of the ship.
      * @param y the y-coordinate of the ship.
-     * @param health the initial health of the ship.
      */
-    public Ship(int x, int y, int health) {
+    public Ship(int x, int y) {
         super(x, y);
-        this.health = health;
+        this.health = 100;
         this.score = 0;
     }
 
@@ -53,7 +53,7 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
@@ -84,3 +84,4 @@ public class Ship extends Controllable {
         return health;
     }
 }
+
