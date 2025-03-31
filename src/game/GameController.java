@@ -32,10 +32,10 @@ public class GameController {
      * Note: Ship creation is handled externally.
      */
     public void startGame() {
-        // 这些对象由测试用例或外部添加，Ship 对象需预先存在（或在 updateGame 时自动创建）。
+        // These objects are added externally. The Ship should already exist (or be created automatically in updateGame).
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 使用匿名类实例化 DescendingEnemy
+        // Instantiate a DescendingEnemy using an anonymous class.
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -45,7 +45,7 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // 初始化统计数据：Score、Health、Level、Time Survived
+        // Initialize stats: Score, Health, Level, Time Survived
         ui.setStat("Score", "0");
         ui.setStat("Health", "100");
         ui.setStat("Level", "1");
@@ -102,23 +102,23 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet fired");
+                    ui.log("Bullet was fired");
                     break;
                 default:
                     break;
@@ -129,11 +129,11 @@ public class GameController {
     }
 
     /**
-     * Pauses the game and logs "Game paused".
+     * Pauses the game and logs "Game paused.".
      */
     public void pauseGame() {
         ui.pause();
-        ui.log("Game paused");
+        ui.log("Game paused.");
     }
 
     /**
