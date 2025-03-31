@@ -1,7 +1,6 @@
 package game;
 
 import game.core.*;
-import game.ui.ObjectGraphic;
 import game.ui.UI;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
@@ -27,11 +26,11 @@ public class GameController {
     }
     
     /**
-     * Initial state: creates ship, enemies, asteroids, and power-ups,
+     * Initial state: creates enemies, asteroids, and power-ups,
      * displays them (stationary), and waits for the player to press Enter.
      */
     public void startGame() {
-        model.createShip();
+        // Ship creation is handled externally (no createShip() method in GameModel)
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
         // Instantiate DescendingEnemy using an anonymous class
@@ -47,7 +46,7 @@ public class GameController {
         ui.onKey(this::preGameInput);
     }
     
-    // Pre-game input handling (private method)
+    // Pre-game input handling
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -86,27 +85,22 @@ public class GameController {
                 case "W":
                     ship.move(Direction.UP);
                     ui.log("Ship moved");
-                    System.out.println("Ship moved");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
                     ui.log("Ship moved");
-                    System.out.println("Ship moved");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
                     ui.log("Ship moved");
-                    System.out.println("Ship moved");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
                     ui.log("Ship moved");
-                    System.out.println("Ship moved");
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
                     ui.log("Bullet fired");
-                    System.out.println("Bullet fired");
                     break;
                 default:
                     break;
@@ -117,23 +111,19 @@ public class GameController {
     }
     
     /**
-     * Public method to pause the game.
-     * In addition to calling ui.pause(), logs "Game paused" via ui.log and System.out.println.
+     * Pauses the game and logs "Game paused".
      */
     public void pauseGame() {
         ui.pause();
         ui.log("Game paused");
-        System.out.println("Game paused");
     }
     
     /**
-     * Public method to retrieve the game model.
+     * Returns the game model.
      *
-     * @return the GameModel object.
+     * @return the GameModel.
      */
     public GameModel getModel() {
         return model;
     }
 }
-
-
