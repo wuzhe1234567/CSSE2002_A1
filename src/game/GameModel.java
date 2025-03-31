@@ -13,7 +13,7 @@ public class GameModel {
     public static final int GAME_HEIGHT = 20;
     public static final int GAME_WIDTH = 10;
     public static final int START_LEVEL = 1;
-    public static final int START_SPAWN_RATE = 2; // Percentage chance per tick (e.g. 2%)
+    public static final int START_SPAWN_RATE = 2; // Percentage chance per tick
     public static final int SPAWN_RATE_INCREASE = 5;
     public static final int SCORE_THRESHOLD = 100;
     public static final int ASTEROID_DAMAGE = 10;
@@ -56,8 +56,8 @@ public class GameModel {
      * 1. Bullet and Enemy: remove both, add 1 score.
      * 2. Ship and Enemy: remove enemy, add 1 score.
      * 3. Ship and Asteroid: remove asteroid.
-     * 4. Ship and HealthPowerUp: apply effect and remove it.
-     * 5. Ship and ShieldPowerUp: apply effect and remove it.
+     * 4. Ship and HealthPowerUp: apply its effect and remove the power-up.
+     * 5. Ship and ShieldPowerUp: apply its effect and remove the power-up.
      * 6. Bullets should not collide with Asteroids.
      * 7. Other collisions: remove both.
      */
@@ -145,7 +145,7 @@ public class GameModel {
     
     /**
      * Spawns new objects based on game level and spawn rate.
-     * 仅当随机值小于 START_SPAWN_RATE 时，在 (8,0) 生成一个 Asteroid，否则不生成。
+     * 此处只在 (8,0) 生成一个 Asteroid 当随机条件满足时。
      */
     public void spawnObjects() {
         if (random.nextInt(100) < START_SPAWN_RATE) {
@@ -185,16 +185,7 @@ public class GameModel {
         return level;
     }
     
-    /**
-     * Creates the ship and adds it to the model.
-     */
-    public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
-        addObject(ship);
-    }
-    
     public Ship getShip() {
         return ship;
     }
 }
-
