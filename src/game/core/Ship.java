@@ -39,7 +39,7 @@ public class Ship extends ObjectWithPosition implements Controllable {
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
         int newY = y;
-        switch(direction) {
+        switch (direction) {
             case UP:
                 newY = y - 1;
                 break;
@@ -53,7 +53,7 @@ public class Ship extends ObjectWithPosition implements Controllable {
                 newX = x + 1;
                 break;
         }
-        if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
@@ -61,7 +61,6 @@ public class Ship extends ObjectWithPosition implements Controllable {
     }
     
     // Methods for managing score and health
-    
     public void addScore(int points) {
         score += points;
     }
@@ -81,11 +80,6 @@ public class Ship extends ObjectWithPosition implements Controllable {
         }
     }
     
-    public int getHealth() {
-        return health;
-    }
-}
-
     public int getHealth() {
         return health;
     }
