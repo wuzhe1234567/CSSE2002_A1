@@ -4,7 +4,7 @@ import game.ui.ObjectGraphic;
 
 /**
  * Abstract class representing an object with a position.
- * Provides concrete implementations for getX() and getY().
+ * Provides concrete implementations of getX() and getY().
  */
 public abstract class ObjectWithPosition implements SpaceObject {
     protected int x;
@@ -31,6 +31,7 @@ public abstract class ObjectWithPosition implements SpaceObject {
         return y;
     }
     
+    // render() 和 tick() 由子类实现
     @Override
     public abstract ObjectGraphic render();
     
