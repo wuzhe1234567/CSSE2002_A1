@@ -56,8 +56,8 @@ public class GameModel {
      * 1. Bullet and Enemy: remove both, add 1 score.
      * 2. Ship and Enemy: remove enemy, add 1 score.
      * 3. Ship and Asteroid: remove asteroid.
-     * 4. Ship and HealthPowerUp: apply its effect and remove it.
-     * 5. Ship and ShieldPowerUp: apply its effect and remove it.
+     * 4. Ship and HealthPowerUp collision: apply effect and remove the power-up.
+     * 5. Ship and ShieldPowerUp collision: apply effect and remove the power-up.
      * 6. Bullets should not collide with Asteroids.
      * 7. Other collisions: remove both.
      */
@@ -158,7 +158,7 @@ public class GameModel {
         if (ship != null && ship.getScore() >= SCORE_THRESHOLD * level) {
             level++;
             logger.log("Level up! Now level " + level);
-            // 可在此处添加提高 spawn rate 等逻辑
+            // 可以在此处添加提高 spawn rate 等逻辑
         }
     }
     
