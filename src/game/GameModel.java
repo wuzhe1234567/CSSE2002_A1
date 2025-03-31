@@ -12,11 +12,20 @@ import java.util.Random;
 public class GameModel {
     public static final int GAME_HEIGHT = 20;
     public static final int GAME_WIDTH = 10;
+    public static final int START_LEVEL = 1;
+    public static final int START_SPAWN_RATE = 2;
+    public static final int SPAWN_RATE_INCREASE = 5;
+    public static final int SCORE_THRESHOLD = 100;
+    public static final int ASTEROID_DAMAGE = 10;
+    public static final int ENEMY_DAMAGE = 20;
+    public static final double ENEMY_SPAWN_RATE = 0.5;
+    public static final double POWER_UP_SPAWN_RATE = 0.25;
     
     private final Random random = new Random();
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
     private Ship ship;
+    private int level = START_LEVEL;
     
     public GameModel(Logger logger) {
         this.logger = logger;
@@ -38,6 +47,9 @@ public class GameModel {
         for (SpaceObject obj : objects) {
             obj.tick(tick);
         }
+        // 可添加刷新、生成新对象逻辑
+        spawnObjects();
+        levelUp();
     }
     
     /**
@@ -123,9 +135,49 @@ public class GameModel {
         }
     }
     
+    /**
+     * Spawns new objects based on game level and spawn rate.
+     * 这里简单示例，每 tick 有一定几率生成敌人。
+     */
+    public void spawnObjects() {
+        // 例如：以 START_SPAWN_RATE% 概率生成一个敌人
+        if (random.nextInt(100) < START_SPAWN_RATE) {
+            addObject(new Enemy(random.nextInt(GAME_WIDTH), 0));
+        }
+    }
+    
+    /**
+     * Levels up the game when score threshold is met.
+     */
+    public void levelUp() {
+        if (ship != null && ship.getScore() >= SCORE_THRESHOLD * level) {
+            level++;
+            logger.log("Level up! Now level " + level);
+            // 可增加生成更多敌人或调整游戏参数的逻辑
+        }
+    }
+    
+    /**
+     * Fires a bullet from the ship.
+     */
+    public void fireBullet() {
+        if (ship != null) {
+            addObject(new Bullet(ship.getX(), ship.getY() - 1));
+            logger.log("Bullet fired.");
+        }
+    }
+    
+    /**
+     * Returns the current game level.
+     *
+     * @return the current level.
+     */
+    public int getLevel() {
+        return level;
+    }
+    
     public void createShip() {
-        // 调用 Ship 构造函数时只使用两个参数
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
         addObject(ship);
     }
     
