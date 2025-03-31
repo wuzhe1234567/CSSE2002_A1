@@ -60,7 +60,12 @@ public class GameController {
         renderGame();
         model.updateGame(tick);
         model.checkCollisions();
-        if (model.getShip() == null) {
+        // 更新分数显示（假设 UI 的 setStat 用于显示统计数据）
+        Ship ship = model.getShip();
+        if (ship != null) {
+            ui.setStat("Score", String.valueOf(ship.getScore()));
+        }
+        if (ship == null) {
             pauseGame();
         }
     }
