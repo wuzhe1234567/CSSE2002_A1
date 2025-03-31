@@ -32,10 +32,10 @@ public class GameController {
      * Note: Ship creation is handled externally.
      */
     public void startGame() {
-        // 这些对象由测试用例构造或外部添加，Ship 对象需预先存在，Health stat 初始为 100
+        // These objects are assumed to be added externally (Ship must be pre-added)
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 使用匿名类实例化 DescendingEnemy
+        // Instantiate DescendingEnemy using an anonymous class
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -45,15 +45,15 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // 初始化统计数据：Score、Health、Level、Time Survived
+        // Initialize stats: Score, Health, Level, and Time Survived.
         ui.setStat("Score", "0");
-        ui.setStat("Health", "100");
+        ui.setStat("Health", "100");  // Initial health is 100
         ui.setStat("Level", "1");
         ui.setStat("Time Survived", "0 seconds");
         ui.onKey(this::preGameInput);
     }
     
-    // Pre-game input handling: wait for Enter key to start game loop.
+    // Pre-game input handling: waits for Enter key to start game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -71,7 +71,7 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // Update "Time Survived" stat in seconds, appending " seconds"
+        // Update "Time Survived" stat (in seconds, with " seconds" appended)
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
@@ -90,7 +90,6 @@ public class GameController {
      * Handles player input: W/A/S/D to move, F fires a bullet, P pauses the game.
      */
     public void handlePlayerInput(String key) {
-        // 当按 P 键时直接设为暂停状态
         if (key.equalsIgnoreCase("P")) {
             paused = true;
             pauseGame();
@@ -130,12 +129,11 @@ public class GameController {
     }
     
     /**
-     * Pauses the game and logs "Game paused".
+     * Pauses the game: logs "Game paused" and invokes UI pause.
      */
     public void pauseGame() {
-        ui.pause();
         ui.log("Game paused");
-        System.out.println("Game paused");
+        ui.pause();
     }
     
     /**
@@ -147,3 +145,4 @@ public class GameController {
         return model;
     }
 }
+
