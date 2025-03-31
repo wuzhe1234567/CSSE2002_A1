@@ -1,7 +1,7 @@
 package game;
 
 import game.core.*;
-import game.ui.ObjectGraphic;  // 添加此行以解决找不到 ObjectGraphic 的问题
+import game.ui.ObjectGraphic;
 import game.ui.UI;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
@@ -34,7 +34,7 @@ public class GameController {
         model.createShip();
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 使用匿名内部类实例化 DescendingEnemy，并实现 render() 方法
+        // 使用匿名内部类实例化 DescendingEnemy
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
