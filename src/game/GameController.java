@@ -1,6 +1,7 @@
 package game;
 
 import game.core.*;
+import game.ui.ObjectGraphic;
 import game.ui.UI;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
