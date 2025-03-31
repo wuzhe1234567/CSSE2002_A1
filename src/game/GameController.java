@@ -44,10 +44,11 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        ui.onKey(this::handlePreGameInput);
+        ui.onKey(this::preGameInput);
     }
     
-    public void handlePreGameInput(String key) {
+    // 将预启动阶段的输入处理方法设为 private，不作为 public API
+    private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
             ui.onKey(this::handlePlayerInput);
@@ -60,7 +61,7 @@ public class GameController {
         model.updateGame(tick);
         model.checkCollisions();
         if (model.getShip() == null) {
-            ui.pause();
+            pauseGame();
         }
     }
     
@@ -69,12 +70,12 @@ public class GameController {
     }
     
     /**
-     * Handles player input: W/A/S/D to move, F to fire, P toggles pause.
+     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
             paused = !paused;
-            ui.pause();
+            pauseGame();
             return;
         }
         if (paused) return;
@@ -103,5 +104,21 @@ public class GameController {
         } catch (BoundaryExceededException e) {
             ui.log("Cannot move: " + e.getMessage());
         }
+    }
+    
+    /**
+     * Public method to pause the game.
+     */
+    public void pauseGame() {
+        ui.pause();
+    }
+    
+    /**
+     * Public method to retrieve the game model.
+     *
+     * @return the GameModel object.
+     */
+    public GameModel getModel() {
+        return model;
     }
 }
