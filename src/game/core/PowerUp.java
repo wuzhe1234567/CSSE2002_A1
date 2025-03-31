@@ -9,6 +9,12 @@ public abstract class PowerUp implements SpaceObject {
     protected int x;
     protected int y;
     
+    /**
+     * Constructs a PowerUp with the specified coordinates.
+     *
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     */
     public PowerUp(int x, int y) {
         this.x = x;
         this.y = y;
@@ -19,7 +25,7 @@ public abstract class PowerUp implements SpaceObject {
         return x;
     }
     
-    @Override 
+    @Override
     public int getY() {
         return y;
     }
@@ -29,13 +35,6 @@ public abstract class PowerUp implements SpaceObject {
     
     @Override
     public void tick(int tick) {
-        // By default, power-ups remain stationary.
+        // Power-ups remain stationary by default.
     }
-    
-    /**
-     * Applies the effect of the power-up to the given ship.
-     *
-     * @param ship the ship that collects the power-up.
-     */
-    public abstract void applyEffect(Ship ship);
 }
