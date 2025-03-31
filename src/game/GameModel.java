@@ -173,10 +173,10 @@ public class GameModel {
         return level;
     }
     
-    public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
-        addObject(ship);
-    }
+   public void createShip() {
+    ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
+    addObject(ship);
+}
     
     public Ship getShip() {
         return ship;
