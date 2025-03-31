@@ -97,23 +97,23 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
-                    ui.log("Ship moved");
+                    ui.log("ship moved ");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
-                    ui.log("Ship moved");
+                    ui.log("ship moved ");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
-                    ui.log("Ship moved");
+                    ui.log("ship moved ");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
-                    ui.log("Ship moved");
+                    ui.log("ship moved ");
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet was fired");
+                    ui.log("a bullet was fired");
                     break;
                 default:
                     break;
@@ -128,7 +128,7 @@ public class GameController {
      */
     public void pauseGame() {
         ui.pause();
-        ui.log("Game paused");
+        ui.log("game paused");
     }
 
     /**
