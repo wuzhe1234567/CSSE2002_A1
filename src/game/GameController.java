@@ -34,7 +34,7 @@ public class GameController {
         model.createShip();
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // Instantiate DescendingEnemy via an anonymous class
+        // Instantiate DescendingEnemy using an anonymous class
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -47,7 +47,7 @@ public class GameController {
         ui.onKey(this::preGameInput);
     }
     
-    // 预启动阶段输入处理，设为 private，不作为 public API
+    // Pre-game input handling (private method, not exposed as public API)
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -70,7 +70,7 @@ public class GameController {
     }
     
     /**
-     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
+     * Handles player input: W/A/S/D to move, F to fire, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -97,7 +97,7 @@ public class GameController {
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet fired");  // 添加日志，满足测试要求
+                    ui.log("Bullet fired");  // 输出日志，满足测试要求
                     break;
                 default:
                     break;
@@ -123,3 +123,4 @@ public class GameController {
         return model;
     }
 }
+
