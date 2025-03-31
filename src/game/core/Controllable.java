@@ -8,7 +8,7 @@ import game.utility.Direction;
  * Inherits from ObjectWithPosition.
  */
 public abstract class Controllable extends ObjectWithPosition {
-    
+
     /**
      * Constructs a controllable object with the given coordinates.
      *
@@ -21,9 +21,14 @@ public abstract class Controllable extends ObjectWithPosition {
     
     /**
      * Moves the object in the specified direction.
+     * Default implementation throws an UnsupportedOperationException.
+     * Subclasses are expected to override this method with a proper implementation.
      *
      * @param direction the direction to move.
      * @throws BoundaryExceededException if the move exceeds game boundaries.
      */
-    public abstract void move(Direction direction) throws BoundaryExceededException;
+    public void move(Direction direction) throws BoundaryExceededException {
+        throw new UnsupportedOperationException("move method not implemented");
+    }
 }
+
