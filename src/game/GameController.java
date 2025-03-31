@@ -32,10 +32,10 @@ public class GameController {
      * Note: Ship creation is handled externally.
      */
     public void startGame() {
-        // 这些对象由测试用例构造或外部添加，Ship 对象需预先存在，Health stat 初始为 100
+        // These objects are assumed to be created externally (Ship must be added beforehand)
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 使用匿名类实例化 DescendingEnemy
+        // Instantiate DescendingEnemy using an anonymous class
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -45,15 +45,15 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // 初始化统计数据：Score、Health、Level、Time Survived
+        // Initialize stats: Score, Health, Level, and Time Survived.
         ui.setStat("Score", "0");
-        ui.setStat("Health", "100");  // 初始健康值设置为 100
+        ui.setStat("Health", "100");  // Initial health set to 100
         ui.setStat("Level", "1");
         ui.setStat("Time Survived", "0 seconds");
         ui.onKey(this::preGameInput);
     }
     
-    // Pre-game input handling: wait for Enter key to start game loop.
+    // Pre-game input handling: waits for Enter key to start game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -71,11 +71,11 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // 更新 "Time Survived" 统计（以秒为单位，并追加 " seconds"）
+        // Update "Time Survived" stat in seconds (with " seconds" appended).
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
-        // 更新 "Level" 统计
+        // Update "Level" stat.
         ui.setStat("Level", String.valueOf(model.getLevel()));
         if (ship == null) {
             pauseGame();
@@ -134,6 +134,8 @@ public class GameController {
     public void pauseGame() {
         ui.pause();
         ui.log("Game paused");
+        // 同时输出到控制台，确保测试工具能捕捉到提示信息
+        System.out.println("Game paused");
     }
     
     /**
