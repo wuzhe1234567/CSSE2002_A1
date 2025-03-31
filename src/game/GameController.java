@@ -70,8 +70,7 @@ public class GameController {
     }
     
     /**
-     * Handles player input:
-     * W/A/S/D to move, F to fire, P toggles pause.
+     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -111,9 +110,11 @@ public class GameController {
     
     /**
      * Public method to pause the game.
+     * In addition to calling ui.pause(), logs "Game paused".
      */
     public void pauseGame() {
         ui.pause();
+        ui.log("Game paused");
     }
     
     /**
@@ -125,4 +126,3 @@ public class GameController {
         return model;
     }
 }
-
