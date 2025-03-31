@@ -46,4 +46,3 @@ public class Enemy implements SpaceObject {
     public void tick(int tick) {
         y++; // Moves downward each tick
     }
-}
