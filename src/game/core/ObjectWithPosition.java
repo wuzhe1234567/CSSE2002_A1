@@ -31,7 +31,6 @@ public abstract class ObjectWithPosition implements SpaceObject {
         return y;
     }
     
-    // render() 和 tick() 方法仍然需要由子类实现
     @Override
     public abstract ObjectGraphic render();
     
