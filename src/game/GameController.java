@@ -124,12 +124,12 @@ public class GameController {
     }
 
     /**
-     * Pauses the game and logs "Game paused".
+     * Pauses the game and logs "Game paused." (with a period).
      */
-
     public void pauseGame() {
-      ui.pause();
-      ui.log("Game paused.");
+        ui.pause();
+        // 根据文档提示，带句号
+        ui.log("Game paused.");
     }
 
     /**
@@ -139,3 +139,4 @@ public class GameController {
         return model;
     }
 }
+
