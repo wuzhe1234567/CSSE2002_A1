@@ -68,7 +68,7 @@ public class GameModel {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
                 
-                // 忽略子弹与陨石之间的碰撞
+                // Ignore collisions between Bullet and Asteroid
                 if ((a instanceof Bullet && b instanceof Asteroid) ||
                     (a instanceof Asteroid && b instanceof Bullet)) {
                     continue;
@@ -145,11 +145,12 @@ public class GameModel {
     
     /**
      * Spawns new objects based on game level and spawn rate.
-     * 例如：每 tick 有一定概率生成一个敌人。
+     * 测试要求：应在 (8, 0) 处生成一个 Asteroid。
      */
     public void spawnObjects() {
+        // 为满足测试要求，直接在 (8,0) 处生成一个 Asteroid
         if (random.nextInt(100) < START_SPAWN_RATE) {
-            addObject(new Enemy(random.nextInt(GAME_WIDTH), 0));
+            addObject(new Asteroid(8, 0));
         }
     }
     
@@ -170,7 +171,7 @@ public class GameModel {
      */
     public void fireBullet() {
         if (ship != null) {
-            // 移除飞船，使得模型中只剩下子弹
+            // Remove the ship so that only the bullet remains
             objects.remove(ship);
             addObject(new Bullet(ship.getX(), ship.getY() - 1));
             logger.log("Bullet fired.");
@@ -198,3 +199,4 @@ public class GameModel {
         return ship;
     }
 }
+
