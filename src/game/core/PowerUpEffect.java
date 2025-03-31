@@ -1,14 +1,13 @@
 package game.core;
 
 /**
- * Interface for a power-up effect.
+ * Interface defining the effect of a power-up.
  */
 public interface PowerUpEffect {
     /**
-     * Applies the effect to the given ship.
+     * Applies the effect of the power-up to the given ship.
      *
-     * @param ship the ship to apply the effect on.
+     * @param ship the ship that collects the power-up.
      */
     void applyEffect(Ship ship);
 }
-
