@@ -6,10 +6,15 @@ import game.ui.ObjectGraphic;
  * Represents a standard enemy object.
  */
 public class Enemy implements SpaceObject {
-    // 为了让 DescendingEnemy 能修改坐标，这里声明为 protected
     protected int x;
     protected int y;
     
+    /**
+     * Constructs an Enemy with the specified coordinates.
+     *
+     * @param x the x-coordinate of the enemy.
+     * @param y the y-coordinate of the enemy.
+     */
     public Enemy(int x, int y) {
         this.x = x;
         this.y = y;
@@ -25,13 +30,19 @@ public class Enemy implements SpaceObject {
         return y;
     }
     
+    /**
+     * Returns the graphical representation of the enemy.
+     * Note: The image file is expected to be at "assets/enemy.png" (relative to the project root).
+     *
+     * @return an ObjectGraphic representing the enemy.
+     */
     @Override
     public ObjectGraphic render() {
-        return new ObjectGraphic("Enemy", "src/assets/enemy.png");
+        return new ObjectGraphic("Enemy", "assets/enemy.png");
     }
     
     @Override
     public void tick(int tick) {
-        y++; // Moves downward each tick
+        y++; // Moves downward each tick.
     }
 }
