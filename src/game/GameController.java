@@ -28,7 +28,7 @@ public class GameController {
     
     /**
      * Initial state: creates enemies, asteroids, and power-ups,
-     * displays them (stationary), and waits for the player to press Enter.
+     * displays them (stationary), sets initial Score stat, and waits for the player to press Enter.
      */
     public void startGame() {
         // Ship creation is handled externally (no createShip() method in GameModel)
@@ -44,6 +44,8 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
+        // 初始显示 Score 统计
+        ui.setStat("Score", "0");
         ui.onKey(this::preGameInput);
     }
     
@@ -60,7 +62,6 @@ public class GameController {
         renderGame();
         model.updateGame(tick);
         model.checkCollisions();
-        // 更新分数显示（假设 UI 的 setStat 用于显示统计数据）
         Ship ship = model.getShip();
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
