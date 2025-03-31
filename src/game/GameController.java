@@ -48,11 +48,11 @@ public class GameController {
         ui.setStat("Score", "0");
         ui.setStat("Health", "0");
         ui.setStat("Level", "1");
-        ui.setStat("Time Survived", "0");
+        ui.setStat("Time Survived", "0 seconds");
         ui.onKey(this::preGameInput);
     }
     
-    // Pre-game input handling: waits for Enter to start the game loop.
+    // Pre-game input handling: waits for Enter key.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -70,12 +70,12 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // Update "Level" stat.
-        ui.setStat("Level", String.valueOf(model.getLevel()));
-        // Update "Time Survived" stat (in seconds).
+        // Update "Time Survived" stat in seconds, appending " seconds".
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
-        ui.setStat("Time Survived", String.valueOf(survivedSeconds));
+        ui.setStat("Time Survived", survivedSeconds + " seconds");
+        // Update "Level" stat.
+        ui.setStat("Level", String.valueOf(model.getLevel()));
         if (ship == null) {
             pauseGame();
         }
@@ -144,4 +144,3 @@ public class GameController {
         return model;
     }
 }
-
