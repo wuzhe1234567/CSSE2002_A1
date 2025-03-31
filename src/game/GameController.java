@@ -15,25 +15,26 @@ public class GameController {
     private GameModel model;
     private boolean gameStarted = false;
     private boolean paused = false;
-    
+
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
         this.model = model;
         this.startTime = System.currentTimeMillis();
     }
-    
+
     public GameController(UI ui) {
         this(ui, new GameModel(ui::log));
     }
-    
+
     /**
-     * Initial state: displays pre-game objects and initializes stats.
-     * Ship creation is handled externally.
+     * Initial state: creates enemies, asteroids, and power-ups,
+     * displays them (stationary), initializes stats, and waits for the player to press Enter.
+     * Note: Ship creation is handled externally.
      */
     public void startGame() {
-        // 预先由外部添加 Ship 对象
+        // 这些对象由测试用例构造或外部添加，Ship 对象需预先存在，Health stat 初始为 100
         model.addObject(new Enemy(3, 1));
-        model.addObject(new Asteroid(8, 0));
+        model.addObject(new Asteroid(5, 1));
         // 使用匿名类实例化 DescendingEnemy
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
@@ -44,15 +45,15 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // 初始化统计数据
+        // 初始化统计数据：Score、Health、Level、Time Survived
         ui.setStat("Score", "0");
-        ui.setStat("Health", "100");
+        ui.setStat("Health", "100");  // 初始健康值设置为 100
         ui.setStat("Level", "1");
         ui.setStat("Time Survived", "0 seconds");
         ui.onKey(this::preGameInput);
     }
-    
-    // 等待玩家按下 Enter 开始游戏循环
+
+    // Pre-game input handling: wait for Enter key to start game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -60,7 +61,7 @@ public class GameController {
             ui.onStep(this::onTick);
         }
     }
-    
+
     public void onTick(int tick) {
         renderGame();
         model.updateGame(tick);
@@ -70,26 +71,27 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
+        // 更新 "Time Survived" 统计（以秒为单位，并追加 " seconds"）
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
+        // 更新 "Level" 统计
         ui.setStat("Level", String.valueOf(model.getLevel()));
         if (ship == null) {
             pauseGame();
         }
     }
-    
+
     public void renderGame() {
         ui.render(model.getSpaceObjects());
     }
-    
+
     /**
-     * Handles player input: W/A/S/D to move, F fires a bullet, P pauses the game.
+     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
-            // 直接暂停游戏，不切换回未暂停状态
-            paused = true;
+            paused = !paused;
             pauseGame();
             return;
         }
@@ -125,17 +127,15 @@ public class GameController {
             ui.log("Cannot move: " + e.getMessage());
         }
     }
-    
+
     /**
      * Pauses the game and logs "Game paused".
      */
     public void pauseGame() {
-        ui.log("Game paused");
         ui.pause();
-        // 为确保输出能被捕捉，可再打印到标准输出
-        System.out.println("Game paused");
+        ui.log("Game paused");
     }
-    
+
     /**
      * Returns the game model.
      *
