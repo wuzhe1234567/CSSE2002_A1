@@ -11,35 +11,35 @@ import game.GameModel;
 public class Ship extends Controllable {
     private int health;
     private int score;
-    
+
     /**
-     * Constructs a Ship with the specified coordinates.
-     * The ship's initial health is fixed at 100 and score is 0.
+     * Constructs a Ship with the specified coordinates and initial health.
      *
      * @param x the x-coordinate of the ship.
      * @param y the y-coordinate of the ship.
+     * @param health the initial health of the ship.
      */
-    public Ship(int x, int y) {
+    public Ship(int x, int y, int health) {
         super(x, y);
-        this.health = 100;
+        this.health = health;
         this.score = 0;
     }
-    
+
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
-    
+
     @Override
     public void tick(int tick) {
-        // Ship's movement is controlled by player input; no automatic update.
+        // Ship movement is controlled by player input; no automatic update.
     }
-    
+
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
         int newY = y;
-        switch (direction) {
+        switch(direction) {
             case UP:
                 newY = y - 1;
                 break;
@@ -53,33 +53,33 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
         y = newY;
     }
-    
+
     // Methods for managing score and health
     public void addScore(int points) {
         score += points;
     }
-    
+
     public int getScore() {
         return score;
     }
-    
+
     public void heal(int amount) {
         health += amount;
     }
-    
+
     public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;
         }
     }
-    
+
     public int getHealth() {
         return health;
     }
