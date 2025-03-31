@@ -3,7 +3,7 @@ package game.core;
 import game.ui.ObjectGraphic;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
-import game.GameModel;
+import game.GameModel; // 用于引用 GAME_WIDTH 与 GAME_HEIGHT
 
 /**
  * Represents the player's ship.
@@ -11,30 +11,30 @@ import game.GameModel;
 public class Ship extends Controllable {
     private int health;
     private int score;
-    
+
     /**
-     * Constructs a Ship with the specified coordinates and initial health.
+     * Constructs a Ship with the specified coordinates.
+     * The ship's initial health is set to 100 and score to 0.
      *
      * @param x the x-coordinate of the ship.
      * @param y the y-coordinate of the ship.
-     * @param health the initial health of the ship.
      */
-    public Ship(int x, int y, int health) {
+    public Ship(int x, int y) {
         super(x, y);
-        this.health = health;
+        this.health = 100;
         this.score = 0;
     }
-    
+
     @Override
     public ObjectGraphic render() {
         return new ObjectGraphic("Ship", "src/assets/ship.png");
     }
-    
+
     @Override
     public void tick(int tick) {
-        // Ship's movement is controlled by player input; no automatic update.
+        // Ship movement is controlled by player input; no automatic update.
     }
-    
+
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
@@ -59,28 +59,27 @@ public class Ship extends Controllable {
         x = newX;
         y = newY;
     }
-    
+
     // Methods for managing score and health
-    
     public void addScore(int points) {
         score += points;
     }
-    
+
     public int getScore() {
         return score;
     }
-    
+
     public void heal(int amount) {
         health += amount;
     }
-    
+
     public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;
         }
     }
-    
+
     public int getHealth() {
         return health;
     }
