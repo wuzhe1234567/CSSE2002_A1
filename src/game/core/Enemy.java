@@ -32,17 +32,17 @@ public class Enemy implements SpaceObject {
     
     /**
      * Returns the graphical representation of the enemy.
-     * Note: The image file is expected to be at "assets/enemy.png" (relative to the project root).
+     * The text representation is set to "👾" as required.
      *
      * @return an ObjectGraphic representing the enemy.
      */
     @Override
     public ObjectGraphic render() {
-        return new ObjectGraphic("Enemy", "assets/enemy.png");
+        return new ObjectGraphic("👾", "assets/enemy.png");
     }
     
     @Override
     public void tick(int tick) {
-        y++; // Moves downward each tick.
+        y++; // Moves downward each tick
     }
 }
