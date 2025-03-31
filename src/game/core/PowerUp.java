@@ -4,8 +4,9 @@ import game.ui.ObjectGraphic;
 
 /**
  * Abstract class representing a generic power-up.
+ * Implements SpaceObject and PowerUpEffect.
  */
-public abstract class PowerUp implements SpaceObject {
+public abstract class PowerUp implements SpaceObject, PowerUpEffect {
     protected int x;
     protected int y;
     
@@ -35,6 +36,11 @@ public abstract class PowerUp implements SpaceObject {
     
     @Override
     public void tick(int tick) {
-        // Power-ups remain stationary by default.
+        // Default: power-ups remain stationary.
     }
+    
+    // 此方法必须实现，因为 PowerUp 实现了 PowerUpEffect 接口
+    @Override
+    public abstract void applyEffect(Ship ship);
 }
+
