@@ -41,7 +41,15 @@ public class Enemy implements SpaceObject {
         return new ObjectGraphic("👾", "assets/enemy.png");
     }
     
+    /**
+     * Updates the enemy's state each tick.
+     * In this case, the enemy moves downward by increasing its y-coordinate.
+     *
+     * @param tick the current game tick.
+     */
     @Override
     public void tick(int tick) {
         y++; // Moves downward each tick
     }
+}
+
