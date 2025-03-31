@@ -47,7 +47,7 @@ public class GameController {
         ui.onKey(this::preGameInput);
     }
     
-    // Pre-game input handling (private method, not exposed as public API)
+    // Pre-game input handling (private method)
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -70,7 +70,8 @@ public class GameController {
     }
     
     /**
-     * Handles player input: W/A/S/D to move, F to fire, P toggles pause.
+     * Handles player input:
+     * W/A/S/D to move, F to fire, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -97,7 +98,8 @@ public class GameController {
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet fired");  // 输出日志，满足测试要求
+                    ui.log("Bullet fired");
+                    System.out.println("Bullet fired");
                     break;
                 default:
                     break;
