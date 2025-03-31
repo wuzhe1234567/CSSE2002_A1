@@ -28,7 +28,8 @@ public class GameController {
     
     /**
      * Initial state: creates enemies, asteroids, and power-ups,
-     * displays them (stationary), sets initial Score stat, and waits for the player to press Enter.
+     * displays them (stationary), sets initial Score and Time Survived stats,
+     * and waits for the player to press Enter.
      */
     public void startGame() {
         // Ship creation is handled externally (no createShip() method in GameModel)
@@ -44,8 +45,8 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // 初始显示 Score 统计
         ui.setStat("Score", "0");
+        ui.setStat("Time Survived", "0");
         ui.onKey(this::preGameInput);
     }
     
@@ -66,6 +67,10 @@ public class GameController {
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
         }
+        // 更新 "Time Survived" 统计（以秒为单位）
+        long currentTime = System.currentTimeMillis();
+        long survivedSeconds = (currentTime - startTime) / 1000;
+        ui.setStat("Time Survived", String.valueOf(survivedSeconds));
         if (ship == null) {
             pauseGame();
         }
@@ -134,3 +139,4 @@ public class GameController {
         return model;
     }
 }
+
