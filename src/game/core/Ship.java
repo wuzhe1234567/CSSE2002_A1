@@ -8,7 +8,7 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship extends ObjectWithPosition implements Controllable {
+public class Ship extends Controllable {
     private int health;
     private int score;
     
@@ -32,14 +32,14 @@ public class Ship extends ObjectWithPosition implements Controllable {
     
     @Override
     public void tick(int tick) {
-        // Ship's movement is controlled by player input; no automatic update.
+        // Ship movement is controlled by player input; no automatic update.
     }
     
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
         int newY = y;
-        switch (direction) {
+        switch(direction) {
             case UP:
                 newY = y - 1;
                 break;
@@ -61,7 +61,6 @@ public class Ship extends ObjectWithPosition implements Controllable {
     }
     
     // Methods for managing score and health
-    
     public void addScore(int points) {
         score += points;
     }
@@ -85,4 +84,3 @@ public class Ship extends ObjectWithPosition implements Controllable {
         return health;
     }
 }
-
