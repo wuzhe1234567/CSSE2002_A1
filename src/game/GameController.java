@@ -28,7 +28,7 @@ public class GameController {
     
     /**
      * Initial state: creates enemies, asteroids, and power-ups,
-     * displays them (stationary), sets initial stats, and waits for the player to press Enter.
+     * displays them (stationary), initializes stats, and waits for the player to press Enter.
      */
     public void startGame() {
         // Ship creation is handled externally (no createShip() method in GameModel)
@@ -44,14 +44,15 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // Initialize stats: Score, Health, and Time Survived.
+        // Initialize stats: Score, Health, Level, and Time Survived.
         ui.setStat("Score", "0");
         ui.setStat("Health", "0");
+        ui.setStat("Level", "1");
         ui.setStat("Time Survived", "0");
         ui.onKey(this::preGameInput);
     }
     
-    // Pre-game input handling: Waits for Enter to start the game loop.
+    // Pre-game input handling: waits for Enter to start the game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -69,7 +70,9 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // Update Time Survived stat (in seconds)
+        // Update "Level" stat.
+        ui.setStat("Level", String.valueOf(model.getLevel()));
+        // Update "Time Survived" stat (in seconds).
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", String.valueOf(survivedSeconds));
@@ -141,3 +144,4 @@ public class GameController {
         return model;
     }
 }
+
