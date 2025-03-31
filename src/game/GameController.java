@@ -32,10 +32,8 @@ public class GameController {
      * Note: Ship creation is handled externally.
      */
     public void startGame() {
-        // These objects are added externally. The Ship should already exist (or be created automatically in updateGame).
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // Instantiate a DescendingEnemy using an anonymous class.
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -45,7 +43,6 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // Initialize stats: Score, Health, Level, Time Survived
         ui.setStat("Score", "0");
         ui.setStat("Health", "100");
         ui.setStat("Level", "1");
@@ -71,11 +68,9 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // Update "Time Survived" stat.
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
-        // Update "Level" stat.
         ui.setStat("Level", String.valueOf(model.getLevel()));
         if (ship == null) {
             pauseGame();
@@ -118,7 +113,7 @@ public class GameController {
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet was fired");
+                    ui.log("Bullet fired.");
                     break;
                 default:
                     break;
@@ -136,9 +131,6 @@ public class GameController {
         ui.log("Game paused.");
     }
 
-    /**
-     * Returns the game model.
-     */
     public GameModel getModel() {
         return model;
     }
