@@ -136,7 +136,6 @@ public class GameModel {
     
     /**
      * Spawns new objects based on game level and spawn rate.
-     * 简单示例：每 tick 有一定几率生成一个敌人。
      */
     public void spawnObjects() {
         if (random.nextInt(100) < START_SPAWN_RATE) {
@@ -151,7 +150,7 @@ public class GameModel {
         if (ship != null && ship.getScore() >= SCORE_THRESHOLD * level) {
             level++;
             logger.log("Level up! Now level " + level);
-            // 可增加更多逻辑：如提高 spawn rate 等
+            // 可添加提高 spawn rate 等逻辑
         }
     }
     
@@ -175,7 +174,7 @@ public class GameModel {
     }
     
     public void createShip() {
-        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1);
+        ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
         addObject(ship);
     }
     
@@ -183,3 +182,4 @@ public class GameModel {
         return ship;
     }
 }
+
