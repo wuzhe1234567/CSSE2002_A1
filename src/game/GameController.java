@@ -34,7 +34,7 @@ public class GameController {
         model.createShip();
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 使用匿名内部类实例化 DescendingEnemy
+        // Instantiate DescendingEnemy via an anonymous class
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -47,7 +47,7 @@ public class GameController {
         ui.onKey(this::preGameInput);
     }
     
-    // 将预启动阶段的输入处理方法设为 private，不作为 public API
+    // 预启动阶段输入处理，设为 private，不作为 public API
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -97,6 +97,7 @@ public class GameController {
                     break;
                 case "F":
                     model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
+                    ui.log("Bullet fired");  // 添加日志，满足测试要求
                     break;
                 default:
                     break;
