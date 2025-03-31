@@ -28,7 +28,7 @@ public class GameModel {
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
     
-    // Ship 对象由外部设置；若为空，在 updateGame() 中自动创建一个默认 ship
+    // Ship 对象由外部添加；本模型内部不负责创建 Ship，因此 ship 可能为 null
     private Ship ship = null;
     private int level = START_LEVEL;
     
@@ -50,18 +50,16 @@ public class GameModel {
     
     /**
      * Updates the state of all space objects.
-     * 对所有对象调用 tick(tick)；当 tick > 0 时，如果 ship 为空则自动创建，
+     * 对所有对象调用 tick(tick)；当 tick > 0 时，
+     * 如果 ship 为空则不自动创建（由外部负责添加），
      * 然后调用 spawnObjects()、levelUp() 与 checkCollisions()。
      */
     public void updateGame(int tick) {
-        // 更新所有对象状态
         for (SpaceObject obj : new ArrayList<>(objects)) {
             obj.tick(tick);
         }
         if (tick > 0) {
-            if (ship == null) {
-                createShip();
-            }
+            // 外部负责添加 Ship 对象，故 ship 可能为 null
             spawnObjects();
             levelUp();
             checkCollisions();
@@ -75,7 +73,7 @@ public class GameModel {
      * 3. Ship-Asteroid：移除陨石。
      * 4. Ship-HealthPowerUp：应用效果后移除 power-up。
      * 5. Ship-ShieldPowerUp：应用效果后移除 power-up。
-     * 6. Bullet 与 Asteroid 碰撞不处理。
+     * 6. Bullet 与 Asteroid 之间的碰撞忽略。
      * 7. 其它碰撞：移除双方。
      */
     public void checkCollisions() {
@@ -160,11 +158,13 @@ public class GameModel {
     
     /**
      * Spawns new objects based on a fixed spawn rate.
-     * 为测试要求，此方法每次调用时都在 (8,0) 生成一个 Asteroid。
+     * 为测试要求，此方法每次调用时在 (8,0) 生成一个 Asteroid，并记录日志。
      */
     public void spawnObjects() {
-        addObject(new Asteroid(8, 0));
-        logger.log("Asteroid spawned at (8,0).");
+        if (random.nextInt(100) < START_SPAWN_RATE) {
+            addObject(new Asteroid(8, 0));
+            logger.log("Asteroid spawned at (8,0).");
+        }
     }
     
     /**
@@ -179,7 +179,7 @@ public class GameModel {
     
     /**
      * Fires a bullet from the ship.
-     * 按测试要求，此方法先移除 ship，再添加一个 Bullet，
+     * 根据测试要求，此方法先移除 ship，再添加一个 Bullet，
      * 使得模型中仅剩下一个空间对象（子弹）。
      */
     public void fireBullet() {
@@ -196,23 +196,5 @@ public class GameModel {
     
     public Ship getShip() {
         return ship;
-    }
-    
-    /**
-     * Sets the Ship object externally.
-     */
-    public void setShip(Ship ship) {
-        this.ship = ship;
-        addObject(ship);
-    }
-    
-    /**
-     * Creates a default Ship object at the center-bottom with 100 health,
-     * and adds it to the model.
-     */
-    public void createShip() {
-        this.ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
-        addObject(ship);
-        logger.log("Default ship created.");
     }
 }
