@@ -110,11 +110,12 @@ public class GameController {
     
     /**
      * Public method to pause the game.
-     * In addition to calling ui.pause(), logs "Game paused".
+     * In addition to calling ui.pause(), logs "Game paused" both via ui.log and System.out.println.
      */
     public void pauseGame() {
         ui.pause();
         ui.log("Game paused");
+        System.out.println("Game paused");
     }
     
     /**
@@ -126,3 +127,4 @@ public class GameController {
         return model;
     }
 }
+
