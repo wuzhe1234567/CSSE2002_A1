@@ -8,20 +8,20 @@ import game.GameModel;
 /**
  * Represents the player's ship.
  */
-public class Ship extends Controllable {
+public class Ship extends ObjectWithPosition implements Controllable {
     private int health;
     private int score;
     
     /**
-     * Constructs a Ship with the specified coordinates.
-     * The ship's initial health is fixed at 100 and score is 0.
+     * Constructs a Ship with the specified coordinates and initial health.
      *
      * @param x the x-coordinate of the ship.
      * @param y the y-coordinate of the ship.
+     * @param health the initial health of the ship.
      */
-    public Ship(int x, int y) {
+    public Ship(int x, int y, int health) {
         super(x, y);
-        this.health = 100;
+        this.health = health;
         this.score = 0;
     }
     
@@ -32,14 +32,14 @@ public class Ship extends Controllable {
     
     @Override
     public void tick(int tick) {
-        // Ship's movement is controlled by player input; no automatic update.
+        // Ship does not move automatically.
     }
     
     @Override
     public void move(Direction direction) throws BoundaryExceededException {
         int newX = x;
         int newY = y;
-        switch (direction) {
+        switch(direction) {
             case UP:
                 newY = y - 1;
                 break;
@@ -53,7 +53,7 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if(newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
@@ -80,6 +80,11 @@ public class Ship extends Controllable {
         }
     }
     
+    public int getHealth() {
+        return health;
+    }
+}
+
     public int getHealth() {
         return health;
     }
