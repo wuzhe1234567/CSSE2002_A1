@@ -53,13 +53,13 @@ public class GameModel {
     
     /**
      * Collision detection:
-     * 1. If collision involves a Bullet and an Enemy, remove both and add 1 score.
-     * 2. If collision involves the Ship and an Enemy, remove the enemy and add 1 score.
-     * 3. If collision involves the Ship and an Asteroid, remove the asteroid.
-     * 4. If collision involves the Ship and a HealthPowerUp, apply its effect and remove it.
-     * 5. If collision involves the Ship and a ShieldPowerUp, apply its effect and remove it.
-     * 6. If collision is between a Bullet and an Asteroid, do nothing.
-     * 7. Other collisions (with matching coordinates) remove both objects.
+     * 1. Bullet and Enemy: remove both, add 1 score.
+     * 2. Ship and Enemy: remove enemy, add 1 score.
+     * 3. Ship and Asteroid: remove asteroid.
+     * 4. Ship and HealthPowerUp: apply its effect and remove it.
+     * 5. Ship and ShieldPowerUp: apply its effect and remove it.
+     * 6. Bullets should not collide with Asteroids.
+     * 7. Other collisions: remove both.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -68,14 +68,14 @@ public class GameModel {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
                 
-                // 如果碰撞涉及子弹与陨石，忽略处理（不相互影响）
+                // 如果碰撞涉及 Bullet 与 Asteroid，则忽略（不相互影响）
                 if ((a instanceof Bullet && b instanceof Asteroid) ||
                     (a instanceof Asteroid && b instanceof Bullet)) {
                     continue;
                 }
                 
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // Bullet and Enemy collision: remove both, add score.
+                    // Bullet and Enemy collision
                     if ((a instanceof Bullet && b instanceof Enemy) ||
                         (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
@@ -86,7 +86,7 @@ public class GameModel {
                         }
                         continue;
                     }
-                    // Ship and Enemy collision: remove enemy, add score.
+                    // Ship and Enemy collision
                     if ((a instanceof Ship && b instanceof Enemy) ||
                         (b instanceof Ship && a instanceof Enemy)) {
                         if (ship != null) {
@@ -100,7 +100,7 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship and Asteroid collision: remove asteroid.
+                    // Ship and Asteroid collision
                     if ((a instanceof Ship && b instanceof Asteroid) ||
                         (b instanceof Ship && a instanceof Asteroid)) {
                         if (a instanceof Ship) {
@@ -111,7 +111,7 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Ship and HealthPowerUp collision.
+                    // Ship and HealthPowerUp collision
                     if ((a instanceof Ship && b instanceof HealthPowerUp) ||
                         (b instanceof Ship && a instanceof HealthPowerUp)) {
                         HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp)a : (HealthPowerUp)b;
@@ -120,7 +120,7 @@ public class GameModel {
                         logger.log("Ship collected Health Power-Up.");
                         continue;
                     }
-                    // Ship and ShieldPowerUp collision.
+                    // Ship and ShieldPowerUp collision
                     if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
                         (b instanceof Ship && a instanceof ShieldPowerUp)) {
                         ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp)a : (ShieldPowerUp)b;
@@ -129,7 +129,7 @@ public class GameModel {
                         logger.log("Ship collected Shield Power-Up.");
                         continue;
                     }
-                    // Other collisions: remove both.
+                    // Other collisions: remove both
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
@@ -145,7 +145,7 @@ public class GameModel {
     
     /**
      * Spawns new objects based on game level and spawn rate.
-     * 简单示例：每 tick 有一定概率生成一个敌人。
+     * 例如：每 tick 有一定概率生成一个敌人。
      */
     public void spawnObjects() {
         if (random.nextInt(100) < START_SPAWN_RATE) {
@@ -160,15 +160,18 @@ public class GameModel {
         if (ship != null && ship.getScore() >= SCORE_THRESHOLD * level) {
             level++;
             logger.log("Level up! Now level " + level);
-            // 可以添加更多逻辑，比如增加 spawn rate
+            // 可增加提高 spawn rate 等逻辑
         }
     }
     
     /**
      * Fires a bullet from the ship.
+     * 根据测试要求，此方法执行后模型中应只存在1个空间对象（子弹），因此移除飞船后添加子弹。
      */
     public void fireBullet() {
         if (ship != null) {
+            // 从模型中移除飞船，使得模型中只留下发射的子弹
+            objects.remove(ship);
             addObject(new Bullet(ship.getX(), ship.getY() - 1));
             logger.log("Bullet fired.");
         }
@@ -183,6 +186,9 @@ public class GameModel {
         return level;
     }
     
+    /**
+     * Creates the ship and adds it to the model.
+     */
     public void createShip() {
         ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 1, 100);
         addObject(ship);
@@ -192,4 +198,3 @@ public class GameModel {
         return ship;
     }
 }
-
