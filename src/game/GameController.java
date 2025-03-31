@@ -33,7 +33,7 @@ public class GameController {
     public void startGame() {
         // 预先由外部添加 Ship 对象
         model.addObject(new Enemy(3, 1));
-        model.addObject(new Asteroid(5, 1));
+        model.addObject(new Asteroid(8, 0));
         // 使用匿名类实例化 DescendingEnemy
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
