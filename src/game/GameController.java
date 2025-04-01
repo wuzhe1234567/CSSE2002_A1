@@ -1,9 +1,10 @@
 package game;
 
+import game.core.*;
 import game.exceptions.BoundaryExceededException;
 import game.ui.UI;
 import game.utility.Direction;
-import game.exceptions.BoundaryExceededException;
+
 
 /**
  * The Controller handling the game flow and interactions.
