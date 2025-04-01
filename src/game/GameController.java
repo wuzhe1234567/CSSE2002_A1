@@ -34,7 +34,7 @@ public class GameController {
     public GameModel getModel() {
         return model;
     }
-    
+
     public void startGame() {
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
@@ -101,18 +101,22 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
+                    System.out.println("Ship moved.");
                     ui.log("Ship moved.");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
+                    System.out.println("Ship moved.");
                     ui.log("Ship moved.");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
+                    System.out.println("Ship moved.");
                     ui.log("Ship moved.");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
+                    System.out.println("Ship moved.");
                     ui.log("Ship moved.");
                     break;
                 case "F":
