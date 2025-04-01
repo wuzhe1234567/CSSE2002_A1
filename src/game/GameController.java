@@ -18,14 +18,19 @@ public class GameController {
 
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
+        // 注意：如果外部已经创建了 model，则不要重新创建，这里直接使用传入的 model
         this.model = model;
         this.startTime = System.currentTimeMillis();
     }
 
     public GameController(UI ui) {
+        // 如果只传入 UI，则创建一个新的 GameModel
         this(ui, new GameModel(ui::log));
     }
 
+    /**
+     * Returns the game model.
+     */
     public GameModel getModel() {
         return model;
     }
@@ -125,4 +130,14 @@ public class GameController {
             ui.log("Cannot move: " + e.getMessage());
         }
     }
+
+    /**
+     * Pauses the game and logs "Game paused.".
+     */
+    public void pauseGame() {
+        ui.pause();
+        ui.log("Game paused.");
+    }
+}
+
 
