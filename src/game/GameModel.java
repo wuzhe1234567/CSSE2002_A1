@@ -180,21 +180,14 @@ public class GameModel {
      * 根据测试要求，此方法先移除 ship，再添加一个 Bullet，
      * 使得模型中仅剩下一个空间对象（子弹）。
      */
-   public void fireBullet() {
-    // 假设 ship 可能为空，如果为空就不发射子弹
-    if (ship == null) {
-        return;
+    public void fireBullet() {
+        Ship s = getShip();
+        if (s != null) {
+            objects.remove(s);
+            addObject(new Bullet(s.getX(), s.getY() - 1));
+            logger.log("Core.Bullet fired!");
+        }
     }
-    // 获取当前飞船的坐标
-    int shipX = ship.getX();
-    int shipY = ship.getY();
-    // 在 ship 的坐标处生成新的子弹
-    Bullet bullet = new Bullet(shipX, shipY);
-    // 将子弹加入到游戏对象列表中
-    addObject(bullet);
-    // 记录日志
-    logger.log("Core.Bullet fired!");
-}
 
     public int getLevel() {
         return level;
