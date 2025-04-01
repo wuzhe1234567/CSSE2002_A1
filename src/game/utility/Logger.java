@@ -1,11 +1,16 @@
 package game.utility;
 
 /**
- * A simple logger implementation that writes log messages to standard output.
+ * A functional interface for logging messages.
+ * Implementations should output the log message exactly as provided,
+ * without adding extra formatting.
  */
-public class ConsoleLogger implements Logger {
-    @Override
-    public void log(String message) {
-        System.out.println(message);
-    }
+@FunctionalInterface
+public interface Logger {
+    /**
+     * Logs the provided message.
+     *
+     * @param message the message to log
+     */
+    void log(String message);
 }
