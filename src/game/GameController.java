@@ -18,7 +18,6 @@ public class GameController {
 
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
-        // 注意：这里不直接使用传入的 model，而是创建一个新的 GameModel 以保证模型初始化为空
         this.model = new GameModel(ui::log);
         this.startTime = System.currentTimeMillis();
     }
@@ -28,26 +27,46 @@ public class GameController {
     }
 
     /**
-     * Returns the GameModel.
+     * Initial state: adds enemies, asteroids, and power-ups,
+     * displays them (stationary), initializes stats, and waits for the player to press Enter.
+     * Note: Ship creation is handled externally.
      */
     public GameModel getModel() {
         return model;
     }
 
-    /**
-     * Starts the game：注册 onStep 与 onKey 回调。
-     * Ship 对象由外部先添加到模型中（测试用例会预先添加 Ship）。
-     */
     public void startGame() {
-        ui.onStep(this::onTick);
-        ui.onKey(this::handlePlayerInput);
+        model.addObject(new Enemy(3, 1));
+        model.addObject(new Asteroid(5, 1));
+        model.addObject(new DescendingEnemy(2, 0) {
+            @Override
+            public ObjectGraphic render() {
+                return new ObjectGraphic("DescendingEnemy", "assets/descending_enemy.png");
+            }
+        });
+        model.addObject(new HealthPowerUp(4, 0));
+        model.addObject(new ShieldPowerUp(6, 0));
+        renderGame();
+        ui.setStat("Score", "0");
+        ui.setStat("Health", "100");
+        ui.setStat("Level", "1");
+        ui.setStat("Time Survived", "0 seconds");
+        ui.onKey(this::preGameInput);
+    }
+
+    // Pre-game input handling: wait for Enter key to start game loop.
+    private void preGameInput(String key) {
+        if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
+            gameStarted = true;
+            ui.onKey(this::handlePlayerInput);
+            ui.onStep(this::onTick);
+        }
     }
 
     public void onTick(int tick) {
         renderGame();
         model.updateGame(tick);
         model.checkCollisions();
-        model.spawnObjects();
         Ship ship = model.getShip();
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
@@ -67,7 +86,7 @@ public class GameController {
     }
 
     /**
-     * 处理玩家输入：W/A/S/D 控制移动，F 发射子弹，P 切换暂停。
+     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -82,19 +101,19 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "F":
                     model.fireBullet();
@@ -108,11 +127,10 @@ public class GameController {
     }
 
     /**
-     * 暂停游戏并记录 "Game paused." 的日志。
+     * Pauses the game and logs "Game paused.".
      */
     public void pauseGame() {
         ui.pause();
         ui.log("Game paused.");
     }
 }
-
