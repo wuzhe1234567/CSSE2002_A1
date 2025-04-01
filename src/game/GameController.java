@@ -18,7 +18,8 @@ public class GameController {
 
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
-        this.model = new GameModel(ui::log);
+        // 注意：构造函数中不要重复创建 model，应使用传入的 model
+        this.model = model; 
         this.startTime = System.currentTimeMillis();
     }
 
@@ -27,16 +28,18 @@ public class GameController {
     }
 
     /**
-     * Initial state: adds enemies, asteroids, and power-ups,
-     * displays them (stationary), initializes stats, and waits for the player to press Enter.
-     * Note: Ship creation is handled externally.
+     * Returns the game model.
      */
     public GameModel getModel() {
         return model;
     }
 
+    /**
+     * Initial state: adds enemies, asteroids, and power-ups,
+     * displays them (stationary), initializes stats, and waits for the player to press Enter.
+     * Note: Ship creation is handled externally.
+     */
     public void startGame() {
-        // 这些对象由测试用例构造或外部添加，Ship 对象需预先存在，Health stat 初始为 100
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
         // 使用匿名类实例化 DescendingEnemy
@@ -95,7 +98,6 @@ public class GameController {
             System.out.println("Invalid input. Use W, A, S, D, F, or P.");
             return;
         }
-
         String command = input.trim().toUpperCase();
         switch (command) {
             case "W":
