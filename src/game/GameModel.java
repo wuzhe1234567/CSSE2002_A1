@@ -200,11 +200,6 @@ public class GameModel {
      * Returns the first Ship instance found in the objects list.
      */
     public Ship getShip() {
-        for (SpaceObject obj : objects) {
-            if (obj instanceof Ship) {
-                return (Ship) obj;
-            }
-        }
         return ship;
     }
 }
