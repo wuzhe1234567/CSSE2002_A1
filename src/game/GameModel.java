@@ -180,10 +180,13 @@ public class GameModel {
      * 根据测试要求，此方法先移除 ship，再添加一个 Bullet，
      * 使得模型中仅剩下一个空间对象（子弹）。
      */
-public void fireBullet() {
+    public void fireBullet() {
+        Ship s = getShip();
+        if (s != null) {
             objects.remove(s);
             addObject(new Bullet(s.getX(), s.getY() - 1));
             logger.log("Core.Bullet fired!");
+        }
     }
 
     public int getLevel() {
@@ -194,6 +197,11 @@ public void fireBullet() {
      * Returns the Ship instance if present in the objects list.
      */
     public Ship getShip() {
-        return ship;
+        for (SpaceObject obj : objects) {
+            if (obj instanceof Ship) {
+                return (Ship) obj;
+            }
+        }
+        return null;
     }
 }
