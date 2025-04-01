@@ -88,43 +88,66 @@ public class GameController {
     /**
      * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
-    public void handlePlayerInput(String key) {
-        if (key.equalsIgnoreCase("P")) {
-            paused = !paused;
-            pauseGame();
+ public void handlePlayerInput(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            System.out.println("Invalid input. Use W, A, S, D, F, or P.");
             return;
         }
-        if (paused) return;
-        Ship ship = model.getShip();
-        if (ship == null) return;
-        try {
-            switch (key.toUpperCase()) {
-                case "W":
-                    ship.move(Direction.UP);
-                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                    break;
-                case "A":
-                    ship.move(Direction.LEFT);
-                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                    break;
-                case "S":
-                    ship.move(Direction.DOWN);
-                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                    break;
-                case "D":
-                    ship.move(Direction.RIGHT);
-                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                    break;
-                case "F":
-                    model.fireBullet();
-                    break;
-                default:
-                    break;
-            }
-        } catch (BoundaryExceededException e) {
-            ui.log("Cannot move: " + e.getMessage());
+
+        String command = input.trim().toUpperCase();
+        switch (command) {
+            case "W":
+                try {
+                    model.getShip().move(Direction.UP);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    ui.log(e.getMessage());
+
+
+                }
+                break;
+            case "A":
+                try {
+                    model.getShip().move(Direction.LEFT);
+
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    ui.log(e.getMessage());
+                }
+                break;
+            case "S":
+                try {
+                    model.getShip().move(Direction.DOWN);
+
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    ui.log(e.getMessage());
+                }
+                break;
+            case "D":
+                try {
+                    model.getShip().move(Direction.RIGHT);
+
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    ui.log(e.getMessage());
+                }
+                break;
+            case "F":
+                model.fireBullet();
+                break;
+            case "P":
+                pauseGame();
+                break;
+
+            default:
+                System.out.println("Invalid input. Use W, A, S, D, F, or P.");
+                break;
         }
-    }
 
     /**
      * Pauses the game and logs "Game paused.".
