@@ -13,21 +13,11 @@ public class Ship extends Controllable {
     private int score;
 
     /**
-     * Constructs a Ship with default position and health.
-     * e.g. position (0,0) and health=100
-     */
-    public Ship() {
-        super(0, 0); // 调用父类的 (x,y) 初始化
-        this.health = 100;
-        this.score = 0;
-    }
-
-    /**
-     * Constructs a Ship with the specified position and health.
+     * Constructs a Ship with the specified coordinates and initial health.
      *
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param health the initial health
+     * @param x      the x-coordinate of the ship.
+     * @param y      the y-coordinate of the ship.
+     * @param health the initial health of the ship.
      */
     public Ship(int x, int y, int health) {
         super(x, y);
@@ -42,7 +32,7 @@ public class Ship extends Controllable {
 
     @Override
     public void tick(int tick) {
-        // Ship does not move automatically.
+        // Ship movement is controlled by player input; no automatic update.
     }
 
     @Override
@@ -63,18 +53,14 @@ public class Ship extends Controllable {
                 newX = x + 1;
                 break;
         }
-        // Boundary check
-        if (newX < 0 || newX >= GameModel.GAME_WIDTH ||
-            newY < 0 || newY >= GameModel.GAME_HEIGHT) {
-            throw new BoundaryExceededException(
-                "Movement out of boundary: (" + newX + ", " + newY + ")");
+        if (newX < 0 || newX >= GameModel.GAME_WIDTH || newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+            throw new BoundaryExceededException("Movement out of boundary: (" + newX + ", " + newY + ")");
         }
         x = newX;
         y = newY;
     }
 
-    // Manage score and health
-
+    // Score and health management methods
     public void addScore(int points) {
         score += points;
     }
@@ -96,5 +82,13 @@ public class Ship extends Controllable {
 
     public int getHealth() {
         return health;
+    }
+
+    /**
+     * Returns a string representing the ship's current coordinates.
+     */
+    @Override
+    public String toString() {
+        return "(" + getX() + ", " + getY() + ")";
     }
 }
