@@ -31,6 +31,10 @@ public class GameController {
      * displays them (stationary), initializes stats, and waits for the player to press Enter.
      * Note: Ship creation is handled externally.
      */
+    public GameModel getModel() {
+        return model;
+    }
+    
     public void startGame() {
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
@@ -128,9 +132,5 @@ public class GameController {
     public void pauseGame() {
         ui.pause();
         ui.log("Game paused.");
-    }
-
-    public GameModel getModel() {
-        return model;
     }
 }
