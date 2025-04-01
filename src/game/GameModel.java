@@ -16,8 +16,8 @@ public class GameModel {
     public static final int GAME_HEIGHT = 20;
     public static final int GAME_WIDTH = 10;
     public static final int START_LEVEL = 1;
-    public static final int START_SPAWN_RATE = 2; // Not used for random spawning now
-    public static final int SCORE_THRESHOLD = 100; // Score needed to level up per level
+    public static final int START_SPAWN_RATE = 2; // 每 tick 生成 Asteroid 的百分比概率
+    public static final int SCORE_THRESHOLD = 100; // 每级升级所需分数
     public static final int ASTEROID_DAMAGE = 10;
     public static final int ENEMY_DAMAGE = 20;
     public static final int SPAWN_RATE_INCREASE = 5;
@@ -28,8 +28,7 @@ public class GameModel {
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
 
-    // Ship is added externally; if not added, getShip() returns null.
-    private Ship ship = null;
+    // Ship 对象由外部添加；getShip() 方法会在 objects 中查找
     private int level = START_LEVEL;
 
     public GameModel(Logger logger) {
@@ -49,11 +48,10 @@ public class GameModel {
     }
 
     /**
-     * Updates the state of all space objects.
-     * Iterates over a copy of the objects list to call tick(tick);
-     * For tick > 0, also calls spawnObjects(), levelUp() and checkCollisions().
+     * 更新所有对象状态，并在 tick > 0 时调用 spawnObjects(), levelUp() 与 checkCollisions().
      */
     public void updateGame(int tick) {
+        // 遍历对象副本，调用 tick()
         for (SpaceObject obj : new ArrayList<>(objects)) {
             obj.tick(tick);
         }
@@ -65,14 +63,14 @@ public class GameModel {
     }
 
     /**
-     * Performs collision detection among space objects.
-     * 1. Bullet-Enemy: remove both; if a ship exists, add 1 score.
-     * 2. Ship-Enemy: remove enemy; add 1 score.
-     * 3. Ship-Asteroid: remove asteroid.
-     * 4. Ship-HealthPowerUp: apply effect then remove power-up.
-     * 5. Ship-ShieldPowerUp: apply effect then remove power-up.
-     * 6. Bullet-Asteroid collisions are ignored.
-     * 7. Other collisions: remove both.
+     * 碰撞检测：
+     * 1. Bullet-Enemy：移除双方，并给 Ship 加 1 分。
+     * 2. Ship-Enemy：移除敌人，并给 Ship 加 1 分。
+     * 3. Ship-Asteroid：移除 Asteroid。
+     * 4. Ship-HealthPowerUp：应用效果后移除 power-up。
+     * 5. Ship-ShieldPowerUp：应用效果后移除 power-up。
+     * 6. Bullet 与 Asteroid 碰撞忽略。
+     * 7. 其它碰撞：移除双方。
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -81,14 +79,14 @@ public class GameModel {
                 SpaceObject a = objects.get(i);
                 SpaceObject b = objects.get(j);
                 if (a.getX() == b.getX() && a.getY() == b.getY()) {
-                    // Ignore collisions between Bullet and Asteroid
+                    // 忽略 Bullet 与 Asteroid 之间的碰撞
                     if ((a instanceof Bullet && b instanceof Asteroid) ||
-                            (a instanceof Asteroid && b instanceof Bullet)) {
+                        (a instanceof Asteroid && b instanceof Bullet)) {
                         continue;
                     }
-                    // Bullet-Enemy collision
+                    // Bullet-Enemy 碰撞
                     if ((a instanceof Bullet && b instanceof Enemy) ||
-                            (a instanceof Enemy && b instanceof Bullet)) {
+                        (a instanceof Enemy && b instanceof Bullet)) {
                         toRemove.add(a);
                         toRemove.add(b);
                         logger.log("Bullet destroyed enemy.");
@@ -98,9 +96,9 @@ public class GameModel {
                         }
                         continue;
                     }
-                    // Ship-Enemy collision
+                    // Ship-Enemy 碰撞
                     if ((a instanceof Ship && b instanceof Enemy) ||
-                            (a instanceof Enemy && b instanceof Ship)) {
+                        (a instanceof Enemy && b instanceof Ship)) {
                         Ship s = getShip();
                         if (s != null) {
                             s.addScore(1);
@@ -113,9 +111,9 @@ public class GameModel {
                         logger.log("Ship collided with enemy.");
                         continue;
                     }
-                    // Ship-Asteroid collision
+                    // Ship-Asteroid 碰撞
                     if ((a instanceof Ship && b instanceof Asteroid) ||
-                            (a instanceof Asteroid && b instanceof Ship)) {
+                        (a instanceof Asteroid && b instanceof Ship)) {
                         if (a instanceof Ship) {
                             toRemove.add(b);
                         } else {
@@ -124,29 +122,29 @@ public class GameModel {
                         logger.log("Ship collided with asteroid.");
                         continue;
                     }
-                    // Ship-HealthPowerUp collision
+                    // Ship-HealthPowerUp 碰撞
                     if ((a instanceof Ship && b instanceof HealthPowerUp) ||
-                            (a instanceof HealthPowerUp && b instanceof Ship)) {
+                        (a instanceof HealthPowerUp && b instanceof Ship)) {
                         HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp) a : (HealthPowerUp) b;
                         hp.applyEffect(getShip());
                         toRemove.add(hp);
                         logger.log("Ship collected Health Power-Up.");
                         continue;
                     }
-                    // Ship-ShieldPowerUp collision
+                    // Ship-ShieldPowerUp 碰撞
                     if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
-                            (a instanceof ShieldPowerUp && b instanceof Ship)) {
+                        (a instanceof ShieldPowerUp && b instanceof Ship)) {
                         ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp) a : (ShieldPowerUp) b;
                         sp.applyEffect(getShip());
                         toRemove.add(sp);
                         logger.log("Ship collected Shield Power-Up.");
                         continue;
                     }
-                    // Other collisions: remove both objects.
+                    // 其它碰撞：移除双方
                     toRemove.add(a);
                     toRemove.add(b);
                     logger.log("Collision detected between " + a.render().toString() +
-                            " and " + b.render().toString());
+                               " and " + b.render().toString());
                 }
             }
         }
@@ -157,16 +155,18 @@ public class GameModel {
     }
 
     /**
-     * Spawns new objects.
-     * For testing purposes, this method always spawns an Asteroid at (8,0) and logs it.
+     * 根据随机数生成新对象。
+     * 若 random.nextInt(100) 小于 START_SPAWN_RATE，则在 (8,0) 生成一个 Asteroid。
      */
     public void spawnObjects() {
-        addObject(new Asteroid(8, 0));
-        logger.log("Asteroid spawned at (8,0).");
+        if (random.nextInt(100) < START_SPAWN_RATE) {
+            addObject(new Asteroid(8, 0));
+            logger.log("Asteroid spawned at (8,0).");
+        }
     }
 
     /**
-     * Increases the game level when the ship's score reaches the threshold.
+     * 当 Ship 的分数达到升级阈值时，增加游戏等级。
      */
     public void levelUp() {
         Ship s = getShip();
@@ -177,18 +177,17 @@ public class GameModel {
     }
 
     /**
-     * Fires a bullet from the ship.
-     * For testing: if a Ship exists, fires a bullet from its position;
-     * if not, fires from a default position.
+     * 发射子弹：如果存在 Ship，则从 Ship 位置发射子弹，并将 Ship 从对象列表中移除。
      */
     public void fireBullet() {
         Ship s = getShip();
         if (s != null) {
+            objects.remove(s);
             addObject(new Bullet(s.getX(), s.getY() - 1));
-            logger.log("Core.Bullet fired!");
+            logger.log("Bullet fired!");
         } else {
             addObject(new Bullet(5, GAME_HEIGHT - 2));
-            logger.log("Core.Bullet fired!");
+            logger.log("Bullet fired!");
         }
     }
 
@@ -197,9 +196,14 @@ public class GameModel {
     }
 
     /**
-     * Returns the first Ship instance found in the objects list.
+     * 返回对象列表中第一个 Ship 对象；若不存在，则返回 null。
      */
     public Ship getShip() {
-        return ship;
+        for (SpaceObject obj : objects) {
+            if (obj instanceof Ship) {
+                return (Ship) obj;
+            }
+        }
+        return null;
     }
 }
