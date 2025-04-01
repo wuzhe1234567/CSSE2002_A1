@@ -124,3 +124,13 @@ public class GameController {
         } catch (BoundaryExceededException e) {
             ui.log("Cannot move: " + e.getMessage());
         }
+    }
+
+    /**
+     * Pauses the game and logs "Game paused.".
+     */
+    public void pauseGame() {
+        ui.pause();
+        ui.log("Game paused.");
+    }
+}
