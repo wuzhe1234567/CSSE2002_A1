@@ -18,7 +18,7 @@ public class GameController {
 
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
-        this.model = model;
+        this.model = new GameModel(ui::log);
         this.startTime = System.currentTimeMillis();
     }
 
