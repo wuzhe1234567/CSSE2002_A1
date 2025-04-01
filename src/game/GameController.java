@@ -101,23 +101,19 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
-                    System.out.println("Ship moved.");
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
-                    System.out.println("Ship moved.");
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
-                    System.out.println("Ship moved.");
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
-                    System.out.println("Ship moved.");
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                     break;
                 case "F":
                     model.fireBullet();
