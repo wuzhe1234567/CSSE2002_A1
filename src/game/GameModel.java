@@ -205,7 +205,7 @@ public class GameModel {
                 return (Ship) obj;
             }
         }
-        return null;
+        return ship;
     }
 }
 
