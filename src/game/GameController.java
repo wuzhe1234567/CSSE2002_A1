@@ -32,10 +32,8 @@ public class GameController {
      * Note: Ship creation is handled externally.
      */
     public void startGame() {
-        // 这些对象由测试用例或外部添加，Ship 对象需预先存在（或在 updateGame 时自动创建）。
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // 使用匿名类实例化 DescendingEnemy
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -45,7 +43,6 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // 初始化统计数据：Score、Health、Level、Time Survived
         ui.setStat("Score", "0");
         ui.setStat("Health", "100");
         ui.setStat("Level", "1");
@@ -71,11 +68,9 @@ public class GameController {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // Update "Time Survived" stat.
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
-        // Update "Level" stat.
         ui.setStat("Level", String.valueOf(model.getLevel()));
         if (ship == null) {
             pauseGame();
@@ -102,23 +97,22 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
-                    ui.log("Ship moved");
+                    ui.log("Ship moved.");
                     break;
                 case "F":
-                    model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet fired");
+                    model.fireBullet();
                     break;
                 default:
                     break;
@@ -129,16 +123,13 @@ public class GameController {
     }
 
     /**
-     * Pauses the game and logs "Game paused".
+     * Pauses the game and logs "Game paused.".
      */
     public void pauseGame() {
         ui.pause();
-        ui.log("Game paused");
+        ui.log("Game paused.");
     }
 
-    /**
-     * Returns the game model.
-     */
     public GameModel getModel() {
         return model;
     }
