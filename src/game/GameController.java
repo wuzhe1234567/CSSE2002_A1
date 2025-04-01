@@ -112,8 +112,8 @@ public class GameController {
                     model.getShip().move(Direction.UP);
 
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    System.out.println("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
 
 
                 }
@@ -124,8 +124,8 @@ public class GameController {
 
 
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    System.out.println("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                 }
                 break;
             case "S":
@@ -134,8 +134,8 @@ public class GameController {
 
 
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    System.out.println("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                 }
                 break;
             case "D":
@@ -144,8 +144,8 @@ public class GameController {
 
 
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    System.out.println("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
                 }
                 break;
             case "F":
