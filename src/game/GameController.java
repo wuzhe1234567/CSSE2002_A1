@@ -157,4 +157,20 @@ public class GameController {
 
             default:
                 System.out.println("Invalid input. Use W, A, S, D, F, or P.");
-        
+                break;
+        }
+
+
+
+
+    }
+    /**
+     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
+
+     */
+
+    public void pauseGame() {
+        ui.pause();
+        ui.log("Game paused.");
+    }
+}
