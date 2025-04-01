@@ -184,7 +184,7 @@ public class GameModel {
         if (s != null) {
             objects.remove(s);
             addObject(new Bullet(s.getX(), s.getY() - 1));
-            logger.log("Bullet fired.");
+            logger.log("Core.Bullet fired!");
         }
     }
 
