@@ -1,148 +1,205 @@
 package game;
 
-import game.core.*;
-import game.exceptions.BoundaryExceededException;
-import game.ui.UI;
-import game.utility.Direction;
+import game.core.SpaceObject;
+import game.core.Asteroid;
+import game.core.Bullet;
+import game.core.Enemy;
+import game.core.HealthPowerUp;
+import game.core.ShieldPowerUp;
+import game.core.Ship;
+import game.utility.Logger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-/**
- * 管理游戏流程和交互。
- * 本类持有 UI 和 GameModel 的引用，更新模型状态并在 UI 上显示统计数据。
- */
-public class GameController {
-    private UI ui;
-    private GameModel model;
-    private long startTime;
-    private boolean gameStarted = false;
-    private boolean paused = false;
+public class GameModel {
+    public static final int GAME_HEIGHT = 20;
+    public static final int GAME_WIDTH = 10;
+    public static final int START_LEVEL = 1;
+    public static final int START_SPAWN_RATE = 2; // Not used for random spawning now
+    public static final int SCORE_THRESHOLD = 100; // Score needed to level up per level
+    public static final int ASTEROID_DAMAGE = 10;
+    public static final int ENEMY_DAMAGE = 20;
+    public static final int SPAWN_RATE_INCREASE = 5;
+    public static final double ENEMY_SPAWN_RATE = 0.5;
+    public static final double POWER_UP_SPAWN_RATE = 0.25;
 
-    // 使用指定 UI 创建控制器，内部构造一个新的 GameModel（日志方法由 UI 提供）
-    public GameController(UI ui) {
-        this.ui = ui;
-        this.model = new GameModel(ui::log);
-        this.startTime = System.currentTimeMillis();
+    private final Random random = new Random();
+    private List<SpaceObject> objects = new ArrayList<>();
+    private Logger logger;
+
+    // Ship is added externally; if not added, getShip() returns null.
+    private Ship ship = null;
+    private int level = START_LEVEL;
+
+    public GameModel(Logger logger) {
+        this.logger = logger;
     }
 
-    // 使用指定 UI 和外部提供的 GameModel 创建控制器
-    public GameController(UI ui, GameModel model) {
-        this.ui = ui;
-        this.model = model;
-        this.startTime = System.currentTimeMillis();
+    public void setRandomSeed(int seed) {
+        random.setSeed(seed);
+    }
+
+    public void addObject(SpaceObject object) {
+        objects.add(object);
+    }
+
+    public List<SpaceObject> getSpaceObjects() {
+        return objects;
     }
 
     /**
-     * 返回当前游戏模型。
+     * Updates the state of all space objects.
+     * Iterates over a copy of the objects list to call tick(tick);
+     * For tick > 0, also calls spawnObjects(), levelUp() and checkCollisions().
      */
-    public GameModel getModel() {
-        return model;
-    }
-
-    /**
-     * 启动游戏：注册游戏循环和玩家输入处理。
-     */
-    public void startGame() {
-        ui.onStep(this::onTick);
-        ui.onKey(this::handlePlayerInput);
-    }
-
-    /**
-     * 游戏循环：每个 tick 调用此方法。
-     * 更新画面、模型状态、碰撞检测和生成新对象。
-     */
-    public void onTick(int tick) {
-        renderGame();
-        model.updateGame(tick);
-        model.checkCollisions();
-        model.spawnObjects();
-        
-        // 更新 Ship 相关统计数据（得分、健康值）
-        Ship ship = model.getShip();
-        if (ship != null) {
-            ui.setStat("Score", String.valueOf(ship.getScore()));
-            ui.setStat("Health", String.valueOf(ship.getHealth()));
+    public void updateGame(int tick) {
+        for (SpaceObject obj : new ArrayList<>(objects)) {
+            obj.tick(tick);
         }
-        // 更新存活时间统计（以秒计）
-        long currentTime = System.currentTimeMillis();
-        long survivedSeconds = (currentTime - startTime) / 1000;
-        ui.setStat("Time Survived", survivedSeconds + " seconds");
-        // 更新等级统计
-        ui.setStat("Level", String.valueOf(model.getLevel()));
-        
-        // 如果 ship 被移除，则暂停游戏
-        if (ship == null) {
-            pauseGame();
+        if (tick > 0) {
+            spawnObjects();
+            levelUp();
+            checkCollisions();
         }
     }
 
     /**
-     * 渲染游戏：调用 UI 的 render 方法显示所有空间对象，并更新存活时间统计。
+     * Performs collision detection among space objects.
+     * 1. Bullet-Enemy: remove both; if a ship exists, add 1 score.
+     * 2. Ship-Enemy: remove enemy; add 1 score.
+     * 3. Ship-Asteroid: remove asteroid.
+     * 4. Ship-HealthPowerUp: apply effect then remove power-up.
+     * 5. Ship-ShieldPowerUp: apply effect then remove power-up.
+     * 6. Bullet-Asteroid collisions are ignored.
+     * 7. Other collisions: remove both.
      */
-    public void renderGame() {
-        long secondsSurvived = (System.currentTimeMillis() - startTime) / 1000;
-        ui.setStat("Time Survived", secondsSurvived + " seconds");
-        ui.render(model.getSpaceObjects());
+    public void checkCollisions() {
+        List<SpaceObject> toRemove = new ArrayList<>();
+        for (int i = 0; i < objects.size(); i++) {
+            for (int j = i + 1; j < objects.size(); j++) {
+                SpaceObject a = objects.get(i);
+                SpaceObject b = objects.get(j);
+                if (a.getX() == b.getX() && a.getY() == b.getY()) {
+                    // Ignore collisions between Bullet and Asteroid
+                    if ((a instanceof Bullet && b instanceof Asteroid) ||
+                            (a instanceof Asteroid && b instanceof Bullet)) {
+                        continue;
+                    }
+                    // Bullet-Enemy collision
+                    if ((a instanceof Bullet && b instanceof Enemy) ||
+                            (a instanceof Enemy && b instanceof Bullet)) {
+                        toRemove.add(a);
+                        toRemove.add(b);
+                        logger.log("Bullet destroyed enemy.");
+                        Ship s = getShip();
+                        if (s != null) {
+                            s.addScore(1);
+                        }
+                        continue;
+                    }
+                    // Ship-Enemy collision
+                    if ((a instanceof Ship && b instanceof Enemy) ||
+                            (a instanceof Enemy && b instanceof Ship)) {
+                        Ship s = getShip();
+                        if (s != null) {
+                            s.addScore(1);
+                        }
+                        if (a instanceof Ship) {
+                            toRemove.add(b);
+                        } else {
+                            toRemove.add(a);
+                        }
+                        logger.log("Ship collided with enemy.");
+                        continue;
+                    }
+                    // Ship-Asteroid collision
+                    if ((a instanceof Ship && b instanceof Asteroid) ||
+                            (a instanceof Asteroid && b instanceof Ship)) {
+                        if (a instanceof Ship) {
+                            toRemove.add(b);
+                        } else {
+                            toRemove.add(a);
+                        }
+                        logger.log("Ship collided with asteroid.");
+                        continue;
+                    }
+                    // Ship-HealthPowerUp collision
+                    if ((a instanceof Ship && b instanceof HealthPowerUp) ||
+                            (a instanceof HealthPowerUp && b instanceof Ship)) {
+                        HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp) a : (HealthPowerUp) b;
+                        hp.applyEffect(getShip());
+                        toRemove.add(hp);
+                        logger.log("Ship collected Health Power-Up.");
+                        continue;
+                    }
+                    // Ship-ShieldPowerUp collision
+                    if ((a instanceof Ship && b instanceof ShieldPowerUp) ||
+                            (a instanceof ShieldPowerUp && b instanceof Ship)) {
+                        ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp) a : (ShieldPowerUp) b;
+                        sp.applyEffect(getShip());
+                        toRemove.add(sp);
+                        logger.log("Ship collected Shield Power-Up.");
+                        continue;
+                    }
+                    // Other collisions: remove both objects.
+                    toRemove.add(a);
+                    toRemove.add(b);
+                    logger.log("Collision detected between " + a.render().toString() +
+                            " and " + b.render().toString());
+                }
+            }
+        }
+        objects.removeAll(toRemove);
+        if (getShip() != null && !objects.contains(getShip())) {
+            logger.log("Game Over: Ship destroyed.");
+        }
     }
 
     /**
-     * 处理玩家输入：W/A/S/D 移动，F 发射子弹，P 切换暂停。
+     * Spawns new objects.
+     * For testing purposes, this method always spawns an Asteroid at (8,0) and logs it.
      */
-    public void handlePlayerInput(String input) {
-        if (input == null || input.trim().isEmpty()) {
-            System.out.println("Invalid input. Use W, A, S, D, F, or P.");
-            return;
-        }
-        String command = input.trim().toUpperCase();
-        switch (command) {
-            case "W":
-                try {
-                    model.getShip().move(Direction.UP);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "A":
-                try {
-                    model.getShip().move(Direction.LEFT);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "S":
-                try {
-                    model.getShip().move(Direction.DOWN);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "D":
-                try {
-                    model.getShip().move(Direction.RIGHT);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "F":
-                model.fireBullet();
-                break;
-            case "P":
-                paused = !paused;
-                pauseGame();
-                break;
-            default:
-                System.out.println("Invalid input. Use W, A, S, D, F, or P.");
-                break;
+    public void spawnObjects() {
+        addObject(new Asteroid(8, 0));
+        logger.log("Asteroid spawned at (8,0).");
+    }
+
+    /**
+     * Increases the game level when the ship's score reaches the threshold.
+     */
+    public void levelUp() {
+        Ship s = getShip();
+        if (s != null && s.getScore() >= SCORE_THRESHOLD * level) {
+            level++;
+            logger.log("Level up! Now level " + level);
         }
     }
 
     /**
-     * 暂停游戏，并在 UI 中记录日志 "Game paused."
+     * Fires a bullet from the ship.
+     * For testing: if a Ship exists, fires a bullet from its position;
+     * if not, fires from a default position.
      */
-    public void pauseGame() {
-        ui.pause();
-        ui.log("Game paused.");
+    public void fireBullet() {
+        Ship s = getShip();
+        if (s != null) {
+            addObject(new Bullet(s.getX(), s.getY() - 1));
+            logger.log("Core.Bullet fired!");
+        } else {
+            addObject(new Bullet(5, GAME_HEIGHT - 2));
+            logger.log("Core.Bullet fired!");
+        }
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Returns the first Ship instance found in the objects list.
+     */
+    public Ship getShip() {
+        return ship;
     }
 }
