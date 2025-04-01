@@ -2,63 +2,59 @@ package game;
 
 import game.core.*;
 import game.ui.ObjectGraphic;
-import game.exceptions.BoundaryExceededException;
 import game.ui.UI;
 import game.utility.Direction;
-
+import game.exceptions.BoundaryExceededException;
 
 /**
- * The Controller handling the game flow and interactions.
- *
- * Holds references to the UI and the Model, so it can pass information and references back and forth as necessary.
- * Manages changes to the game, which are stored in the Model, and displayed by the UI.
+ * Manages game flow and interactions.
  */
 public class GameController {
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
-     * @param ui    游戏的用户界面组件
-     * @param model 游戏的模型，包含游戏数据和业务逻辑
-     */
-
-
+    private long startTime;
     private UI ui;
     private GameModel model;
-    private long startTime;
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     */
+    private boolean gameStarted = false;
+    private boolean paused = false;
 
-    public GameController(UI ui) {
-
+    public GameController(UI ui, GameModel model) {
         this.ui = ui;
         this.model = new GameModel(ui::log);
         this.startTime = System.currentTimeMillis();
     }
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
-     * @param ui    游戏的用户界面组件
-     * @param model 游戏的模型，包含游戏数据和业务逻辑
-     */
 
-    public GameController(UI ui, GameModel model) {
-        this.model = model;
-        this.ui = null;
-        this.startTime = System.currentTimeMillis();
-
+    public GameController(UI ui) {
+        this(ui, new GameModel(ui::log));
     }
 
-
     /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
+     * Initial state: adds enemies, asteroids, and power-ups,
+     * displays them (stationary), initializes stats, and waits for the player to press Enter.
+     * Note: Ship creation is handled externally.
      */
-
     public GameModel getModel() {
         return model;
     }
 
+    public void startGame() {
+        model.addObject(new Enemy(3, 1));
+        model.addObject(new Asteroid(5, 1));
+        model.addObject(new DescendingEnemy(2, 0) {
+            @Override
+            public ObjectGraphic render() {
+                return new ObjectGraphic("DescendingEnemy", "assets/descending_enemy.png");
+            }
+        });
+        model.addObject(new HealthPowerUp(4, 0));
+        model.addObject(new ShieldPowerUp(6, 0));
+        renderGame();
+        ui.setStat("Score", "0");
+        ui.setStat("Health", "100");
+        ui.setStat("Level", "1");
+        ui.setStat("Time Survived", "0 seconds");
+        ui.onKey(this::preGameInput);
+    }
+
+    // Pre-game input handling: wait for Enter key to start game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -66,26 +62,11 @@ public class GameController {
             ui.onStep(this::onTick);
         }
     }
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
-     */
-
-    public void startGame() {
-        ui.onStep(this::onTick);
-        ui.onKey(this::handlePlayerInput);
-    }
-
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
-     */
 
     public void onTick(int tick) {
         renderGame();
         model.updateGame(tick);
         model.checkCollisions();
-        model.spawnObjects();
         Ship ship = model.getShip();
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
@@ -98,26 +79,15 @@ public class GameController {
         if (ship == null) {
             pauseGame();
         }
-
     }
 
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
-     */
-
     public void renderGame() {
-
-        long secondsSurvived = (System.currentTimeMillis() - startTime) / 1000;
-        ui.setStat("Time Survived", secondsSurvived + " seconds");
         ui.render(model.getSpaceObjects());
     }
 
     /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-     *
+     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
-
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
             paused = !paused;
@@ -154,19 +124,3 @@ public class GameController {
         } catch (BoundaryExceededException e) {
             ui.log("Cannot move: " + e.getMessage());
         }
-    }
-
-
-
-
-    }
-    /**
-     * 使用指定的 UI 和游戏模型创建一个新的 GameController 实例。
-
-     */
-
-    public void pauseGame() {
-        ui.pause();
-        ui.log("Game paused.");
-    }
-}
