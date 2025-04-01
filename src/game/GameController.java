@@ -36,8 +36,10 @@ public class GameController {
     }
 
     public void startGame() {
+        // 这些对象由测试用例构造或外部添加，Ship 对象需预先存在，Health stat 初始为 100
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
+        // 使用匿名类实例化 DescendingEnemy
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -88,7 +90,7 @@ public class GameController {
     /**
      * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
      */
- public void handlePlayerInput(String input) {
+    public void handlePlayerInput(String input) {
         if (input == null || input.trim().isEmpty()) {
             System.out.println("Invalid input. Use W, A, S, D, F, or P.");
             return;
@@ -99,55 +101,47 @@ public class GameController {
             case "W":
                 try {
                     model.getShip().move(Direction.UP);
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
-
-
+                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                } catch (BoundaryExceededException e) {
+                    ui.log("Cannot move: " + e.getMessage());
                 }
                 break;
             case "A":
                 try {
                     model.getShip().move(Direction.LEFT);
-
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                } catch (BoundaryExceededException e) {
+                    ui.log("Cannot move: " + e.getMessage());
                 }
                 break;
             case "S":
                 try {
                     model.getShip().move(Direction.DOWN);
-
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                } catch (BoundaryExceededException e) {
+                    ui.log("Cannot move: " + e.getMessage());
                 }
                 break;
             case "D":
                 try {
                     model.getShip().move(Direction.RIGHT);
-
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    ui.log(e.getMessage());
+                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                } catch (BoundaryExceededException e) {
+                    ui.log("Cannot move: " + e.getMessage());
                 }
                 break;
             case "F":
                 model.fireBullet();
                 break;
             case "P":
+                paused = !paused;
                 pauseGame();
                 break;
-
             default:
                 System.out.println("Invalid input. Use W, A, S, D, F, or P.");
                 break;
         }
+    }
 
     /**
      * Pauses the game and logs "Game paused.".
