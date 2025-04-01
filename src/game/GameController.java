@@ -150,3 +150,4 @@ public class GameController {
         ui.pause();
         ui.log("Game paused.");
     }
+}
