@@ -38,7 +38,7 @@ public class Asteroid implements SpaceObject {
      */
     @Override
     public ObjectGraphic render() {
-        // 注意：确保图片路径正确，如果图片存放在项目根目录的 assets 文件夹中，则使用 "assets/asteroid.png"
+        // Note: Ensure that the image path is correct. If the image is stored in the assets folder at the project's root, use "assets/asteroid.png"
         return new ObjectGraphic("🌑", "assets/asteroid.png");
     }
 
