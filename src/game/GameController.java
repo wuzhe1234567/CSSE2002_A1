@@ -7,7 +7,9 @@ import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
 
 /**
- * Manages game flow and interactions.
+ * The Controller handling the game flow and interactions.
+ * Holds references to the UI and the Model, so it can pass information and references back and forth as necessary.
+ * Manages changes to the game, which are stored in the Model, and displayed by the UI.
  */
 public class GameController {
     private long startTime;
@@ -16,20 +18,32 @@ public class GameController {
     private boolean gameStarted = false;
     private boolean paused = false;
 
+    /**
+     * Initializes the game controller with the given UI and GameModel.
+     * Stores the ui, model and start time.
+     *
+     * @param ui the UI used to draw the game.
+     * @param model the model used to maintain game information.
+     */
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
         this.model = model;
         this.startTime = System.currentTimeMillis();
     }
 
+    /**
+     * Initializes the game controller with the given UI and a new GameModel.
+     * Calls the other constructor using the "this()" keyword.
+     *
+     * @param ui the UI used to draw the game.
+     */
     public GameController(UI ui) {
         this(ui, new GameModel(ui::log));
     }
 
     /**
-     * Initial state: adds enemies, asteroids, and power-ups,
-     * displays them (stationary), initializes stats, and waits for the player to press Enter.
-     * Note: Ship creation is handled externally.
+     * Starts the main game loop.
+     * Passes onTick and handlePlayerInput to ui.onStep and ui.onKey respectively.
      */
     public void startGame() {
         // These objects are added externally. The Ship should already exist (or be created automatically in updateGame).
@@ -45,7 +59,7 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // Initialize stats: Score, Health, Level, Time Survived
+        // Initialize stats: Score, Health, Level, Time Survived.
         ui.setStat("Score", "0");
         ui.setStat("Health", "100");
         ui.setStat("Level", "1");
@@ -53,7 +67,7 @@ public class GameController {
         ui.onKey(this::preGameInput);
     }
 
-    // Pre-game input handling: wait for Enter key to start game loop.
+    // Pre-game input handling: wait for Enter key to start the game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -62,32 +76,45 @@ public class GameController {
         }
     }
 
+    /**
+     * Uses the provided tick to advance the game state.
+     * Calls renderGame() to draw the current state, then model.updateGame(tick) to update game objects,
+     * and finally updates UI stats.
+     *
+     * @param tick the provided tick value.
+     */
     public void onTick(int tick) {
         renderGame();
         model.updateGame(tick);
-        model.checkCollisions();
         Ship ship = model.getShip();
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // Update "Time Survived" stat.
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
-        // Update "Level" stat.
         ui.setStat("Level", String.valueOf(model.getLevel()));
         if (ship == null) {
             pauseGame();
         }
     }
 
+    /**
+     * Renders the current game state by calling ui.render() with all SpaceObjects.
+     */
     public void renderGame() {
         ui.render(model.getSpaceObjects());
     }
 
     /**
-     * Handles player input: W/A/S/D to move, F fires a bullet, P toggles pause.
+     * Handles player input:
+     * - For W/A/S/D, moves the ship and logs its new position.
+     * - For F, calls the fireBullet() method of the model.
+     * - For P, toggles pause and calls pauseGame().
+     * - For invalid input, logs an error message.
+     *
+     * @param key the player's input command.
      */
     public void handlePlayerInput(String key) {
         if (key.equalsIgnoreCase("P")) {
@@ -102,25 +129,25 @@ public class GameController {
             switch (key.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
                     break;
                 case "A":
                     ship.move(Direction.LEFT);
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
                     break;
                 case "S":
                     ship.move(Direction.DOWN);
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
                     break;
                 case "D":
                     ship.move(Direction.RIGHT);
-                    ui.log("Ship moved.");
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
                     break;
                 case "F":
-                    model.addObject(new Bullet(ship.getX(), ship.getY() - 1));
-                    ui.log("Bullet was fired");
+                    model.fireBullet();
                     break;
                 default:
+                    ui.log("Invalid input. Use W, A, S, D, F, or P.");
                     break;
             }
         } catch (BoundaryExceededException e) {
@@ -129,7 +156,7 @@ public class GameController {
     }
 
     /**
-     * Pauses the game and logs "Game paused.".
+     * Pauses the game by calling ui.pause() and logs "Game paused.".
      */
     public void pauseGame() {
         ui.pause();
@@ -137,9 +164,12 @@ public class GameController {
     }
 
     /**
-     * Returns the game model.
+     * Returns the current game model.
+     *
+     * @return the game model.
      */
     public GameModel getModel() {
         return model;
     }
 }
+
