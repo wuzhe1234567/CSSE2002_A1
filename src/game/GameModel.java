@@ -32,16 +32,19 @@ public class GameModel {
     private Logger logger;
 
     // Ship is added externally; if not added, getShip() returns null.
-    private Ship ship = null;
+    private Ship ship;
     private int level = START_LEVEL;
 
     /**
-     * 构造函数，使用 Logger 初始化 GameModel。
+     * 构造函数，使用 Logger 初始化 GameModel，并创建默认的 Ship。
      *
      * @param logger the logger instance for logging messages.
      */
     public GameModel(Logger logger) {
         this.logger = logger;
+        // 创建默认的 Ship 对象，位置设为屏幕中间偏下（例如：x=GAME_WIDTH/2, y=GAME_HEIGHT-2），健康值为 100
+        this.ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 2, 100);
+        addObject(ship);
     }
 
     /**
@@ -156,7 +159,7 @@ public class GameModel {
                     // Ship-HealthPowerUp 碰撞
                     if ((a instanceof Ship && b instanceof HealthPowerUp)
                             || (a instanceof HealthPowerUp && b instanceof Ship)) {
-                        HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp) a 
+                        HealthPowerUp hp = (a instanceof HealthPowerUp) ? (HealthPowerUp) a
                                 : (HealthPowerUp) b;
                         hp.applyEffect(getShip());
                         toRemove.add(hp);
@@ -166,7 +169,7 @@ public class GameModel {
                     // Ship-ShieldPowerUp 碰撞
                     if ((a instanceof Ship && b instanceof ShieldPowerUp)
                             || (a instanceof ShieldPowerUp && b instanceof Ship)) {
-                        ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp) a 
+                        ShieldPowerUp sp = (a instanceof ShieldPowerUp) ? (ShieldPowerUp) a
                                 : (ShieldPowerUp) b;
                         sp.applyEffect(getShip());
                         toRemove.add(sp);
@@ -176,9 +179,9 @@ public class GameModel {
                     // 其他碰撞：移除双方
                     toRemove.add(a);
                     toRemove.add(b);
-                    logger.log("Collision detected between " 
-                            + a.render().toString() 
-                            + " and " 
+                    logger.log("Collision detected between "
+                            + a.render().toString()
+                            + " and "
                             + b.render().toString());
                 }
             }
