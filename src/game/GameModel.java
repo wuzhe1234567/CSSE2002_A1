@@ -209,7 +209,8 @@ public class GameModel {
         if (ship.getScore() >= level * SCORE_THRESHOLD) {
             level++;
             spawnRate += SPAWN_RATE_INCREASE;
-            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to " + spawnRate + "%.");
+            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to " 
+                    + spawnRate + "%.");
         }
     }
 
