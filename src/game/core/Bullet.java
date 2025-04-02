@@ -6,9 +6,9 @@ import game.ui.ObjectGraphic;
  * Represents a bullet object.
  */
 public class Bullet implements SpaceObject {
-    private int x;
-    private int y;
-    
+    private int xpos;
+    private int ypos;
+
     /**
      * Constructs a Bullet with the specified coordinates.
      *
@@ -16,20 +16,20 @@ public class Bullet implements SpaceObject {
      * @param y the y-coordinate of the bullet.
      */
     public Bullet(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.xpos = x;
+        this.ypos = y;
     }
-    
+
     @Override
     public int getX() {
-        return x;
+        return xpos;
     }
-    
-    @Override 
+
+    @Override
     public int getY() {
-        return y;
+        return ypos;
     }
-    
+
     /**
      * Returns the graphical representation of the bullet.
      * Here we use the image located at "assets/bullet.png".
@@ -40,10 +40,11 @@ public class Bullet implements SpaceObject {
     public ObjectGraphic render() {
         return new ObjectGraphic("Bullet", "assets/bullet.png");
     }
-    
+
     @Override
     public void tick(int tick) {
-        y--; // Moves upward each tick
+        ypos--; // Moves upward each tick
     }
 }
+
 
