@@ -2,6 +2,11 @@ package game;
 
 import game.core.SpaceObject;
 import game.core.Ship;
+import game.core.Bullet;
+import game.core.Enemy;
+import game.core.HealthPowerUp;
+import game.core.ShieldPowerUp;
+import game.GameModel;
 import game.exceptions.BoundaryExceededException;
 import game.ui.KeyHandler;
 import game.ui.Tickable;
@@ -12,6 +17,7 @@ import java.util.List;
 
 /**
  * The Controller handling the game flow and interactions.
+ *
  * Holds references to the UI and the Model, so it can pass information and references back and forth as necessary.
  * Manages changes to the game, which are stored in the Model, and displayed by the UI.
  */
@@ -30,7 +36,7 @@ public class GameController {
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
         this.model = model;
-        this.startTime = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis(); // Start the timer
     }
 
     /**
@@ -157,9 +163,27 @@ public class GameController {
 
     /**
      * Starts the main game loop.
+     *
      * Passes onTick and handlePlayerInput to ui.onStep and ui.onKey respectively.
+     *
+     * Original Stage comments:
+     * FOR STAGE 0 only, uncomment or remove after:
+     *     model.addObject(new Bullet(2, 14));
+     * FOR STAGE 1 only, uncomment or remove after:
+     *     model.addObject(new Bullet(2, 14));
+     *     model.addObject(new Enemy(2, 0));
+     * Uncomment in stage 2 for player input handling.
      */
     public void startGame() {
+        // FOR STAGE 0 only, uncomment or remove after
+        model.addObject(new Bullet(2, 14));
+        // END STAGE 0 only
+
+        // FOR STAGE 1 only, uncomment or remove after
+        // model.addObject(new Bullet(2, 14));
+        // model.addObject(new Enemy(2, 0));
+        // END STAGE 1 only
+
         ui.onStep(new Tickable() {
             @Override
             public void tick(int tick) {
@@ -174,4 +198,3 @@ public class GameController {
         });
     }
 }
-
