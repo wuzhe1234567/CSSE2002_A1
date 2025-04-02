@@ -47,7 +47,7 @@ public class Enemy implements SpaceObject {
      */
     @Override
     public ObjectGraphic render() {
-        // 修改图片路径为正确路径 "assets/enemy.png"
+        // Modify the image path to the correct path "assets/enemy.png"
         return new ObjectGraphic("👾", "assets/enemy.png");
     }
 
@@ -56,3 +56,4 @@ public class Enemy implements SpaceObject {
         ypos++; // Moves downward each tick
     }
 }
+
