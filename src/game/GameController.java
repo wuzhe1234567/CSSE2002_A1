@@ -118,7 +118,9 @@ public class GameController {
         }
         String command = input.trim().toUpperCase();
         Ship ship = model.getShip();
-        if (ship == null) return;
+        if (ship == null) {
+            return;
+        }
         try {
             switch (command) {
                 case "W":
