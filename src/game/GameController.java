@@ -7,11 +7,14 @@ import game.ui.KeyHandler;
 import game.ui.Tickable;
 import game.ui.UI;
 import game.utility.Direction;
-import game.utility.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Controller handling the game flow and interactions.
+ * Holds references to the UI and the Model, so it can pass information and references back and forth as necessary.
+ * Manages changes to the game, which are stored in the Model, and displayed by the UI.
+ */
 public class GameController {
     private UI ui;
     private GameModel model;
@@ -88,7 +91,9 @@ public class GameController {
                             break;
                     }
                     model.getShip().move(direction);
-                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Core.Ship moved to ("
+                            + model.getShip().getX() + ", "
+                            + model.getShip().getY() + ")");
                 } catch (BoundaryExceededException e) {
                     ui.log(e.getMessage());
                 }
@@ -126,7 +131,7 @@ public class GameController {
 
     /**
      * Calls ui.pause() to pause the game and logs "Game paused."
-     * (注：暂停时玩家仍可移动。)
+     * (Note: the player may still move during paused time.)
      */
     public void pauseGame() {
         ui.pause();
@@ -138,7 +143,6 @@ public class GameController {
      * Updates the UI stats and renders all SpaceObjects (including the Ship).
      */
     public void renderGame() {
-        // 更新 UI 中的游戏状态
         Ship ship = model.getShip();
         ui.setStat("Score", String.valueOf(ship.getScore()));
         ui.setStat("Health", String.valueOf(ship.getHealth()));
@@ -146,7 +150,6 @@ public class GameController {
         long timeSurvived = (System.currentTimeMillis() - startTime) / 1000;
         ui.setStat("Time Survived", timeSurvived + " seconds");
 
-        // 获取所有对象，并加入 Ship 对象
         List<SpaceObject> objects = new ArrayList<>(model.getSpaceObjects());
         objects.add(ship);
         ui.render(objects);
@@ -171,3 +174,4 @@ public class GameController {
         });
     }
 }
+
