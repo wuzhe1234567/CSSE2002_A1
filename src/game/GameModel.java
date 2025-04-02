@@ -1,5 +1,6 @@
 package game;
 
+import game.core.*;
 import game.core.SpaceObject;
 import game.core.Asteroid;
 import game.core.Bullet;
@@ -14,27 +15,15 @@ import java.util.Random;
 
 /**
  * Represents the game information and state. Stores and manipulates the game state.
- * Models a game, storing and modifying data relevant to the game.
- *
- * The original version of this file also declared:
- *   - START_SPAWN_RATE with a comment indicating it is the spawn rate (percentage chance per tick)
- *   - SPAWN_RATE_INCREASE with a comment indicating it increases the spawn rate by 5% per level
- *   - A Random instance with a comment noting it is ONLY USED IN this.spawnObjects()
- *   - A setRandomSeed method with a note that this method should NEVER be called.
- * 
- * All these elements have been incorporated below without altering the existing code.
  */
 public class GameModel {
-    public static final int GAME_HEIGHT = 20;
-    public static final int GAME_WIDTH = 10;
-    public static final int START_LEVEL = 1;
-    public static final int START_SPAWN_RATE = 2;
-    public static final int SCORE_THRESHOLD = 100;
-    public static final int ASTEROID_DAMAGE = 10;
-    public static final int ENEMY_DAMAGE = 20;
-    public static final int SPAWN_RATE_INCREASE = 5;
-    public static final double ENEMY_SPAWN_RATE = 0.5;
-    public static final double POWER_UP_SPAWN_RATE = 0.25;
+    public static final int SPAWN_RATE_INCREASE = 5; // Increase spawn rate by 5% per level
+    public static final int START_LEVEL = 1; // Starting level value
+    public static final int SCORE_THRESHOLD = 100; // Score threshold for leveling
+    public static final int ASTEROID_DAMAGE = 10; // The amount of damage an asteroid deals
+    public static final int ENEMY_DAMAGE = 20; // The amount of damage an enemy deals
+    public static final double ENEMY_SPAWN_RATE = 0.5; // Percentage of asteroid spawn chance
+    public static final double POWER_UP_SPAWN_RATE = 0.25; // Percentage of asteroid spawn chance
 
     private final Random random = new Random(); // ONLY USED IN this.spawnObjects()
     private List<SpaceObject> objects = new ArrayList<>();
@@ -43,19 +32,17 @@ public class GameModel {
     private Ship ship;
     private int level = START_LEVEL;
     private int spawnRate = START_SPAWN_RATE;
-
     /**
-     * Constructs a GameModel with the given logger.
-     * Creates a default Ship placed at (GAME_WIDTH/2, GAME_HEIGHT-2) with health 100.
-     *
-     * @param logger the logger instance for logging messages.
-     *
-     * Original constructor notes:
+     * Models a game, storing and modifying data relevant to the game.
+     * Logger argument should be a method reference to a .log method such as the UI.log method.
+     * Example: Model gameModel = new GameModel(ui::log)
      * - Instantiates an empty list for storing all SpaceObjects the model needs to track.
      * - Instantiates the game level with the starting level value.
      * - Instantiates the game spawn rate with the starting spawn rate.
      * - Instantiates a new ship.
      * - Stores reference to the given logger.
+     *
+     * @param logger a functional interface for passing information between classes.
      */
     public GameModel(Logger logger) {
         this.logger = logger;
@@ -64,11 +51,12 @@ public class GameModel {
     }
 
     /**
-     * Sets the seed for the Random instance.
+     * Sets the seed of the Random instance created in the constructor using .setSeed().
      *
-     * @param seed the seed value.
+     * This method should NEVER be called.
      *
-     * Original method note: This method should NEVER be called.
+     * @param seed to be set for the Random instance
+     * @provided
      */
     public void setRandomSeed(int seed) {
         random.setSeed(seed);
@@ -263,4 +251,3 @@ public class GameModel {
         return ship;
     }
 }
-
