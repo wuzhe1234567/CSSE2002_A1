@@ -85,16 +85,24 @@ public class GameController {
     }
 
     /**
-     * 渲染游戏：调用 UI 的 render 方法显示所有空间对象，并更新存活时间统计。
+     * 渲染游戏：更新统计数据并调用 UI 的 render 方法显示所有空间对象，
      * 包括将 Ship 添加到渲染列表中。
      */
     public void renderGame() {
-        List<SpaceObject> objectsToRender = new ArrayList<>(model.getSpaceObjects());
-        if (model.getShip() != null) {
-            objectsToRender.add(model.getShip());
+        Ship ship = model.getShip();
+        // 更新统计数据：Score、Health、Level 和 Time Survived
+        if (ship != null) {
+            ui.setStat("Score", String.valueOf(ship.getScore()));
+            ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
+        ui.setStat("Level", String.valueOf(model.getLevel()));
         long secondsSurvived = (System.currentTimeMillis() - startTime) / 1000;
         ui.setStat("Time Survived", secondsSurvived + " seconds");
+
+        List<SpaceObject> objectsToRender = new ArrayList<>(model.getSpaceObjects());
+        if (ship != null) {
+            objectsToRender.add(ship);
+        }
         ui.render(objectsToRender);
     }
 
