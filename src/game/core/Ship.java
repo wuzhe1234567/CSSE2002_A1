@@ -64,8 +64,10 @@ public class Ship extends Controllable {
                 break;
         }
         // Boundary check
-        if (newX < 0 || newX >= GameModel.GAME_WIDTH ||
-                newY < 0 || newY >= GameModel.GAME_HEIGHT) {
+        if (newX < 0 
+            || newX >= GameModel.GAME_WIDTH
+            || newY < 0
+            || newY >= GameModel.GAME_HEIGHT) {
             throw new BoundaryExceededException(
                     "Movement out of boundary: (" + newX + ", " + newY + ")");
         }
@@ -73,20 +75,39 @@ public class Ship extends Controllable {
         y = newY;
     }
 
-    // Manage score and health
-
+    /**
+     * Adds the specified points to the ship's score.
+     *
+     * @param points the points to add.
+     */
     public void addScore(int points) {
         score += points;
     }
 
+    /**
+     * Returns the current score of the ship.
+     *
+     * @return the score.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Increases the ship's health by the specified amount.
+     *
+     * @param amount the amount of health to add.
+     */
     public void heal(int amount) {
         health += amount;
     }
 
+    /**
+     * Reduces the ship's health by the specified amount.
+     * If the health falls below 0, it is set to 0.
+     *
+     * @param amount the damage amount.
+     */
     public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) {
@@ -94,6 +115,11 @@ public class Ship extends Controllable {
         }
     }
 
+    /**
+     * Returns the current health of the ship.
+     *
+     * @return the health.
+     */
     public int getHealth() {
         return health;
     }
