@@ -1,37 +1,28 @@
 package game;
 
-import game.core.*;
+import game.core.SpaceObject;
+import game.core.Ship;
 import game.exceptions.BoundaryExceededException;
+import game.ui.KeyHandler;
+import game.ui.Tickable;
 import game.ui.UI;
 import game.utility.Direction;
+import game.utility.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 管理游戏流程和交互。
- * 本类持有 UI 和 GameModel 的引用，更新模型状态并在 UI 上显示统计数据。
- */
 public class GameController {
     private UI ui;
     private GameModel model;
     private long startTime;
-    private boolean gameStarted = false;
-    private boolean paused = false;
 
     /**
-     * 使用指定 UI 创建控制器，内部构造一个新的 GameModel（日志方法由 UI 提供）。
+     * Initializes the game controller with the given UI and GameModel.
+     * Stores the ui, model and start time.
      *
-     * @param ui the UI instance.
-     */
-    public GameController(UI ui) {
-        this(ui, new GameModel(ui::log));
-    }
-
-    /**
-     * 使用指定 UI 和外部提供的 GameModel 创建控制器。
-     *
-     * @param ui the UI instance.
-     * @param model the GameModel instance.
+     * @param ui    the UI used to draw the Game
+     * @param model the model used to maintain game information
      */
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
@@ -40,27 +31,90 @@ public class GameController {
     }
 
     /**
-     * 返回当前游戏模型。
+     * Initializes the game controller with the given UI and a new GameModel.
+     * The new GameModel is constructed using ui::log as the logger.
      *
-     * @return the current GameModel.
+     * @param ui the UI used to draw the Game
+     */
+    public GameController(UI ui) {
+        this(ui, new GameModel(ui::log));
+    }
+
+    /**
+     * Returns the current game model.
+     *
+     * @return the current game model.
      */
     public GameModel getModel() {
         return model;
     }
 
     /**
-     * 启动游戏：注册游戏循环和玩家输入处理。
+     * Handles player input and performs actions such as moving the ship or firing bullets.
+     * Uppercase and lowercase inputs are treated identically.
+     *
+     * For movement keys "W", "A", "S" and "D", the ship is moved up, left, down, or right respectively,
+     * and logs "Core.Ship moved to (x, y)" with the ship's new coordinates.
+     * For input "F", the model's fireBullet() method is called.
+     * For input "P", the pauseGame() method is called.
+     * For all other inputs, logs "Invalid input. Use W, A, S, D, F, or P."
+     *
+     * @param input the player's input command.
      */
-    public void startGame() {
-        ui.onStep(this::onTick);
-        ui.onKey(this::handlePlayerInput);
+    public void handlePlayerInput(String input) {
+        if (input == null || input.isEmpty()) {
+            return;
+        }
+        String command = input.toUpperCase();
+        switch (command) {
+            case "W":
+            case "A":
+            case "S":
+            case "D":
+                try {
+                    Direction direction = null;
+                    switch (command) {
+                        case "W":
+                            direction = Direction.UP;
+                            break;
+                        case "A":
+                            direction = Direction.LEFT;
+                            break;
+                        case "S":
+                            direction = Direction.DOWN;
+                            break;
+                        case "D":
+                            direction = Direction.RIGHT;
+                            break;
+                    }
+                    model.getShip().move(direction);
+                    ui.log("Core.Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                } catch (BoundaryExceededException e) {
+                    ui.log(e.getMessage());
+                }
+                break;
+            case "F":
+                model.fireBullet();
+                break;
+            case "P":
+                pauseGame();
+                break;
+            default:
+                ui.log("Invalid input. Use W, A, S, D, F, or P.");
+                break;
+        }
     }
 
     /**
-     * 游戏循环：每个 tick 调用此方法。
-     * 更新画面、模型状态、碰撞检测和生成新对象。
+     * Uses the provided tick to advance the game state.
+     * Calls the following in order:
+     * - renderGame() to draw the current state.
+     * - model.updateGame(tick) to advance the game.
+     * - model.checkCollisions() to handle game interactions.
+     * - model.spawnObjects() to handle object creation.
+     * - model.levelUp() to check and handle leveling.
      *
-     * @param tick the current tick count.
+     * @param tick the provided tick.
      */
     public void onTick(int tick) {
         renderGame();
@@ -68,98 +122,52 @@ public class GameController {
         model.checkCollisions();
         model.spawnObjects();
         model.levelUp();
-
-        Ship ship = model.getShip();
-        if (ship != null) {
-            ui.setStat("Score", String.valueOf(ship.getScore()));
-            ui.setStat("Health", String.valueOf(ship.getHealth()));
-        }
-        long currentTime = System.currentTimeMillis();
-        long survivedSeconds = (currentTime - startTime) / 1000;
-        ui.setStat("Time Survived", survivedSeconds + " seconds");
-        ui.setStat("Level", String.valueOf(model.getLevel()));
-
-        if (ship == null) {
-            pauseGame();
-        }
     }
 
     /**
-     * 渲染游戏：更新统计数据并调用 UI 的 render 方法显示所有空间对象，
-     * 包括将 Ship 添加到渲染列表中。
-     */
-    public void renderGame() {
-        Ship ship = model.getShip();
-        // 更新统计数据：Score、Health、Level 和 Time Survived
-        if (ship != null) {
-            ui.setStat("Score", String.valueOf(ship.getScore()));
-            ui.setStat("Health", String.valueOf(ship.getHealth()));
-        }
-        ui.setStat("Level", String.valueOf(model.getLevel()));
-        long secondsSurvived = (System.currentTimeMillis() - startTime) / 1000;
-        ui.setStat("Time Survived", secondsSurvived + " seconds");
-
-        List<SpaceObject> objectsToRender = new ArrayList<>(model.getSpaceObjects());
-        if (ship != null) {
-            objectsToRender.add(ship);
-        }
-        ui.render(objectsToRender);
-    }
-
-    /**
-     * 处理玩家输入：W/A/S/D 移动，F 发射子弹，P 切换暂停。
-     *
-     * @param input the player input command.
-     */
-    public void handlePlayerInput(String input) {
-        if (input == null || input.trim().isEmpty()) {
-            System.out.println("Invalid input. Use W, A, S, D, F, or P.");
-            return;
-        }
-        String command = input.trim().toUpperCase();
-        Ship ship = model.getShip();
-        if (ship == null) {
-            return;
-        }
-        try {
-            switch (command) {
-                case "W":
-                    ship.move(Direction.UP);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
-                    break;
-                case "A":
-                    ship.move(Direction.LEFT);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
-                    break;
-                case "S":
-                    ship.move(Direction.DOWN);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
-                    break;
-                case "D":
-                    ship.move(Direction.RIGHT);
-                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
-                    break;
-                case "F":
-                    model.fireBullet();
-                    break;
-                case "P":
-                    paused = !paused;
-                    pauseGame();
-                    break;
-                default:
-                    ui.log("Invalid input. Use W, A, S, D, F, or P.");
-                    break;
-            }
-        } catch (BoundaryExceededException e) {
-            ui.log("Cannot move: " + e.getMessage());
-        }
-    }
-
-    /**
-     * 暂停游戏，并在 UI 中记录日志 "Game paused."。
+     * Calls ui.pause() to pause the game and logs "Game paused."
+     * (注：暂停时玩家仍可移动。)
      */
     public void pauseGame() {
         ui.pause();
         ui.log("Game paused.");
+    }
+
+    /**
+     * Renders the current game state, including score, health, level and time survived.
+     * Updates the UI stats and renders all SpaceObjects (including the Ship).
+     */
+    public void renderGame() {
+        // 更新 UI 中的游戏状态
+        Ship ship = model.getShip();
+        ui.setStat("Score", String.valueOf(ship.getScore()));
+        ui.setStat("Health", String.valueOf(ship.getHealth()));
+        ui.setStat("Level", String.valueOf(model.getLevel()));
+        long timeSurvived = (System.currentTimeMillis() - startTime) / 1000;
+        ui.setStat("Time Survived", timeSurvived + " seconds");
+
+        // 获取所有对象，并加入 Ship 对象
+        List<SpaceObject> objects = new ArrayList<>(model.getSpaceObjects());
+        objects.add(ship);
+        ui.render(objects);
+    }
+
+    /**
+     * Starts the main game loop.
+     * Passes onTick and handlePlayerInput to ui.onStep and ui.onKey respectively.
+     */
+    public void startGame() {
+        ui.onStep(new Tickable() {
+            @Override
+            public void tick(int tick) {
+                onTick(tick);
+            }
+        });
+        ui.onKey(new KeyHandler() {
+            @Override
+            public void onPress(String key) {
+                handlePlayerInput(key);
+            }
+        });
     }
 }
