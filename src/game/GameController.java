@@ -132,7 +132,6 @@ public class GameController {
         //model.addObject(new Bullet(2, 14));
         //model.addObject(new Enemy(2, 0));
         // END STAGE 1 only
-
         ui.onStep(this::onTick);
         // Uncomment in stage 2
         //ui.onKey(this::handlePlayerInput); // Pass Callback to UI
