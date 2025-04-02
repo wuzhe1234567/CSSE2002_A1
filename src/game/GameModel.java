@@ -1,6 +1,5 @@
 package game;
 
-import game.core.*;
 import game.core.SpaceObject;
 import game.core.Asteroid;
 import game.core.Bullet;
@@ -17,6 +16,9 @@ import java.util.Random;
  * Represents the game information and state. Stores and manipulates the game state.
  */
 public class GameModel {
+    public static final int GAME_HEIGHT = 20;
+    public static final int GAME_WIDTH = 10;
+    public static final int START_SPAWN_RATE = 2; // spawn rate (percentage chance per tick)
     public static final int SPAWN_RATE_INCREASE = 5; // Increase spawn rate by 5% per level
     public static final int START_LEVEL = 1; // Starting level value
     public static final int SCORE_THRESHOLD = 100; // Score threshold for leveling
@@ -32,6 +34,7 @@ public class GameModel {
     private Ship ship;
     private int level = START_LEVEL;
     private int spawnRate = START_SPAWN_RATE;
+
     /**
      * Models a game, storing and modifying data relevant to the game.
      * Logger argument should be a method reference to a .log method such as the UI.log method.
@@ -214,8 +217,7 @@ public class GameModel {
         if (ship.getScore() >= level * SCORE_THRESHOLD) {
             level++;
             spawnRate += SPAWN_RATE_INCREASE;
-            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to "
-                    + spawnRate + "%.");
+            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to " + spawnRate + "%.");
         }
     }
 
