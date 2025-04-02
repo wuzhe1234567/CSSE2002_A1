@@ -6,7 +6,7 @@ import game.ui.ObjectGraphic;
  * Represents a health power-up that increases the ship's health.
  */
 public class HealthPowerUp extends PowerUp implements PowerUpEffect {
-    private int healAmount = 20; // 固定加成值
+    private int healAmount = 20; // Fixed bonus value
 
     /**
      * Constructs a HealthPowerUp at the given coordinates.
