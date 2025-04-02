@@ -6,8 +6,8 @@ import game.ui.ObjectGraphic;
  * Represents an asteroid object.
  */
 public class Asteroid implements SpaceObject {
-    private int xPos;
-    private int yPos;
+    private int x;
+    private int y;
 
     /**
      * Constructs an Asteroid with the specified coordinates.
@@ -16,18 +16,18 @@ public class Asteroid implements SpaceObject {
      * @param y the y-coordinate.
      */
     public Asteroid(int x, int y) {
-        this.xPos = x;
-        this.yPos = y;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
     public int getX() {
-        return xPos;
+        return x;
     }
 
     @Override
     public int getY() {
-        return yPos;
+        return y;
     }
 
     /**
@@ -38,11 +38,12 @@ public class Asteroid implements SpaceObject {
      */
     @Override
     public ObjectGraphic render() {
+        // 注意：确保图片路径正确，如果图片存放在项目根目录的 assets 文件夹中，则使用 "assets/asteroid.png"
         return new ObjectGraphic("🌑", "assets/asteroid.png");
     }
 
     @Override
     public void tick(int tick) {
-        yPos++; // Moves downward each tick
+        y++; // 每次 tick 向下移动
     }
 }
