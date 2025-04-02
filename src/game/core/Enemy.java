@@ -47,8 +47,8 @@ public class Enemy implements SpaceObject {
      */
     @Override
     public ObjectGraphic render() {
-        // 修改图片路径为正确路径
-        return new ObjectGraphic("👾", "src/assets/enemy.png");
+        // 修改图片路径为正确路径 "assets/enemy.png"
+        return new ObjectGraphic("👾", "assets/enemy.png");
     }
 
     @Override
