@@ -25,7 +25,8 @@ public class ShieldPowerUp extends PowerUp implements PowerUpEffect {
 
     @Override
     public void applyEffect(Ship ship) {
-        // Here, only a message is printed; in practice, you could call ship.activateShield(duration) to implement the invincibility effect.
+        // Here, only a message is printed.
+        // In practice, you could call ship.activateShield(duration) to implement the invincibility effect.
         System.out.println("Shield activated for " + duration + " ticks.");
     }
 }
