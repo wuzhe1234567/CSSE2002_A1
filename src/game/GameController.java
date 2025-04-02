@@ -148,6 +148,7 @@ public class GameController {
             }
         });
     }
+
     /**
      * Uses the provided tick to call and advance the following:
      *      - A call to renderGame() to draw the current state of the game.
@@ -175,6 +176,8 @@ public class GameController {
         ui.pause();
         ui.log("Game paused.");
     }
+
+    // Empty line added here to separate method definitions.
 
     /**
      * Renders the current game state, including score, health, level and time survived.
