@@ -17,7 +17,7 @@ public class Ship extends Controllable {
      * e.g. position (0,0) and health=100
      */
     public Ship() {
-        super(0, 0); // 调用父类的 (x,y) 初始化
+        super(0, 0); // Call the superclass's (x,y) initialization
         this.health = 100;
         this.score = 0;
     }
