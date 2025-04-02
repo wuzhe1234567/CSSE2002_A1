@@ -46,5 +46,3 @@ public class Bullet implements SpaceObject {
         ypos--; // Moves upward each tick
     }
 }
-
-
