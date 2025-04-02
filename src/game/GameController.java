@@ -5,6 +5,8 @@ import game.ui.ObjectGraphic;
 import game.ui.UI;
 import game.utility.Direction;
 import game.exceptions.BoundaryExceededException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Controller handling the game flow and interactions.
@@ -32,8 +34,8 @@ public class GameController {
     }
 
     /**
-     * Initializes the game controller with the given UI and a new GameModel.
-     * Calls the other constructor using the "this()" keyword.
+     * Initializes the game controller with the given UI and a new GameModel (taking ui::log as the logger).
+     * This constructor calls the other constructor using the "this()" keyword.
      *
      * @param ui the UI used to draw the game.
      */
@@ -46,10 +48,10 @@ public class GameController {
      * Passes onTick and handlePlayerInput to ui.onStep and ui.onKey respectively.
      */
     public void startGame() {
-        // These objects are added externally. The Ship should already exist (or be created automatically in updateGame).
+        // 添加外部对象（例如敌人、小行星、降落型敌人、健康及盾牌道具）。
         model.addObject(new Enemy(3, 1));
         model.addObject(new Asteroid(5, 1));
-        // Instantiate a DescendingEnemy using an anonymous class.
+        // 使用匿名类实例化一个 DescendingEnemy 对象
         model.addObject(new DescendingEnemy(2, 0) {
             @Override
             public ObjectGraphic render() {
@@ -59,7 +61,7 @@ public class GameController {
         model.addObject(new HealthPowerUp(4, 0));
         model.addObject(new ShieldPowerUp(6, 0));
         renderGame();
-        // Initialize stats: Score, Health, Level, Time Survived.
+        // 初始化统计数据：Score, Health, Level, Time Survived
         ui.setStat("Score", "0");
         ui.setStat("Health", "100");
         ui.setStat("Level", "1");
@@ -67,7 +69,7 @@ public class GameController {
         ui.onKey(this::preGameInput);
     }
 
-    // Pre-game input handling: wait for Enter key to start the game loop.
+    // Pre-game input handling: wait for Enter key to start game loop.
     private void preGameInput(String key) {
         if (key.equals("\n") || key.equalsIgnoreCase("ENTER")) {
             gameStarted = true;
@@ -78,14 +80,17 @@ public class GameController {
 
     /**
      * Uses the provided tick to advance the game state.
-     * Calls renderGame() to draw the current state, then model.updateGame(tick) to update game objects,
-     * and finally updates UI stats.
+     * Calls renderGame(), model.updateGame(tick), model.checkCollisions(),
+     * model.spawnObjects(), and model.levelUp(), then updates UI stats.
      *
      * @param tick the provided tick value.
      */
     public void onTick(int tick) {
         renderGame();
         model.updateGame(tick);
+        model.checkCollisions();
+        model.spawnObjects();
+        model.levelUp();
         Ship ship = model.getShip();
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
@@ -101,23 +106,28 @@ public class GameController {
     }
 
     /**
-     * Renders the current game state by calling ui.render() with all SpaceObjects.
+     * Renders the current game state.
+     * Combines all SpaceObjects from the model with the Ship, and passes them to ui.render().
      */
     public void renderGame() {
-        ui.render(model.getSpaceObjects());
+        List<SpaceObject> allObjects = new ArrayList<>(model.getSpaceObjects());
+        if (model.getShip() != null) {
+            allObjects.add(model.getShip());
+        }
+        ui.render(allObjects);
     }
 
     /**
-     * Handles player input:
-     * - For W/A/S/D, moves the ship and logs its new position.
-     * - For F, calls the fireBullet() method of the model.
-     * - For P, toggles pause and calls pauseGame().
-     * - For invalid input, logs an error message.
+     * Handles player input and performs actions:
+     * - For movement keys "W", "A", "S", "D": moves the ship and logs the new position.
+     * - For "F": fires a bullet via model.fireBullet().
+     * - For "P": toggles pause and calls pauseGame().
+     * - For invalid input: logs "Invalid input. Use W, A, S, D, F, or P."
      *
-     * @param key the player's input command.
+     * @param input the player's input command.
      */
-    public void handlePlayerInput(String key) {
-        if (key.equalsIgnoreCase("P")) {
+    public void handlePlayerInput(String input) {
+        if (input.equalsIgnoreCase("P")) {
             paused = !paused;
             pauseGame();
             return;
@@ -126,7 +136,7 @@ public class GameController {
         Ship ship = model.getShip();
         if (ship == null) return;
         try {
-            switch (key.toUpperCase()) {
+            switch (input.toUpperCase()) {
                 case "W":
                     ship.move(Direction.UP);
                     ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
@@ -166,7 +176,7 @@ public class GameController {
     /**
      * Returns the current game model.
      *
-     * @return the game model.
+     * @return the current GameModel.
      */
     public GameModel getModel() {
         return model;
