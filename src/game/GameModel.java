@@ -28,8 +28,7 @@ public class GameModel {
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
 
-    // Ship is added externally; if not added, getShip() returns null.
-    private Ship ship = null;
+    // Ship is added externally; if not added, getShip() will search objects list.
     private int level = START_LEVEL;
 
     public GameModel(Logger logger) {
@@ -51,7 +50,7 @@ public class GameModel {
     /**
      * Updates the state of all space objects.
      * Iterates over a copy of the objects list to call tick(tick);
-     * For tick > 0, also calls spawnObjects(), levelUp() and checkCollisions().
+     * For tick > 0, also calls spawnObjects(), levelUp(), and checkCollisions().
      */
     public void updateGame(int tick) {
         for (SpaceObject obj : new ArrayList<>(objects)) {
@@ -66,13 +65,6 @@ public class GameModel {
 
     /**
      * Performs collision detection among space objects.
-     * 1. Bullet-Enemy: remove both; if a ship exists, add 1 score.
-     * 2. Ship-Enemy: remove enemy; add 1 score.
-     * 3. Ship-Asteroid: remove asteroid.
-     * 4. Ship-HealthPowerUp: apply effect then remove power-up.
-     * 5. Ship-ShieldPowerUp: apply effect then remove power-up.
-     * 6. Bullet-Asteroid collisions are ignored.
-     * 7. Other collisions: remove both.
      */
     public void checkCollisions() {
         List<SpaceObject> toRemove = new ArrayList<>();
@@ -171,19 +163,20 @@ public class GameModel {
     public void levelUp() {
         Ship s = getShip();
         if (s != null && s.getScore() >= SCORE_THRESHOLD * level) {
-            level++;
+            level = level + 1;
             logger.log("Level up! Now level " + level);
         }
     }
 
     /**
      * Fires a bullet from the ship.
-     * For testing: if a Ship exists, fires a bullet from its position;
-     * if not, fires from a default position.
+     * For testing: if a Ship exists, removes it then fires a bullet from its position;
+     * otherwise, fires from a default position.
      */
     public void fireBullet() {
         Ship s = getShip();
         if (s != null) {
+            objects.remove(s);
             addObject(new Bullet(s.getX(), s.getY() - 1));
             logger.log("Core.Bullet fired!");
         } else {
@@ -200,6 +193,12 @@ public class GameModel {
      * Returns the first Ship instance found in the objects list.
      */
     public Ship getShip() {
-        return ship;
+        for (SpaceObject obj : objects) {
+            if (obj instanceof Ship) {
+                return (Ship) obj;
+            }
+        }
+        return null;
     }
 }
+
