@@ -22,7 +22,6 @@ public class DescendingEnemy extends Enemy {
      */
     @Override
     public void tick(int tick) {
-        // 使用 getY() 和 setY() 更新位置，确保每个 tick 向下移动 2 个单位
         setY(getY() + 2);
     }
 }
