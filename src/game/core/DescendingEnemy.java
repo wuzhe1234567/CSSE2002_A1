@@ -1,9 +1,11 @@
 package game.core;
 
+import game.ui.ObjectGraphic;
+
 /**
  * Represents an enemy that descends faster.
  */
-public class DescendingEnemy extends Enemy {
+public abstract class DescendingEnemy extends Enemy {
 
     /**
      * Constructs a DescendingEnemy with the specified coordinates.
@@ -24,4 +26,12 @@ public class DescendingEnemy extends Enemy {
     public void tick(int tick) {
         setY(getY() + 2);
     }
+
+    /**
+     * Abstract render method to be implemented by concrete subclasses.
+     *
+     * @return an ObjectGraphic representing the enemy.
+     */
+    @Override
+    public abstract ObjectGraphic render();
 }
