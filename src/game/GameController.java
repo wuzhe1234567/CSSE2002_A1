@@ -16,14 +16,23 @@ public class GameController {
     private boolean gameStarted = false;
     private boolean paused = false;
 
-    // 使用指定 UI 创建控制器，内部构造一个新的 GameModel（日志方法由 UI 提供）
+    /**
+     * 使用指定 UI 创建控制器，内部构造一个新的 GameModel（日志方法由 UI 提供）。
+     *
+     * @param ui the UI instance.
+     */
     public GameController(UI ui) {
         this.ui = ui;
         this.model = new GameModel(ui::log);
         this.startTime = System.currentTimeMillis();
     }
 
-    // 使用指定 UI 和外部提供的 GameModel 创建控制器
+    /**
+     * 使用指定 UI 和外部提供的 GameModel 创建控制器。
+     *
+     * @param ui the UI instance.
+     * @param model the GameModel instance.
+     */
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
         this.model = model;
@@ -32,6 +41,8 @@ public class GameController {
 
     /**
      * 返回当前游戏模型。
+     *
+     * @return the current GameModel.
      */
     public GameModel getModel() {
         return model;
@@ -48,6 +59,8 @@ public class GameController {
     /**
      * 游戏循环：每个 tick 调用此方法。
      * 更新画面、模型状态、碰撞检测和生成新对象。
+     *
+     * @param tick the current tick count.
      */
     public void onTick(int tick) {
         renderGame();
@@ -85,6 +98,8 @@ public class GameController {
 
     /**
      * 处理玩家输入：W/A/S/D 移动，F 发射子弹，P 切换暂停。
+     *
+     * @param input the player input command.
      */
     public void handlePlayerInput(String input) {
         if (input == null || input.trim().isEmpty()) {
@@ -96,7 +111,9 @@ public class GameController {
             case "W":
                 try {
                     model.getShip().move(Direction.UP);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Ship moved to ("
+                        + model.getShip().getX() + ", "
+                        + model.getShip().getY() + ")");
                 } catch (BoundaryExceededException e) {
                     ui.log("Cannot move: " + e.getMessage());
                 }
@@ -104,7 +121,9 @@ public class GameController {
             case "A":
                 try {
                     model.getShip().move(Direction.LEFT);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Ship moved to ("
+                        + model.getShip().getX() + ", "
+                        + model.getShip().getY() + ")");
                 } catch (BoundaryExceededException e) {
                     ui.log("Cannot move: " + e.getMessage());
                 }
@@ -112,7 +131,9 @@ public class GameController {
             case "S":
                 try {
                     model.getShip().move(Direction.DOWN);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Ship moved to ("
+                        + model.getShip().getX() + ", "
+                        + model.getShip().getY() + ")");
                 } catch (BoundaryExceededException e) {
                     ui.log("Cannot move: " + e.getMessage());
                 }
@@ -120,7 +141,9 @@ public class GameController {
             case "D":
                 try {
                     model.getShip().move(Direction.RIGHT);
-                    ui.log("Ship moved to (" + model.getShip().getX() + ", " + model.getShip().getY() + ")");
+                    ui.log("Ship moved to ("
+                        + model.getShip().getX() + ", "
+                        + model.getShip().getY() + ")");
                 } catch (BoundaryExceededException e) {
                     ui.log("Cannot move: " + e.getMessage());
                 }
