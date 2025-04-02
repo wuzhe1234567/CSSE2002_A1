@@ -188,4 +188,60 @@ public class GameModel {
             }
         }
         // PowerUp spawn.
-        if (random.nextInt(100) < spawnRate * POWER*
+        if (random.nextInt(100) < spawnRate * POWER_UP_SPAWN_RATE) {
+            int x = random.nextInt(GAME_WIDTH);
+            if (x != ship.getX()) {
+                if (random.nextBoolean()) {
+                    addObject(new ShieldPowerUp(x, 0));
+                } else {
+                    addObject(new HealthPowerUp(x, 0));
+                }
+            }
+        }
+    }
+
+    /**
+     * If the Ship's score is greater than or equal to (level * SCORE_THRESHOLD),
+     * increases the game level by 1 and increases the spawn rate by SPAWN_RATE_INCREASE.
+     * Logs "Level Up! Welcome to Level {new level}. Spawn rate increased to {new spawn rate}%."
+     */
+    public void levelUp() {
+        if (ship.getScore() >= level * SCORE_THRESHOLD) {
+            level++;
+            spawnRate += SPAWN_RATE_INCREASE;
+            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to " + spawnRate + "%.");
+        }
+    }
+
+    /**
+     * Fires a bullet from the Ship's current position.
+     * Creates a new Bullet at (ship.getX(), ship.getY()) and logs "Core.Bullet fired!".
+     */
+    public void fireBullet() {
+        if (ship != null) {
+            addObject(new Bullet(ship.getX(), ship.getY()));
+            logger.log("Core.Bullet fired!");
+        } else {
+            addObject(new Bullet(5, GAME_HEIGHT - 2));
+            logger.log("Core.Bullet fired!");
+        }
+    }
+
+    /**
+     * Returns the current game level.
+     *
+     * @return the current level.
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Returns the Ship instance in the game.
+     *
+     * @return the current Ship.
+     */
+    public Ship getShip() {
+        return ship;
+    }
+}
