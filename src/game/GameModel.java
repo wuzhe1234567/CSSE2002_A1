@@ -1,5 +1,6 @@
 package game;
 
+import game.core.*;
 import game.core.SpaceObject;
 import game.core.Asteroid;
 import game.core.Bullet;
