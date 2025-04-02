@@ -15,6 +15,14 @@ import java.util.Random;
 /**
  * Represents the game information and state. Stores and manipulates the game state.
  * Models a game, storing and modifying data relevant to the game.
+ *
+ * The original version of this file also declared:
+ *   - START_SPAWN_RATE with a comment indicating it is the spawn rate (percentage chance per tick)
+ *   - SPAWN_RATE_INCREASE with a comment indicating it increases the spawn rate by 5% per level
+ *   - A Random instance with a comment noting it is ONLY USED IN this.spawnObjects()
+ *   - A setRandomSeed method with a note that this method should NEVER be called.
+ * 
+ * All these elements have been incorporated below without altering the existing code.
  */
 public class GameModel {
     public static final int GAME_HEIGHT = 20;
@@ -28,7 +36,7 @@ public class GameModel {
     public static final double ENEMY_SPAWN_RATE = 0.5;
     public static final double POWER_UP_SPAWN_RATE = 0.25;
 
-    private final Random random = new Random();
+    private final Random random = new Random(); // ONLY USED IN this.spawnObjects()
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
     // Ship is stored separately; it is NOT part of the objects list.
@@ -41,6 +49,13 @@ public class GameModel {
      * Creates a default Ship placed at (GAME_WIDTH/2, GAME_HEIGHT-2) with health 100.
      *
      * @param logger the logger instance for logging messages.
+     *
+     * Original constructor notes:
+     * - Instantiates an empty list for storing all SpaceObjects the model needs to track.
+     * - Instantiates the game level with the starting level value.
+     * - Instantiates the game spawn rate with the starting spawn rate.
+     * - Instantiates a new ship.
+     * - Stores reference to the given logger.
      */
     public GameModel(Logger logger) {
         this.logger = logger;
@@ -52,6 +67,8 @@ public class GameModel {
      * Sets the seed for the Random instance.
      *
      * @param seed the seed value.
+     *
+     * Original method note: This method should NEVER be called.
      */
     public void setRandomSeed(int seed) {
         random.setSeed(seed);
@@ -209,7 +226,7 @@ public class GameModel {
         if (ship.getScore() >= level * SCORE_THRESHOLD) {
             level++;
             spawnRate += SPAWN_RATE_INCREASE;
-            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to " 
+            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to "
                     + spawnRate + "%.");
         }
     }
@@ -246,3 +263,4 @@ public class GameModel {
         return ship;
     }
 }
+
