@@ -4,6 +4,8 @@ import game.core.*;
 import game.exceptions.BoundaryExceededException;
 import game.ui.UI;
 import game.utility.Direction;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 管理游戏流程和交互。
@@ -22,9 +24,7 @@ public class GameController {
      * @param ui the UI instance.
      */
     public GameController(UI ui) {
-        this.ui = ui;
-        this.model = new GameModel(ui::log);
-        this.startTime = System.currentTimeMillis();
+        this(ui, new GameModel(ui::log));
     }
 
     /**
@@ -67,21 +67,18 @@ public class GameController {
         model.updateGame(tick);
         model.checkCollisions();
         model.spawnObjects();
+        model.levelUp();
 
-        // 更新 Ship 相关统计数据（得分、健康值）
         Ship ship = model.getShip();
         if (ship != null) {
             ui.setStat("Score", String.valueOf(ship.getScore()));
             ui.setStat("Health", String.valueOf(ship.getHealth()));
         }
-        // 更新存活时间统计（以秒计）
         long currentTime = System.currentTimeMillis();
         long survivedSeconds = (currentTime - startTime) / 1000;
         ui.setStat("Time Survived", survivedSeconds + " seconds");
-        // 更新等级统计
         ui.setStat("Level", String.valueOf(model.getLevel()));
 
-        // 如果 ship 被移除，则暂停游戏
         if (ship == null) {
             pauseGame();
         }
@@ -89,11 +86,16 @@ public class GameController {
 
     /**
      * 渲染游戏：调用 UI 的 render 方法显示所有空间对象，并更新存活时间统计。
+     * 包括将 Ship 添加到渲染列表中。
      */
     public void renderGame() {
+        List<SpaceObject> objectsToRender = new ArrayList<>(model.getSpaceObjects());
+        if (model.getShip() != null) {
+            objectsToRender.add(model.getShip());
+        }
         long secondsSurvived = (System.currentTimeMillis() - startTime) / 1000;
         ui.setStat("Time Survived", secondsSurvived + " seconds");
-        ui.render(model.getSpaceObjects());
+        ui.render(objectsToRender);
     }
 
     /**
@@ -107,62 +109,44 @@ public class GameController {
             return;
         }
         String command = input.trim().toUpperCase();
-        switch (command) {
-            case "W":
-                try {
-                    model.getShip().move(Direction.UP);
-                    ui.log("Ship moved to ("
-                        + model.getShip().getX() + ", "
-                        + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "A":
-                try {
-                    model.getShip().move(Direction.LEFT);
-                    ui.log("Ship moved to ("
-                        + model.getShip().getX() + ", "
-                        + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "S":
-                try {
-                    model.getShip().move(Direction.DOWN);
-                    ui.log("Ship moved to ("
-                        + model.getShip().getX() + ", "
-                        + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "D":
-                try {
-                    model.getShip().move(Direction.RIGHT);
-                    ui.log("Ship moved to ("
-                        + model.getShip().getX() + ", "
-                        + model.getShip().getY() + ")");
-                } catch (BoundaryExceededException e) {
-                    ui.log("Cannot move: " + e.getMessage());
-                }
-                break;
-            case "F":
-                model.fireBullet();
-                break;
-            case "P":
-                paused = !paused;
-                pauseGame();
-                break;
-            default:
-                System.out.println("Invalid input. Use W, A, S, D, F, or P.");
-                break;
+        Ship ship = model.getShip();
+        if (ship == null) return;
+        try {
+            switch (command) {
+                case "W":
+                    ship.move(Direction.UP);
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    break;
+                case "A":
+                    ship.move(Direction.LEFT);
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    break;
+                case "S":
+                    ship.move(Direction.DOWN);
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    break;
+                case "D":
+                    ship.move(Direction.RIGHT);
+                    ui.log("Core.Ship moved to (" + ship.getX() + ", " + ship.getY() + ")");
+                    break;
+                case "F":
+                    model.fireBullet();
+                    break;
+                case "P":
+                    paused = !paused;
+                    pauseGame();
+                    break;
+                default:
+                    ui.log("Invalid input. Use W, A, S, D, F, or P.");
+                    break;
+            }
+        } catch (BoundaryExceededException e) {
+            ui.log("Cannot move: " + e.getMessage());
         }
     }
 
     /**
-     * 暂停游戏，并在 UI 中记录日志 "Game paused."
+     * 暂停游戏，并在 UI 中记录日志 "Game paused."。
      */
     public void pauseGame() {
         ui.pause();
