@@ -1,19 +1,17 @@
 package game;
 
+import game.core.*;
 import game.core.SpaceObject;
 import game.core.Ship;
-import game.core.Bullet;
-import game.core.Enemy;
-import game.core.HealthPowerUp;
-import game.core.ShieldPowerUp;
-import game.GameModel;
 import game.exceptions.BoundaryExceededException;
 import game.ui.KeyHandler;
 import game.ui.Tickable;
+import game.GameModel;
 import game.ui.UI;
 import game.utility.Direction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Controller handling the game flow and interactions.
@@ -27,11 +25,13 @@ public class GameController {
     private long startTime;
 
     /**
-     * Initializes the game controller with the given UI and GameModel.
+     * Initializes the game controller with the given UI and Model.
      * Stores the ui, model and start time.
+     * The start time System.currentTimeMillis() should be stored as a long.
      *
-     * @param ui    the UI used to draw the Game
+     * @param ui the UI used to draw the Game
      * @param model the model used to maintain game information
+     * @provided
      */
     public GameController(UI ui, GameModel model) {
         this.ui = ui;
@@ -40,10 +40,11 @@ public class GameController {
     }
 
     /**
-     * Initializes the game controller with the given UI and a new GameModel.
-     * The new GameModel is constructed using ui::log as the logger.
+     * Initializes the game controller with the given UI and a new GameModel (taking ui::log as the logger).
+     * This constructor should call the other constructor using the "this()" keyword.
      *
      * @param ui the UI used to draw the Game
+     * @provided
      */
     public GameController(UI ui) {
         this(ui, new GameModel(ui::log));
@@ -117,22 +118,43 @@ public class GameController {
     }
 
     /**
-     * Uses the provided tick to advance the game state.
-     * Calls the following in order:
-     * - renderGame() to draw the current state.
-     * - model.updateGame(tick) to advance the game.
-     * - model.checkCollisions() to handle game interactions.
-     * - model.spawnObjects() to handle object creation.
-     * - model.levelUp() to check and handle leveling.
+     * Starts the main game loop.
      *
-     * @param tick the provided tick.
+     * Passes onTick and handlePlayerInput to ui.onStep and ui.onKey respectively.
+     * @provided
+     */
+    public void startGame() {
+        
+        ui.onStep(new Tickable() {
+            @Override
+            public void tick(int tick) {
+                onTick(tick);
+            }
+        });
+        ui.onKey(new KeyHandler() {
+            @Override
+            public void onPress(String key) {
+                handlePlayerInput(key);
+            }
+        });
+    }
+    /**
+     * Uses the provided tick to call and advance the following:
+     *      - A call to renderGame() to draw the current state of the game.
+     *      - A call to model.updateGame(tick) to advance the game by the given tick.
+     *      - A call to model.checkCollisions() to handle game interactions.
+     *      - A call to model.spawnObjects() to handle object creation.
+     *      - A call to model.levelUp() to check and handle leveling.
+     *
+     * @param tick the provided tick
+     * @provided
      */
     public void onTick(int tick) {
-        renderGame();
-        model.updateGame(tick);
-        model.checkCollisions();
-        model.spawnObjects();
-        model.levelUp();
+        renderGame(); // Update Visual
+        model.updateGame(tick); // Update GameObjects
+        model.checkCollisions(); // Check for Collisions
+        model.spawnObjects(); // Handles new spawns
+        model.levelUp(); // Level up when score threshold is met
     }
 
     /**
@@ -159,42 +181,5 @@ public class GameController {
         List<SpaceObject> objects = new ArrayList<>(model.getSpaceObjects());
         objects.add(ship);
         ui.render(objects);
-    }
-
-    /**
-     * Starts the main game loop.
-     *
-     * Passes onTick and handlePlayerInput to ui.onStep and ui.onKey respectively.
-     *
-     * Original Stage comments:
-     * FOR STAGE 0 only, uncomment or remove after:
-     *     model.addObject(new Bullet(2, 14));
-     * FOR STAGE 1 only, uncomment or remove after:
-     *     model.addObject(new Bullet(2, 14));
-     *     model.addObject(new Enemy(2, 0));
-     * Uncomment in stage 2 for player input handling.
-     */
-    public void startGame() {
-        // FOR STAGE 0 only, uncomment or remove after
-        model.addObject(new Bullet(2, 14));
-        // END STAGE 0 only
-
-        // FOR STAGE 1 only, uncomment or remove after
-        // model.addObject(new Bullet(2, 14));
-        // model.addObject(new Enemy(2, 0));
-        // END STAGE 1 only
-
-        ui.onStep(new Tickable() {
-            @Override
-            public void tick(int tick) {
-                onTick(tick);
-            }
-        });
-        ui.onKey(new KeyHandler() {
-            @Override
-            public void onPress(String key) {
-                handlePlayerInput(key);
-            }
-        });
     }
 }
