@@ -124,7 +124,18 @@ public class GameController {
      * @provided
      */
     public void startGame() {
-        
+        // FOR STAGE 0 only, uncomment or remove after
+        model.addObject(new Bullet(2, 14));
+        // END STAGE 0 only
+
+        // FOR STAGE 1 only, uncomment or remove after
+        //model.addObject(new Bullet(2, 14));
+        //model.addObject(new Enemy(2, 0));
+        // END STAGE 1 only
+
+        ui.onStep(this::onTick);
+        // Uncomment in stage 2
+        //ui.onKey(this::handlePlayerInput); // Pass Callback to UI
         ui.onStep(new Tickable() {
             @Override
             public void tick(int tick) {
