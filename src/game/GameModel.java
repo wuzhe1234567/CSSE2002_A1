@@ -14,6 +14,7 @@ import java.util.Random;
 
 /**
  * Represents the game information and state. Stores and manipulates the game state.
+ * Models a game, storing and modifying data relevant to the game.
  */
 public class GameModel {
     public static final int GAME_HEIGHT = 20;
@@ -30,7 +31,7 @@ public class GameModel {
     private final Random random = new Random();
     private List<SpaceObject> objects = new ArrayList<>();
     private Logger logger;
-    // Ship is stored separately; it is NOT part of objects list.
+    // Ship is stored separately; it is NOT part of the objects list.
     private Ship ship;
     private int level = START_LEVEL;
     private int spawnRate = START_SPAWN_RATE;
@@ -43,7 +44,7 @@ public class GameModel {
      */
     public GameModel(Logger logger) {
         this.logger = logger;
-        // 创建默认的 Ship 对象，位置设为屏幕中间偏下
+        // Create the default ship at the middle-bottom of the screen.
         this.ship = new Ship(GAME_WIDTH / 2, GAME_HEIGHT - 2, 100);
     }
 
@@ -83,13 +84,13 @@ public class GameModel {
      * @param tick the current tick value.
      */
     public void updateGame(int tick) {
-        // Move all objects
+        // Move all objects.
         for (SpaceObject obj : new ArrayList<>(objects)) {
             obj.tick(tick);
         }
-        // Remove off-screen objects (y > GAME_HEIGHT)
+        // Remove off-screen objects.
         objects.removeIf(obj -> obj.getY() > GAME_HEIGHT);
-        // Spawn new objects, level up, and check collisions if tick > 0
+        // For tick > 0, spawn new objects, level up, and check collisions.
         if (tick > 0) {
             spawnObjects();
             levelUp();
@@ -99,22 +100,23 @@ public class GameModel {
 
     /**
      * Detects and handles collisions.
+     * <p>
      * First, checks collisions between the Ship and any SpaceObject:
-     * - If colliding with a PowerUp: apply its effect and log "Power-up collected: <symbol>".
-     * - If colliding with an Asteroid: ship takes ASTEROID_DAMAGE and log "Hit by asteroid! Health reduced by ...".
-     * - If colliding with an Enemy: ship takes ENEMY_DAMAGE and log "Hit by enemy! Health reduced by ...".
-     * Colliding objects are removed.
+     * <ul>
+     *   <li>If colliding with a PowerUp: apply its effect and log "Power-up collected: &lt;symbol&gt;".</li>
+     *   <li>If colliding with an Asteroid: ship takes ASTEROID_DAMAGE and log "Hit by asteroid! Health reduced by ...".</li>
+     *   <li>If colliding with an Enemy: ship takes ENEMY_DAMAGE and log "Hit by enemy! Health reduced by ...".</li>
+     * </ul>
      * Then, checks collisions between Bullets and Enemies; if colliding, both are removed.
+     * </p>
      */
     public void checkCollisions() {
-        // List to hold objects to be removed
         List<SpaceObject> toRemove = new ArrayList<>();
 
-        // Check collisions between ship and other objects
+        // Check collisions between ship and other objects.
         for (SpaceObject obj : new ArrayList<>(objects)) {
             if (obj.getX() == ship.getX() && obj.getY() == ship.getY()) {
                 if (obj instanceof HealthPowerUp || obj instanceof ShieldPowerUp) {
-                    obj.tick(0); // just in case; not needed normally
                     if (obj instanceof HealthPowerUp) {
                         ((HealthPowerUp) obj).applyEffect(ship);
                     } else {
@@ -134,7 +136,7 @@ public class GameModel {
             }
         }
 
-        // Check collisions between Bullets and Enemies
+        // Check collisions between Bullets and Enemies.
         List<SpaceObject> bulletCollisions = new ArrayList<>();
         for (SpaceObject a : new ArrayList<>(objects)) {
             if (a instanceof Bullet) {
@@ -147,12 +149,9 @@ public class GameModel {
             }
         }
         toRemove.addAll(bulletCollisions);
-
-        // Remove all collided objects
         objects.removeAll(toRemove);
 
-        // If ship is hit and its health is reduced to 0 or below, log game over.
-        // (这里未要求移除 ship，但可根据需要扩展)
+        // If ship's health is zero or below, log game over.
         if (ship.getHealth() <= 0) {
             logger.log("Game Over: Ship destroyed.");
         }
@@ -160,87 +159,33 @@ public class GameModel {
 
     /**
      * Spawns new objects at y = 0 using exactly 6 calls to random.nextInt() and 1 call to random.nextBoolean().
+     * <p>
      * The order is as follows:
-     * 1. Check if an Asteroid should spawn (random.nextInt(100) < spawnRate).
-     *    If yes, spawn an Asteroid at x = random.nextInt(GAME_WIDTH), unless that x equals ship's x.
-     * 2. Check if an Enemy should spawn (random.nextInt(100) < spawnRate * ENEMY_SPAWN_RATE).
-     *    If yes, spawn an Enemy at x = random.nextInt(GAME_WIDTH), unless that x equals ship's x.
-     * 3. Check if a PowerUp should spawn (random.nextInt(100) < spawnRate * POWER_UP_SPAWN_RATE).
-     *    If yes, spawn a PowerUp at x = random.nextInt(GAME_WIDTH) (unless colliding with ship),
-     *    and then use random.nextBoolean() to determine which type:
-     *    if true, spawn a ShieldPowerUp; else, spawn a HealthPowerUp.
+     * <ol>
+     *   <li>Check if an Asteroid should spawn (random.nextInt(100) < spawnRate).
+     *       If yes, spawn an Asteroid at x = random.nextInt(GAME_WIDTH), unless that x equals ship's x.</li>
+     *   <li>Check if an Enemy should spawn (random.nextInt(100) < spawnRate * ENEMY_SPAWN_RATE).
+     *       If yes, spawn an Enemy at x = random.nextInt(GAME_WIDTH), unless that x equals ship's x.</li>
+     *   <li>Check if a PowerUp should spawn (random.nextInt(100) < spawnRate * POWER_UP_SPAWN_RATE).
+     *       If yes, spawn a PowerUp at x = random.nextInt(GAME_WIDTH) (unless colliding with ship),
+     *       and then use random.nextBoolean() to determine which type: ShieldPowerUp if true, otherwise HealthPowerUp.</li>
+     * </ol>
+     * </p>
      */
     public void spawnObjects() {
-        // 1. Asteroid spawn
+        // Asteroid spawn.
         if (random.nextInt(100) < spawnRate) {
             int x = random.nextInt(GAME_WIDTH);
             if (x != ship.getX()) {
                 addObject(new Asteroid(x, 0));
             }
         }
-        // 2. Enemy spawn
+        // Enemy spawn.
         if (random.nextInt(100) < spawnRate * ENEMY_SPAWN_RATE) {
             int x = random.nextInt(GAME_WIDTH);
             if (x != ship.getX()) {
                 addObject(new Enemy(x, 0));
             }
         }
-        // 3. PowerUp spawn
-        if (random.nextInt(100) < spawnRate * POWER_UP_SPAWN_RATE) {
-            int x = random.nextInt(GAME_WIDTH);
-            if (x != ship.getX()) {
-                // Determine type using random.nextBoolean()
-                if (random.nextBoolean()) {
-                    addObject(new ShieldPowerUp(x, 0));
-                } else {
-                    addObject(new HealthPowerUp(x, 0));
-                }
-            }
-        }
-    }
-
-    /**
-     * If the Ship's score is greater than or equal to (level * SCORE_THRESHOLD),
-     * increases the game level by 1 and increases the spawn rate by SPAWN_RATE_INCREASE.
-     * Logs "Level Up! Welcome to Level {new level}. Spawn rate increased to {new spawn rate}%."
-     */
-    public void levelUp() {
-        if (ship.getScore() >= level * SCORE_THRESHOLD) {
-            level++;
-            spawnRate += SPAWN_RATE_INCREASE;
-            logger.log("Level Up! Welcome to Level " + level + ". Spawn rate increased to " + spawnRate + "%.");
-        }
-    }
-
-    /**
-     * Fires a bullet from the Ship's current position.
-     * Creates a new Bullet at (ship.getX(), ship.getY() - 1) and logs "Core.Bullet fired!".
-     */
-    public void fireBullet() {
-        if (ship != null) {
-            addObject(new Bullet(ship.getX(), ship.getY() - 1));
-            logger.log("Core.Bullet fired!");
-        } else {
-            addObject(new Bullet(5, GAME_HEIGHT - 2));
-            logger.log("Core.Bullet fired!");
-        }
-    }
-
-    /**
-     * Returns the current game level.
-     *
-     * @return the current level.
-     */
-    public int getLevel() {
-        return level;
-    }
-
-    /**
-     * Returns the Ship instance in the game.
-     *
-     * @return the current Ship.
-     */
-    public Ship getShip() {
-        return ship;
-    }
-}
+        // PowerUp spawn.
+        if (random.nextInt(100) < spawnRate * POWER*
