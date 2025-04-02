@@ -345,7 +345,7 @@ A total of 1 style violations.
 
 =============
 
-❌ /src/game/GameController.java:121:9: 'if' construct must use '{}'s. [NeedBraces]
+ /src/game/GameController.java:121:9: 'if' construct must use '{}'s. [NeedBraces]
 
 ChatGPT said:
 Inferred, 4 seconds
@@ -524,16 +524,15 @@ A total of 2 style violations.
 
 =============
 
-❌ /src/game/GameController.java:15:1: Missing a Javadoc comment. [MissingJavadocType]
-❌ /src/game/GameController.java:91: Line is longer than 100 characters (found 114). [LineLength]
+/src/game/GameController.java:15:1: Missing a Javadoc comment. [MissingJavadocType]
+/src/game/GameController.java:91: Line is longer than 100 characters (found 114). [LineLength]
 
-
-ChatGPT 说：
-Reasoned about code style violations，持续 7 秒
-下面是修改后的 GameController.java 文件，已添加类的 Javadoc 注释，并修正了超过 100 个字符的长行问题：
+ChatGPT said:
+Reasoned about code style violations, lasted 7 seconds
+Here is the modified GameController.java file, adding the class Javadoc comment and fixing the problem of long lines longer than 100 characters:
 
 java
-复制
+Copy
 package game;
 
 import game.core.SpaceObject;
