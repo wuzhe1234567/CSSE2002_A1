@@ -1,27 +1,58 @@
 package game.core;
 
+import game.ui.ObjectGraphic;
+
 /**
- * Represents an enemy that descends faster.
+ * Represents a standard enemy object.
  */
-public class DescendingEnemy extends Enemy {
+public class Enemy implements SpaceObject {
+    private int xpos;
+    private int ypos;
 
     /**
-     * Constructs a DescendingEnemy with the specified coordinates.
+     * Constructs an Enemy with the specified coordinates.
      *
      * @param x the x-coordinate of the enemy.
      * @param y the y-coordinate of the enemy.
      */
-    public DescendingEnemy(int x, int y) {
-        super(x, y);
+    public Enemy(int x, int y) {
+        this.xpos = x;
+        this.ypos = y;
+    }
+
+    @Override
+    public int getX() {
+        return xpos;
+    }
+
+    @Override
+    public int getY() {
+        return ypos;
     }
 
     /**
-     * Overrides tick to make the enemy descend 2 units per tick.
+     * Sets the y-coordinate for the enemy.
      *
-     * @param tick the current tick count.
+     * @param newY the new y-coordinate.
+     */
+    protected void setY(int newY) {
+        this.ypos = newY;
+    }
+
+    /**
+     * Returns the graphical representation of the enemy.
+     * The text representation is set to "👾" as required.
+     *
+     * @return an ObjectGraphic representing the enemy.
      */
     @Override
+    public ObjectGraphic render() {
+        // 修改图片路径为正确路径
+        return new ObjectGraphic("👾", "src/assets/enemy.png");
+    }
+
+    @Override
     public void tick(int tick) {
-        setY(getY() + 2);
+        ypos++; // Moves downward each tick
     }
 }
