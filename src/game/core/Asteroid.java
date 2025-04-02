@@ -38,7 +38,8 @@ public class Asteroid implements SpaceObject {
      */
     @Override
     public ObjectGraphic render() {
-        // Note: Ensure that the image path is correct. If the image is stored in the assets folder at the project's root, use "assets/asteroid.png"
+        // Note: Ensure the image path is correct.
+        // If stored in the project's root assets folder, use "assets/asteroid.png"
         return new ObjectGraphic("🌑", "assets/asteroid.png");
     }
 
@@ -47,3 +48,4 @@ public class Asteroid implements SpaceObject {
         ypos++; // Moves downward each tick
     }
 }
+
