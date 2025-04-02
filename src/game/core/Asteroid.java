@@ -6,8 +6,8 @@ import game.ui.ObjectGraphic;
  * Represents an asteroid object.
  */
 public class Asteroid implements SpaceObject {
-    private int x;
-    private int y;
+    private int xpos;
+    private int ypos;
 
     /**
      * Constructs an Asteroid with the specified coordinates.
@@ -16,18 +16,18 @@ public class Asteroid implements SpaceObject {
      * @param y the y-coordinate.
      */
     public Asteroid(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.xpos = x;
+        this.ypos = y;
     }
 
     @Override
     public int getX() {
-        return x;
+        return xpos;
     }
 
     @Override
     public int getY() {
-        return y;
+        return ypos;
     }
 
     /**
@@ -44,6 +44,7 @@ public class Asteroid implements SpaceObject {
 
     @Override
     public void tick(int tick) {
-        y++; // 每次 tick 向下移动
+        ypos++; // Moves downward each tick
     }
 }
+
