@@ -6,9 +6,9 @@ import game.ui.ObjectGraphic;
  * Represents a standard enemy object.
  */
 public class Enemy implements SpaceObject {
-    protected int x;
-    protected int y;
-    
+    private int xpos;
+    private int ypos;
+
     /**
      * Constructs an Enemy with the specified coordinates.
      *
@@ -16,20 +16,20 @@ public class Enemy implements SpaceObject {
      * @param y the y-coordinate of the enemy.
      */
     public Enemy(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.xpos = x;
+        this.ypos = y;
     }
-    
-    @Override 
+
+    @Override
     public int getX() {
-        return x;
+        return xpos;
     }
-    
-    @Override 
+
+    @Override
     public int getY() {
-        return y;
+        return ypos;
     }
-    
+
     /**
      * Returns the graphical representation of the enemy.
      * The text representation is set to "👾" as required.
@@ -38,18 +38,12 @@ public class Enemy implements SpaceObject {
      */
     @Override
     public ObjectGraphic render() {
-        return new ObjectGraphic("👾", "assets/enemy.png");
+        // 修改图片路径为正确路径
+        return new ObjectGraphic("👾", "src/assets/enemy.png");
     }
-    
-    /**
-     * Updates the enemy's state each tick.
-     * In this case, the enemy moves downward by increasing its y-coordinate.
-     *
-     * @param tick the current game tick.
-     */
+
     @Override
     public void tick(int tick) {
-        y++; // Moves downward each tick
+        ypos++; // Moves downward each tick
     }
 }
-
